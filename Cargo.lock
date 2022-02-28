@@ -388,6 +388,7 @@ name = "particle-scattering"
 version = "0.1.0"
 dependencies = [
  "plotters",
+ "scilib",
 ]
 
 [[package]]
@@ -536,6 +537,12 @@ checksum = "93fc1dc3aaa9bfed95e02e6eadabb4baf7e3078b0bd1b4d7b6b0b68378900502"
 dependencies = [
  "winapi-util",
 ]
+
+[[package]]
+name = "scilib"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "751954be1b0c4f20532888313db634a7e10d9ac1153d0bbf9949410a047b48f0"
 
 [[package]]
 name = "semver"
