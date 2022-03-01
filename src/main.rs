@@ -2,11 +2,6 @@ use plotters::prelude::*;
 use scilib::math::complex::Complex;
 use std::cmp::*;
 
-const MED_N: f64 = 1.0;
-const PART_N: f64 = 2.0;
-const PART_SIZE: f64 = 1.0;
-const WAVE_LENGHT: f64 = 0.1;
-
 /*
 xmodmap -e "keycode 105 = less greater less greater bar brokenbar lessthanequal greaterthanequal"
  */
@@ -255,14 +250,15 @@ fn plot_png(
         )?;
 
     chart.configure_mesh().draw()?;
-
+    println!("pushing data...");
     for i in 0..functions.len() {
+        let closure = move |(x, y): (i32, i32)| PathElement::new(vec![(x, y), (x + 20, y)], &colors[i]);
         chart
             .draw_series(LineSeries::new(functions[i].clone(), &colors[i]))?
             .label(labels[i])
-            .legend(|(x, y)| PathElement::new(vec![(x, y), (x + 20, y)], &RED));
+            .legend(closure);
     }
-
+    println!("drawing...");
     chart
         .configure_series_labels()
         .background_style(&WHITE.mix(0.8))
@@ -303,14 +299,20 @@ fn b_n(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dn: &Vec<f64>, m: f64
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     //let upper_x = 2.0 * std::f64::consts::PI * MED_N * PART_SIZE;
-    let m = PART_N / MED_N;
     let mut an_r: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 4];
     let mut an_i: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 4];
     let mut bn_r: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 4];
     let mut bn_i: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 4];
 
-    for i in 0..499 {
-        let coord_x = (i + 1) as f64 / 10.0;
+    let wavelenght_boundaries = (1000e-9, 2000e-9);
+    let medium_n = 1.0;
+    let m = 3.5 / medium_n; // 1.0 : just to remember the refractive index of the air
+    let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
+    let step = (wavelenght_boundaries.1 - wavelenght_boundaries.0) / 500.0;//((upper_limit - lower_limit) / 500.0).abs();
+
+    for i in 0..=499 {
+        let current_wavelenght = wavelenght_boundaries.0 + step * (i + 1) as f64;
+        let coord_x = upper_x / current_wavelenght;
 
         let jn_x = j_n(3, coord_x);
         let yn_x = y_n(3, coord_x);
@@ -325,18 +327,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let bn = b_n(3, &psin_x, &xin_x, &dn_mx, m, coord_x);
 
         for j in 1..4 {
-            an_r[j].push((coord_x, an[j].re));
-            an_i[j].push((coord_x, an[j].im));
-            bn_r[j].push((coord_x, bn[j].re));
-            bn_i[j].push((coord_x, bn[j].im));
+            an_r[j].push((current_wavelenght, an[j].re));
+            an_i[j].push((current_wavelenght, an[j].im));
+            bn_r[j].push((current_wavelenght, bn[j].re));
+            bn_i[j].push((current_wavelenght, bn[j].im));
         }
     }
 
+    println!("calculating...");
     plot_png(
         "./results/scattering-coeff-anr.png",
         (2000, 400),
         "scattering coeff anr",
-        (0.0, 50.0),
+        (wavelenght_boundaries.0, wavelenght_boundaries.1),
         (-0.2, 1.2),
         &an_r[1..].to_vec(),
         &vec!["anr1", "anr2", "anr3"],
@@ -347,7 +350,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "./results/scattering-coeff-ani.png",
         (2000, 400),
         "scattering coeff ani",
-        (0.0, 50.0),
+        (wavelenght_boundaries.0, wavelenght_boundaries.1),
         (-1.0, 1.0),
         &an_i[1..].to_vec(),
         &vec!["ani1", "ani2", "ani3"],
@@ -358,7 +361,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "./results/scattering-coeff-bnr.png",
         (2000, 400),
         "scattering coeff bnr",
-        (0.0, 50.0),
+        (wavelenght_boundaries.0, wavelenght_boundaries.1),
         (-0.2, 1.2),
         &bn_r[1..].to_vec(),
         &vec!["bnr1", "bnr2", "bnr3"],
@@ -369,7 +372,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "./results/scattering-coeff-bni.png",
         (2000, 400),
         "scattering coeff bni",
-        (0.0, 50.0),
+        (wavelenght_boundaries.0, wavelenght_boundaries.1),
         (-1.0, 1.0),
         &bn_i[1..].to_vec(),
         &vec!["bni1", "bni2", "bni3"],
@@ -378,3 +381,41 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+mod integration {
+
+    pub fn trapezoid(xy: &[(f64, f64)]) -> f64 {
+        let mut area = 0.0;
+        for i in 1..xy.len()  {
+            let previous = xy[i-1];
+            let current = xy[i];
+            let offset = current.0 - previous.0;
+            if previous.1.signum() != current.1.signum() { // Zero in the middle
+                let thales = offset / (previous.1 + current.1);
+                let first_tri_base = previous.1 * thales;
+                let second_tri_base = current.1 * thales;
+                area += (first_tri_base * previous.1 + second_tri_base * current.1) / 2.0;
+            }
+            else {
+                let mut max = 0.0;
+                let mut min = 0.0;
+                if previous.1 < current.1 {
+                    max = current.1;
+                    min = previous.1;
+                }
+                else {
+                    max = previous.1;
+                    min = current.1;
+                }
+                area += (max - min) * offset / 2.0 + offset * min;
+            }
+        }
+        return area;
+    }
+}
+
+/*
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    integration::trapezoid(&[0, 1, 2]);
+    Ok(())
+}*/
