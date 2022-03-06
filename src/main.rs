@@ -106,7 +106,7 @@ fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
     return jn;
 }
 
-
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut j0: Vec<(f64, f64)> = Vec::with_capacity(400);
@@ -123,7 +123,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     plot_png("./results/bessel-jn-z.png", (800, 800), "bessel jn", (0.0, 20.0), (-0.5, 1.2), &vec![j0, j1, j2], &vec!["j0", "j1", "j2"], &vec![RED, BLUE, GREEN])?;
 
     Ok(())
-}
+}*/
 
 fn pitau_n(order: usize, theta: f64) -> (Vec<f64>, Vec<f64>) {
     assert!(order > 0);
@@ -514,6 +514,18 @@ mod integration {
         return area;
     }
 }
+use std::ops::{Div};
+struct Point {
+    a: f64,
+    b: f64
+}
+impl Div<Point> for f64 {
+    type Output = Point;
+
+    fn div(self, other: Point) -> Point {
+        Point {a: self + other.a, b: self + other.b}
+    }
+}
 
 /*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -571,3 +583,65 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     Ok(())
 }*/
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+	let mut c_sca_coeff: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 3];
+	let mut c_ext_coeff: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 3];
+
+	let wavelenght_boundaries = (400e-9, 1800e-9);
+    let medium_n = 1.0;
+    let m = 3.5 / medium_n; // 1.0 : just to remember the refractive index of the air
+    let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
+    let step = (wavelenght_boundaries.1 - wavelenght_boundaries.0) / 500.0;
+
+    for i in 0..=499 {
+        let current_wavelenght = wavelenght_boundaries.0 + step * (i + 1) as f64;
+        let coord_x = upper_x / current_wavelenght;
+
+        let jn_x = j_n(3, coord_x);
+        let yn_x = y_n(3, coord_x);
+        let psin_x = psi_n(&jn_x, coord_x);
+        let xin_x = xi_n(&jn_x, &yn_x, coord_x);
+
+        let jn_mx = j_n(3, coord_x * m);
+        let psin_mx = psi_n(&jn_mx, coord_x * m);
+        let dn_mx = d_n(&psin_mx, coord_x * m);
+
+        let an = a_n(3, &psin_x, &xin_x, &dn_mx, m, coord_x);
+        let bn = b_n(3, &psin_x, &xin_x, &dn_mx, m, coord_x);
+
+        let mul = (current_wavelenght / medium_n).powi(2) / (2.0 * std::f64::consts::PI) / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
+        for j in 1..4 {
+        	c_sca_coeff[j - 1].push((current_wavelenght, mul * (2.0 * j as f64 + 1.0) * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2))));
+        	c_ext_coeff[j - 1].push((current_wavelenght, mul * (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)));
+        }
+    }
+
+    let mut z = Complex::from(1.0, 1.0);
+    let mut var = 1.0;
+    
+    println!("calculating...");
+    plot_png(
+        "./results/c-sca-coeffs.png",
+        (2000, 400),
+        "c_sca coeffs",
+        (wavelenght_boundaries.0, wavelenght_boundaries.1),
+        (0.0, 10.0),
+        &c_sca_coeff,
+        &vec!["coeff 1", "coeff 2", "coeff 3"],
+        &vec![RED, BLUE, GREEN],
+    )?;
+    plot_png(
+        "./results/c-ext-coeffs.png",
+        (2000, 400),
+        "c_ext coeffs",
+        (wavelenght_boundaries.0, wavelenght_boundaries.1),
+        (0.0, 10.0),
+        &c_ext_coeff,
+        &vec!["coeff 1", "coeff 2", "coeff 3"],
+        &vec![RED, BLUE, GREEN],
+    )?;
+    
+    Ok(())
+}
