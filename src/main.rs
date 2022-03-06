@@ -617,9 +617,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         	c_ext_coeff[j - 1].push((current_wavelenght, mul * (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)));
         }
     }
-
-    let mut z = Complex::from(1.0, 1.0);
-    let mut var = 1.0;
     
     println!("calculating...");
     plot_png(
