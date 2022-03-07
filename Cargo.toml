@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 plotters = "0.3.1"
-scilib = "0.3.0"
+scilib = { git = "https://github.com/Gentil-N/scilib"}
+num-traits = "0.2"

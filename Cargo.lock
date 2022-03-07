@@ -387,6 +387,7 @@ dependencies = [
 name = "particle-scattering"
 version = "0.1.0"
 dependencies = [
+ "num-traits",
  "plotters",
  "scilib",
 ]
@@ -540,9 +541,8 @@ dependencies = [
 
 [[package]]
 name = "scilib"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "751954be1b0c4f20532888313db634a7e10d9ac1153d0bbf9949410a047b48f0"
+version = "0.3.1"
+source = "git+https://github.com/Gentil-N/scilib#2eac98588e117552c18193e5701be28a0fe66b5a"
 
 [[package]]
 name = "semver"

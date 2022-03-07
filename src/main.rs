@@ -2,6 +2,53 @@ use plotters::prelude::*;
 use scilib::math::complex::Complex;
 use std::cmp::*;
 
+mod func;
+
+/*
+use num_traits::{Num, Zero, One, NumCast};
+
+pub trait Trigo {
+    fn sin(&self) -> Self;
+    fn cos(&self) -> Self;
+    fn tan(&self) -> Self;
+}
+
+macro_rules! trigo_impl {
+    ($t:ty) => {
+        impl Trigo for $t {
+            #[inline]
+            fn sin(&self) -> $t {
+                <$t>::sin(*self)
+            }
+            #[inline]
+            fn cos(&self) -> $t {
+                <$t>::cos(*self)
+            }
+            #[inline]
+            fn tan(&self) -> $t {
+                <$t>::tan(*self)
+            }
+        }
+    };
+}
+
+trigo_impl!(f64);
+
+impl Trigo for Complex {
+    #[inline]
+    fn sin(&self) -> Complex {
+        Complex::sin(self)
+    }
+    #[inline]
+    fn cos(&self) -> Complex {
+        Complex::cos(self)
+    }
+    #[inline]
+    fn tan(&self) -> Complex {
+        Complex::tan(self)
+    }
+}*/
+
 /*
 xmodmap -e "keycode 105 = less greater less greater bar brokenbar lessthanequal greaterthanequal"
  */
@@ -12,6 +59,7 @@ fn y_n(order: usize, x: f64) -> Vec<f64> {
     for i in 2..(order+1) {
         yn.push((2 * i + 1) as f64 / x * yn.last().unwrap() - yn[yn.len() - 2]);
     }*/
+    
     let y_0 = -x.cos() / x;
     if order == 0 {
         return vec![y_0];
@@ -30,11 +78,11 @@ fn y_n(order: usize, x: f64) -> Vec<f64> {
 }
 
 fn y_n_z(order: usize, z: Complex) -> Vec<Complex> {
-    let y_0 = -cosinus_z(z) / z;
+    let y_0 = -z.cos() / z;
     if order == 0 {
         return vec![y_0];
     }
-    let y_1 = -cosinus_z(z) / (z * z) - sinus_z(z) / z;
+    let y_1 = -z.cos() / (z * z) - z.sin() / z;
     if order == 1 {
         return vec![y_1];
     }
@@ -82,14 +130,6 @@ fn j_n(order: usize, x: f64) -> Vec<f64> {
     return jn;
 }
 
-fn sinus_z(z: Complex) -> Complex {
-	return Complex::from(z.re.sin() * z.im.cosh(), z.re.cos() * z.im.sinh());
-}
-
-fn cosinus_z(z: Complex) -> Complex {
-	return Complex::from(z.re.cos() * z.im.cosh(), -z.re.sin() * z.im.sinh());
-}
-
 fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
     let max_len = (order + 1) * 10; // ten times more to have the limit
     let mut jn: Vec<Complex> = vec![Complex::from(0.0, 0.0); max_len];
@@ -99,14 +139,14 @@ fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
         jn[i - 1] = Complex::from((2 * i + 1) as f64, 0.0) / z * jn[i] - jn[i + 1];
     }
     jn.resize(order + 1, Complex::from(0.0, 0.0));
-    let coeff = sinus_z(z) / (z * jn[0]);
+    let coeff = z.sin() / (z * jn[0]);
     for i in 0..jn.len() {
         jn[i] *= coeff;
     }
     return jn;
 }
 
-/*
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut j0: Vec<(f64, f64)> = Vec::with_capacity(400);
@@ -114,16 +154,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut j2: Vec<(f64, f64)> = Vec::with_capacity(400);
     for i in 0..399 {
         let coord_x = (i + 1) as f64 / 20.0;
-        let jnz = j_n_z(2, Complex::from(coord_x, 1.0));
-        j0.push((coord_x, jnz[0].modulus()));
-        j1.push((coord_x, jnz[1].modulus()));
-        j2.push((coord_x, jnz[2].modulus()));
+        let jnz = j_n_z(2, Complex::from(coord_x, 0.0));
+        j0.push((coord_x, jnz[0].re));
+        j1.push((coord_x, jnz[1].re));
+        j2.push((coord_x, jnz[2].re));
     }
 
     plot_png("./results/bessel-jn-z.png", (800, 800), "bessel jn", (0.0, 20.0), (-0.5, 1.2), &vec![j0, j1, j2], &vec!["j0", "j1", "j2"], &vec![RED, BLUE, GREEN])?;
 
     Ok(())
-}*/
+}
 
 fn pitau_n(order: usize, theta: f64) -> (Vec<f64>, Vec<f64>) {
     assert!(order > 0);
@@ -371,27 +411,27 @@ fn b_n(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dn: &Vec<f64>, m: f64
     return bn;
 }
 
-fn a_n_z(order: usize,  psinz: &Vec<Complex>, xinz: &Vec<Complex>, dnz: &Vec<Complex>, m: Complex, z: Complex) -> Vec<Complex> {
-    assert!(psinz.len() == xinz.len() && xinz.len() == dnz.len());
-    let mut anz: Vec<Complex> = Vec::with_capacity(psinz.len());
+fn a_n_z(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dnz: &Vec<Complex>, m: Complex, z: f64) -> Vec<Complex> {
+    assert!(psin.len() == xin.len() && xin.len() == dnz.len());
+    let mut anz: Vec<Complex> = Vec::with_capacity(psin.len());
     anz.push(Complex::from(0.0, 0.0));
     for j in 1..=order {
         let n = Complex::from(j as f64, 0.0);
         let coeff_aj = dnz[j] / m + n / z;
-        let aj: Complex = (coeff_aj * psinz[j] - psinz[j - 1]) / (coeff_aj * xinz[j] - xinz[j - 1]);
+        let aj: Complex = (coeff_aj * psin[j] - psin[j - 1]) / (coeff_aj * xin[j] - xin[j - 1]);
         anz.push(aj);
     }
     return anz;
 }
 
-fn b_n_z(order: usize,  psinz: &Vec<Complex>, xinz: &Vec<Complex>, dnz: &Vec<Complex>, m: Complex, z: Complex) -> Vec<Complex> {
-    assert!(psinz.len() == xinz.len() && xinz.len() == dnz.len());
-    let mut bnz: Vec<Complex> = Vec::with_capacity(psinz.len());
+fn b_n_z(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dnz: &Vec<Complex>, m: Complex, z: f64) -> Vec<Complex> {
+    assert!(psin.len() == xin.len() && xin.len() == dnz.len());
+    let mut bnz: Vec<Complex> = Vec::with_capacity(psin.len());
     bnz.push(Complex::from(0.0, 0.0));
     for j in 1..=order {
         let n = Complex::from(j as f64, 0.0);
         let coeff_bj = dnz[j] * m + n / z;
-        let bj: Complex = (coeff_bj * psinz[j] - psinz[j - 1]) / (coeff_bj * xinz[j] - xinz[j - 1]);
+        let bj: Complex = (coeff_bj * psin[j] - psin[j - 1]) / (coeff_bj * xin[j] - xin[j - 1]);
         bnz.push(bj);
     }
     return bnz;
@@ -514,18 +554,6 @@ mod integration {
         return area;
     }
 }
-use std::ops::{Div};
-struct Point {
-    a: f64,
-    b: f64
-}
-impl Div<Point> for f64 {
-    type Output = Point;
-
-    fn div(self, other: Point) -> Point {
-        Point {a: self + other.a, b: self + other.b}
-    }
-}
 
 /*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -584,6 +612,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }*/
 
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let mut c_sca_coeff: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 3];
@@ -643,4 +672,74 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
     
     Ok(())
+}*/
+
+trait Cast<T> {
+    fn my_cast(_: usize) -> Self;
 }
+
+impl Cast<usize> for f64 {
+    fn my_cast(m: usize) -> Self {
+        m as f64
+    }
+}
+
+/*
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    let test: usize = 0;
+    let testf: f64 = f64::my_cast(test);
+
+	let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
+	let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
+
+	let wavelenght_boundaries = (400e-9, 1800e-9);
+    let medium_n = 1.0;
+    let m = Complex::from(3.5, 0.05) / medium_n; // 1.0 : just to remember the refractive index of the air
+    let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
+    let step = (wavelenght_boundaries.1 - wavelenght_boundaries.0) / 500.0;//((upper_limit - lower_limit) / 500.0).abs();
+
+    for i in 0..=499 {
+        let current_wavelenght = wavelenght_boundaries.0 + step * (i + 1) as f64;
+        let coord_x = upper_x / current_wavelenght;
+
+        let jn_x = j_n(3, coord_x);
+        let yn_x = y_n(3, coord_x);
+        let psin_x = psi_n(&jn_x, coord_x);
+        let xin_x = xi_n(&jn_x, &yn_x, coord_x);
+
+        let jnz_mx = j_n_z(3, coord_x * m);
+        let psinz_mx = psi_n_z(&jnz_mx, coord_x * m);
+        let dnz_mx = d_n_z(&psinz_mx, coord_x * m);
+
+        let an = a_n_z(3, &psin_x, &xin_x, &dnz_mx, m, coord_x);
+        let bn = b_n_z(3, &psin_x, &xin_x, &dnz_mx, m, coord_x);
+
+		let mut sum_sca = 0.0;
+		let mut sum_ext = 0.0;
+        for j in 1..4 {
+        	sum_sca += (2.0 * j as f64 + 1.0) * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2));
+        	sum_ext += (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re);
+        }
+        let mul = (current_wavelenght / medium_n).powi(2) / (2.0 * std::f64::consts::PI);
+        sum_sca *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
+        sum_ext *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
+
+        c_sca.push((current_wavelenght, sum_sca));
+        c_ext.push((current_wavelenght, sum_ext));
+    }
+    
+    println!("calculating...");
+    plot_png(
+        "./results/cross-section-z.png",
+        (2000, 400),
+        "cross section c_sca & c_ext",
+        (wavelenght_boundaries.0, wavelenght_boundaries.1),
+        (0.0, 10.0),
+        &vec![c_sca, c_ext],
+        &vec!["c_sca", "c_ext"],
+        &vec![RED, BLUE],
+    )?;
+    
+    Ok(())
+}*/
