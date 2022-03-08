@@ -59,7 +59,6 @@ fn y_n(order: usize, x: f64) -> Vec<f64> {
     for i in 2..(order+1) {
         yn.push((2 * i + 1) as f64 / x * yn.last().unwrap() - yn[yn.len() - 2]);
     }*/
-    
     let y_0 = -x.cos() / x;
     if order == 0 {
         return vec![y_0];
@@ -146,7 +145,7 @@ fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
     return jn;
 }
 
-
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut j0: Vec<(f64, f64)> = Vec::with_capacity(400);
@@ -163,7 +162,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     plot_png("./results/bessel-jn-z.png", (800, 800), "bessel jn", (0.0, 20.0), (-0.5, 1.2), &vec![j0, j1, j2], &vec!["j0", "j1", "j2"], &vec![RED, BLUE, GREEN])?;
 
     Ok(())
-}
+}*/
 
 fn pitau_n(order: usize, theta: f64) -> (Vec<f64>, Vec<f64>) {
     assert!(order > 0);
@@ -282,7 +281,7 @@ fn xi_n_z(jnz: &Vec<Complex>, ynz: &Vec<Complex>, z: Complex) -> Vec<Complex> {
     assert!(jnz.len() == ynz.len());
     let mut xinz: Vec<Complex> = Vec::with_capacity(jnz.len());
     for i in 0..jnz.len() {
-        xinz.push(jnz[i] + Complex::from(0.0, 1.0) * ynz[i] * z);
+        xinz.push(z * (jnz[i] + Complex::from(0.0, 1.0) * ynz[i]));
     }
     return xinz;
 }
@@ -411,7 +410,7 @@ fn b_n(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dn: &Vec<f64>, m: f64
     return bn;
 }
 
-fn a_n_z(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dnz: &Vec<Complex>, m: Complex, z: f64) -> Vec<Complex> {
+fn a_n_z(z: f64, m: Complex, order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dnz: &Vec<Complex>) -> Vec<Complex> {
     assert!(psin.len() == xin.len() && xin.len() == dnz.len());
     let mut anz: Vec<Complex> = Vec::with_capacity(psin.len());
     anz.push(Complex::from(0.0, 0.0));
@@ -424,7 +423,7 @@ fn a_n_z(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dnz: &Vec<Complex>,
     return anz;
 }
 
-fn b_n_z(order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dnz: &Vec<Complex>, m: Complex, z: f64) -> Vec<Complex> {
+fn b_n_z(z: f64, m: Complex, order: usize,  psin: &Vec<f64>, xin: &Vec<Complex>, dnz: &Vec<Complex>) -> Vec<Complex> {
     assert!(psin.len() == xin.len() && xin.len() == dnz.len());
     let mut bnz: Vec<Complex> = Vec::with_capacity(psin.len());
     bnz.push(Complex::from(0.0, 0.0));
@@ -563,7 +562,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let wavelenght_boundaries = (400e-9, 1800e-9);
     let medium_n = 1.0;
-    let m = 3.5 / medium_n; // 1.0 : just to remember the refractive index of the air
+    let m = Complex::from(3.5, 0.05) / medium_n; // 1.0 : just to remember the refractive index of the air
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
     let step = (wavelenght_boundaries.1 - wavelenght_boundaries.0) / 500.0;//((upper_limit - lower_limit) / 500.0).abs();
 
@@ -571,17 +570,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let current_wavelenght = wavelenght_boundaries.0 + step * (i + 1) as f64;
         let coord_x = upper_x / current_wavelenght;
 
-        let jn_x = j_n(3, coord_x);
-        let yn_x = y_n(3, coord_x);
-        let psin_x = psi_n(&jn_x, coord_x);
-        let xin_x = xi_n(&jn_x, &yn_x, coord_x);
+        let jn_x = func::sj_array(coord_x, 3usize);
+        let yn_x = func::sy_array(coord_x, 3usize);
+        let psin_x = func::psi_array(coord_x, &jn_x);
+        let xin_x = func::xi_array(coord_x, &jn_x, &yn_x);
 
-        let jn_mx = j_n(3, coord_x * m);
-        let psin_mx = psi_n(&jn_mx, coord_x * m);
-        let dn_mx = d_n(&psin_mx, coord_x * m);
+        let jn_mx = func::sj_array(coord_x * m, 3usize);
+        let psin_mx = func::psi_array(coord_x * m, &jn_mx);
+        let dn_mx = func::d_array(coord_x * m, &psin_mx);
 
-        let an = a_n(3, &psin_x, &xin_x, &dn_mx, m, coord_x);
-        let bn = b_n(3, &psin_x, &xin_x, &dn_mx, m, coord_x);
+        let an = func::a_array(coord_x, m, 3usize, &psin_x, &xin_x, &dn_mx);
+        let bn = func::b_array(coord_x, m, 3usize, &psin_x, &xin_x, &dn_mx);
 
 		let mut sum_sca = 0.0;
 		let mut sum_ext = 0.0;
@@ -589,17 +588,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         	sum_sca += (2.0 * j as f64 + 1.0) * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2));
         	sum_ext += (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re);
         }
-        let mul = (current_wavelenght / medium_n).powi(2) / (2.0 * std::f64::consts::PI);
-        sum_sca *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
-        sum_ext *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
-        println!("{}", sum_sca);
+        let surface = (200.0e-9) * (200.0e-9) * std::f64::consts::PI;
+        let mul = (current_wavelenght / medium_n).powi(2) / (2.0 * std::f64::consts::PI) / surface;
+        sum_sca *= mul;
+        sum_ext *= mul;
         c_sca.push((current_wavelenght, sum_sca));
         c_ext.push((current_wavelenght, sum_ext));
     }
     
     println!("calculating...");
     plot_png(
-        "./results/cross-section.png",
+        "./results/cross-section-test.png",
         (2000, 400),
         "cross section c_sca & c_ext",
         (wavelenght_boundaries.0, wavelenght_boundaries.1),
@@ -612,7 +611,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }*/
 
-/*
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let mut c_sca_coeff: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 3];
@@ -620,7 +619,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let wavelenght_boundaries = (400e-9, 1800e-9);
     let medium_n = 1.0;
-    let m = 3.5 / medium_n; // 1.0 : just to remember the refractive index of the air
+    let m = Complex::from(3.5, 0.05) / medium_n; // 1.0 : just to remember the refractive index of the air
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
     let step = (wavelenght_boundaries.1 - wavelenght_boundaries.0) / 500.0;
 
@@ -628,17 +627,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let current_wavelenght = wavelenght_boundaries.0 + step * (i + 1) as f64;
         let coord_x = upper_x / current_wavelenght;
 
-        let jn_x = j_n(3, coord_x);
-        let yn_x = y_n(3, coord_x);
-        let psin_x = psi_n(&jn_x, coord_x);
-        let xin_x = xi_n(&jn_x, &yn_x, coord_x);
+        let jn_x = func::sj_array(coord_x, 3usize);
+        let yn_x = func::sy_array(coord_x, 3usize);
+        let psin_x = func::psi_array(coord_x, &jn_x);
+        let xin_x = func::xi_array(coord_x, &jn_x, &yn_x);
 
-        let jn_mx = j_n(3, coord_x * m);
-        let psin_mx = psi_n(&jn_mx, coord_x * m);
-        let dn_mx = d_n(&psin_mx, coord_x * m);
+        let jn_mx = func::sj_array(coord_x * m, 3usize);
+        let psin_mx = func::psi_array(coord_x * m, &jn_mx);
+        let dn_mx = func::d_array(coord_x * m, &psin_mx);
 
-        let an = a_n(3, &psin_x, &xin_x, &dn_mx, m, coord_x);
-        let bn = b_n(3, &psin_x, &xin_x, &dn_mx, m, coord_x);
+        let an = func::a_array(coord_x, m, 3usize, &psin_x, &xin_x, &dn_mx);
+        let bn = func::b_array(coord_x, m, 3usize, &psin_x, &xin_x, &dn_mx);
 
         let mul = (current_wavelenght / medium_n).powi(2) / (2.0 * std::f64::consts::PI) / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
         for j in 1..4 {
@@ -646,8 +645,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         	c_ext_coeff[j - 1].push((current_wavelenght, mul * (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)));
         }
     }
-
-    let var = 0.0;
     
     println!("calculating...");
     plot_png(
@@ -672,15 +669,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
     
     Ok(())
-}*/
-
-trait Cast<T> {
-    fn my_cast(_: usize) -> Self;
 }
 
-impl Cast<usize> for f64 {
-    fn my_cast(m: usize) -> Self {
-        m as f64
+trait Cast {
+    fn to_usize(&self) -> usize;
+}
+
+impl Cast for f64 {
+    fn to_usize(&self) -> usize {
+        *self as usize
     }
 }
 
