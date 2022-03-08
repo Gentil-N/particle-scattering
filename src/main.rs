@@ -3,6 +3,7 @@ use scilib::math::complex::Complex;
 use std::cmp::*;
 
 mod func;
+mod csv;
 
 /*
 use num_traits::{Num, Zero, One, NumCast};
@@ -132,10 +133,17 @@ fn j_n(order: usize, x: f64) -> Vec<f64> {
 fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
     let max_len = (order + 1) * 10; // ten times more to have the limit
     let mut jn: Vec<Complex> = vec![Complex::from(0.0, 0.0); max_len];
+    /*jn[0] = z.sin() / z;
+    jn[1] = z.sin() / z.powi(2) - z.cos() / z;
+    for i in 1..=max_len - 2 {
+        jn[i + 1] = Complex::from((2 * i + 1) as f64, 0.0) / z * jn[i] - jn[i - 1];
+        println!("{}", jn[i + 1]);
+    }*/
     jn[max_len - 1] = Complex::from(0.0, 0.0);
-    jn[max_len - 2] = Complex::from(1.0, 0.0);
+    jn[max_len - 2] = Complex::from(1.0 / 10e100, 0.0);
     for i in (1..=max_len - 2).rev() {
         jn[i - 1] = Complex::from((2 * i + 1) as f64, 0.0) / z * jn[i] - jn[i + 1];
+        println!("{}", jn[i - 1]);
     }
     jn.resize(order + 1, Complex::from(0.0, 0.0));
     let coeff = z.sin() / (z * jn[0]);
@@ -145,24 +153,24 @@ fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
     return jn;
 }
 
-/*
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut j0: Vec<(f64, f64)> = Vec::with_capacity(400);
     let mut j1: Vec<(f64, f64)> = Vec::with_capacity(400);
     let mut j2: Vec<(f64, f64)> = Vec::with_capacity(400);
-    for i in 0..399 {
-        let coord_x = (i + 1) as f64 / 20.0;
-        let jnz = j_n_z(2, Complex::from(coord_x, 0.0));
-        j0.push((coord_x, jnz[0].re));
-        j1.push((coord_x, jnz[1].re));
-        j2.push((coord_x, jnz[2].re));
+    for i in 0..1 {
+        let coord_x = (i + 1) as f64 / 10.0;
+        let jn_x = j_n_z(3usize,Complex::from(coord_x, 0.0));
+        j0.push((coord_x, jn_x[0].re));
+        j1.push((coord_x, jn_x[1].re));
+        j2.push((coord_x, jn_x[2].re));
     }
 
-    plot_png("./results/bessel-jn-z.png", (800, 800), "bessel jn", (0.0, 20.0), (-0.5, 1.2), &vec![j0, j1, j2], &vec!["j0", "j1", "j2"], &vec![RED, BLUE, GREEN])?;
+    plot_png("./results/bessel-jn-z.png", (800, 800), "bessel jn", (0.0, 40.0), (-0.5, 1.2), &vec![j0, j1, j2], &vec!["j0", "j1", "j2"], &vec![RED, BLUE, GREEN])?;
 
     Ok(())
-}*/
+}
 
 fn pitau_n(order: usize, theta: f64) -> (Vec<f64>, Vec<f64>) {
     assert!(order > 0);
@@ -611,7 +619,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }*/
 
-
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	let mut c_sca_coeff: Vec<Vec<(f64, f64)>> = vec![Vec::with_capacity(500); 3];
@@ -645,7 +653,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         	c_ext_coeff[j - 1].push((current_wavelenght, mul * (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)));
         }
     }
-    
+
     println!("calculating...");
     plot_png(
         "./results/c-sca-coeffs.png",
@@ -669,7 +677,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
     
     Ok(())
-}
+}*/
 
 trait Cast {
     fn to_usize(&self) -> usize;
@@ -684,9 +692,6 @@ impl Cast for f64 {
 /*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
-    let test: usize = 0;
-    let testf: f64 = f64::my_cast(test);
-
 	let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
 	let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
 
@@ -695,26 +700,27 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let m = Complex::from(3.5, 0.05) / medium_n; // 1.0 : just to remember the refractive index of the air
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
     let step = (wavelenght_boundaries.1 - wavelenght_boundaries.0) / 500.0;//((upper_limit - lower_limit) / 500.0).abs();
+    let max_n: usize = 3;
 
     for i in 0..=499 {
         let current_wavelenght = wavelenght_boundaries.0 + step * (i + 1) as f64;
         let coord_x = upper_x / current_wavelenght;
 
-        let jn_x = j_n(3, coord_x);
-        let yn_x = y_n(3, coord_x);
-        let psin_x = psi_n(&jn_x, coord_x);
-        let xin_x = xi_n(&jn_x, &yn_x, coord_x);
+        let jn_x = func::sj_array(coord_x, max_n);
+        let yn_x = func::sy_array(coord_x, max_n);
+        let psin_x = func::psi_array(coord_x, &jn_x);
+        let xin_x = func::xi_array(coord_x, &jn_x, &yn_x);
 
-        let jnz_mx = j_n_z(3, coord_x * m);
-        let psinz_mx = psi_n_z(&jnz_mx, coord_x * m);
-        let dnz_mx = d_n_z(&psinz_mx, coord_x * m);
+        let jn_mx = func::sj_array(coord_x * m, max_n);
+        let psin_mx = func::psi_array(coord_x * m, &jn_mx);
+        let dn_mx = func::d_array(coord_x * m, &psin_mx);
 
-        let an = a_n_z(3, &psin_x, &xin_x, &dnz_mx, m, coord_x);
-        let bn = b_n_z(3, &psin_x, &xin_x, &dnz_mx, m, coord_x);
+        let an = func::a_array(coord_x, m, max_n, &psin_x, &xin_x, &dn_mx);
+        let bn = func::b_array(coord_x, m, max_n, &psin_x, &xin_x, &dn_mx);
 
 		let mut sum_sca = 0.0;
 		let mut sum_ext = 0.0;
-        for j in 1..4 {
+        for j in 1..=max_n {
         	sum_sca += (2.0 * j as f64 + 1.0) * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2));
         	sum_ext += (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re);
         }

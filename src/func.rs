@@ -1,5 +1,6 @@
 use scilib::math::complex::Complex;
 use std::f64::consts::{PI};
+use std::cmp::*;
 
 pub fn sy_array<T: Into<Complex>, U: Into<usize>>(x: T, n: U) -> Vec<Complex> {
     let z: Complex = x.into();
@@ -16,7 +17,7 @@ pub fn sy_array<T: Into<Complex>, U: Into<usize>>(x: T, n: U) -> Vec<Complex> {
     yn[0] = y0;
     yn[1] = y1;
     for i in 2..(order + 1) {
-        yn[i] = Complex::from((2 * i + 1) as f64, 0.0) / z * yn[i - 1] - yn[i - 2];
+        yn[i] = ((2 * i + 1) as f64) / z * yn[i - 1] - yn[i - 2];
     }
     return yn;
 }
@@ -24,7 +25,7 @@ pub fn sy_array<T: Into<Complex>, U: Into<usize>>(x: T, n: U) -> Vec<Complex> {
 pub fn sj_array<T: Into<Complex>, U: Into<usize>>(x: T, n: U) -> Vec<Complex> {
     let z: Complex = x.into();
     let order: usize = n.into();
-    let max_len = (order + 1) * 10; // ten times more to have the limit
+    let max_len = (order + 1) * 25; // ten times more to have the limit
     let mut jn: Vec<Complex> = vec![Complex::from(0.0, 0.0); max_len];
     jn[max_len - 1] = Complex::from(0.0, 0.0);
     jn[max_len - 2] = Complex::from(1.0, 0.0);
@@ -66,10 +67,10 @@ pub fn psi_array<T: Into<Complex>>(x: T, sjn: &Vec<Complex>) -> Vec<Complex> {
 }
 
 pub fn xi_array<T: Into<Complex>>(x: T, jn: &Vec<Complex>, yn: &Vec<Complex>) -> Vec<Complex> {
-    assert!(jn.len() == yn.len());
     let z: Complex = x.into();
-    let mut xinz: Vec<Complex> = Vec::with_capacity(jn.len());
-    for i in 0..jn.len() {
+    let min = min(jn.len(), yn.len());
+    let mut xinz: Vec<Complex> = Vec::with_capacity(min);
+    for i in 0..min {
         xinz.push(z * (jn[i] + Complex::from(0.0, 1.0) * yn[i]));
     }
     return xinz;
@@ -93,9 +94,9 @@ pub fn d_array<T: Into<Complex>>(x: T, psin: &Vec<Complex>) -> Vec<Complex> {
 }
 
 pub fn a_array<T: Into<Complex>, U: Into<usize>>(x: f64, m: T, n: U,  psin: &Vec<Complex>, xin: &Vec<Complex>, dn: &Vec<Complex>) -> Vec<Complex> {
-    assert!(psin.len() == xin.len() && xin.len() == dn.len());
-    let coeff_m: Complex = m.into();
     let order: usize = n.into();
+    assert!(order < psin.len() && order < xin.len() && order < dn.len());
+    let coeff_m: Complex = m.into();
     let mut an: Vec<Complex> = Vec::with_capacity(psin.len());
     an.push(Complex::from(0.0, 0.0));
     for j in 1..=order {
@@ -107,9 +108,9 @@ pub fn a_array<T: Into<Complex>, U: Into<usize>>(x: f64, m: T, n: U,  psin: &Vec
 }
 
 pub fn b_array<T: Into<Complex>, U: Into<usize>>(x: f64, m: T, n: U,  psin: &Vec<Complex>, xin: &Vec<Complex>, dn: &Vec<Complex>) -> Vec<Complex> {
-    assert!(psin.len() == xin.len() && xin.len() == dn.len());
-    let coeff_m: Complex = m.into();
     let order: usize = n.into();
+    assert!(order < psin.len() && order < xin.len() && order < dn.len());
+    let coeff_m: Complex = m.into();
     let mut bn: Vec<Complex> = Vec::with_capacity(psin.len());
     bn.push(Complex::from(0.0, 0.0));
     for j in 1..=order {
