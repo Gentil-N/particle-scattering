@@ -131,29 +131,99 @@ fn j_n(order: usize, x: f64) -> Vec<f64> {
 }
 
 fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
-    let max_len = (order + 1) * 10; // ten times more to have the limit
+    let max_len = order + 1; //(order + 1) * 5; // ten times more to have the limit
     let mut jn: Vec<Complex> = vec![Complex::from(0.0, 0.0); max_len];
     jn[0] = z.sin() / z;
     jn[1] = z.sin() / z.powi(2) - z.cos() / z;
     for i in 1..=max_len - 2 {
         jn[i + 1] = Complex::from((2 * i + 1) as f64, 0.0) / z * jn[i] - jn[i - 1];
-        if jn[i + 1].re.abs() >= 10e100 || jn[i + 1].re.abs() <= 10e-100 {
-            println!("{} /// {}", z.re, jn[i + 1]);
+        if jn[i + 1].re.abs() > 1e10 {
+            jn[i + 1].re = 0.4;
         }
+        //println!("{} /// {} /// {}", z.re, i, jn[i + 1]);
     }
     /*jn[max_len - 1] = Complex::from(0.0, 0.0);
     jn[max_len - 2] = Complex::from(1.0, 0.0);
     for i in (1..=max_len - 2).rev() {
         jn[i - 1] = Complex::from((2 * i + 1) as f64, 0.0) / z * jn[i] - jn[i + 1];
-        if jn[i - 1].re.abs() >= 10e100 || jn[i - 1].re.abs() <= 10e-100 {
-            println!("{} /// {}", z.re, jn[i - 1]);
-        }
+        //println!("{} /// {} /// {}", z.re, i, jn[i - 1]);
     }
+    //println!("");
     jn.resize(order + 1, Complex::from(0.0, 0.0));
     let coeff = z.sin() / (z * jn[0]);
     for i in 0..jn.len() {
         jn[i] *= coeff;
+        //println!("{} /// {} /// {}", z.re, i, jn[i]);
     }*/
+    //println!("");
+    return jn;
+}
+
+fn upward_reccurence(x: f64, n: usize) -> Vec<f64> {
+    let count = n + 1;
+    let mut jn = vec![0.0; count];
+    jn[0] = x.sin() / x;
+    jn[1] = x.sin() / x.powi(2) - x.cos() / x;
+    for i in 1..=count - 2 {
+        jn[i + 1] = (2 * i + 1) as f64 / x * jn[i] - jn[i - 1];
+    }
+    jn
+}
+
+fn downward_reccurence(x: f64, nl: usize, nu: usize) -> Vec<f64> {
+    let count = nu - nl + 1;
+    let mut jn: Vec<f64> = vec![0.0; count + 2];
+    jn[count + 1] = 0.0;
+    jn[count] = 1.0;
+    for i in (1..=count).rev() {
+        jn[i - 1] = (2 * i + 1) as f64 / x * jn[i] - jn[i + 1];
+    }
+    jn.resize(count, 0.0);
+    jn
+}
+
+fn fucking_jn(x: f64, n: usize) -> Vec<f64> {
+    if x > n as f64 / 2.0 {
+        upward_reccurence(x, n)
+    } else {
+        let num_big_loop = n / 100;
+        let mut jn_all = Vec::<Vec<f64>>::new();
+        for i in 0..num_big_loop {
+            jn_all.push(downward_reccurence(x, i * 100, (i + 1) * 100));
+        }
+        let rest = n % 100;
+        if rest != 0 {
+            jn_all.push(downward_reccurence(x, n - rest, n));
+        }
+
+        let mut jn = Vec::<f64>::with_capacity(n);
+        let mut norm = x.sin() / x / jn_all[0][0];
+        for i in 0..jn_all[0].len() {
+            jn.push(jn_all[0][i] * norm);
+        }
+        for i in 1..jn_all.len() {
+            norm = jn.last().unwrap() / jn_all[i][0];
+            for k in 1..jn_all[i].len() {
+                jn.push(jn_all[i][k] * norm);
+            }
+        }
+        jn
+    }
+}
+
+fn miller(x: f64, order: usize) -> Vec<f64> {
+    let mut jn: Vec<f64> = vec![0.0; order + 2];
+    jn[order + 1] = 0.0;
+    jn[order] = 1.0;
+    for i in (1..order + 1).rev() {
+        jn[i - 1] = (2 * i + 1) as f64 / x * jn[i] - jn[i + 1];
+    }
+
+    let norm = x.sin() / x / jn[0];
+    for i in 0..jn.len() {
+        jn[i] *= norm;
+        println!("{} /// {}", i, jn[i]);
+    }
     return jn;
 }
 
@@ -163,10 +233,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut j2: Vec<(f64, f64)> = Vec::with_capacity(400);
     for i in 0..399 {
         let coord_x = (i + 1) as f64 / 10.0;
-        let jn_x = j_n_z(5usize, Complex::from(coord_x, 0.0));
-        j0.push((coord_x, jn_x[0].re));
-        j1.push((coord_x, jn_x[1].re));
-        j2.push((coord_x, jn_x[2].re));
+        let jn_x = fucking_jn(coord_x, 500usize); //j_n_z(100usize, Complex::from(coord_x, 0.0));
+        j0.push((coord_x, jn_x[0]));
+        j1.push((coord_x, jn_x[1]));
+        j2.push((coord_x, jn_x[2]));
     }
 
     plot_png(
