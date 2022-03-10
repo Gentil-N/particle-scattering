@@ -837,6 +837,29 @@ fn get_ref_index(csv_file: &Vec<(f64, f64, f64)>, wavelength: f64) -> Complex {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    {
+        let sj = func::sj_array(Complex::from(13, 5), 3usize);
+        assert_eq!(sj[0], Complex::from(3.8248700377925635, 3.708547263317134));
+        assert_eq!(sj[1], Complex::from(-3.357143112679857, 3.9747696875545517));
+        assert_eq!(sj[2], Complex::from(-4.1924320794482135, -2.6499227040139104));
+        println!("{}, {}, {}", sj[0], sj[1], sj[2]);
+        let sj2 = func::sj_array(0.2, 25usize);
+        println!("{}, {}, {}", sj2[13], sj2[17], sj2[25]);
+        assert_eq!(sj2[13], Complex::from(0.000000000000000000000003835110596379198, 0.0));
+        assert_eq!(sj2[17], Complex::from(0.000000000000000000000000000000005910455642760406, 0.0));
+        assert_eq!(sj2[25], Complex::from(0.000000000000000000000000000000000000000000000000001125476749298975, 0.0));
+
+        let sy = func::sy_array(Complex::from(13, 5), 3usize);
+        println!("{}, {}, {}", sy[0], sy[1], sy[2]);
+        assert_eq!(sy[0], Complex::from(-3.7090299518957797, 3.8248379131516654));
+        assert_eq!(sy[1], Complex::from(-3.9748349852610523, -3.356650136356049));
+        assert_eq!(sy[2], Complex::from(1.9446973361696478, -4.437267728778557));
+        let sy2 = func::sy_array(0.2, 25usize);
+        println!("{}, {}, {}", sy2[13], sy2[17], sy2[25]);
+        assert_eq!(sy2[13], Complex::from(-438040564762039800000000.0, 0.0));
+        assert_eq!(sy2[17], Complex::from(-284225138610497950000000000000000.0, 0.0));
+        assert_eq!(sy2[25], Complex::from(-1492587957151948600000000000000000000000000000000000.0, 0.0));
+    }
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
     let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
 
