@@ -2,8 +2,9 @@ use plotters::prelude::*;
 use scilib::math::complex::Complex;
 use std::cmp::*;
 
+mod csv;
 mod func;
-//mod csv;
+mod utils;
 
 /*
 use num_traits::{Num, Zero, One, NumCast};
@@ -159,9 +160,10 @@ fn j_n_z(order: usize, z: Complex) -> Vec<Complex> {
     return jn;
 }
 
-fn upward_reccurence(x: f64, n: usize) -> Vec<f64> {
+fn upward_reccurence<T: Into<Complex>>(z: T, n: usize) -> Vec<Complex> {
     let count = n + 1;
-    let mut jn = vec![0.0; count];
+    let x: Complex = z.into();
+    let mut jn = vec![Complex::from(0.0, 0.0); count];
     jn[0] = x.sin() / x;
     jn[1] = x.sin() / x.powi(2) - x.cos() / x;
     for i in 1..=count - 2 {
@@ -170,39 +172,43 @@ fn upward_reccurence(x: f64, n: usize) -> Vec<f64> {
     jn
 }
 
-fn downward_reccurence(x: f64, nl: usize, nu: usize) -> Vec<f64> {
+fn downward_reccurence<T: Into<Complex>>(z: T, nl: usize, nu: usize) -> Vec<Complex> {
     let count = nu - nl + 1;
-    let mut jn: Vec<f64> = vec![0.0; count + 2];
-    jn[count + 1] = 0.0;
-    jn[count] = 1.0;
+    let x: Complex = z.into();
+    let mut jn = vec![Complex::from(0.0, 0.0); count + 2];
+    jn[count + 1] = Complex::from(0.0, 0.0);
+    jn[count] = Complex::from(1.0, 0.0);
     for i in (1..=count).rev() {
         jn[i - 1] = (2 * i + 1) as f64 / x * jn[i] - jn[i + 1];
     }
-    jn.resize(count, 0.0);
+    jn.resize(count, Complex::from(0.0, 0.0));
     jn
 }
 
-fn fucking_jn(x: f64, n: usize) -> Vec<f64> {
-    if x > n as f64 / 2.0 {
+const LOOP: usize = 50;
+
+fn fucking_jn<T: Into<Complex>>(z: T, n: usize) -> Vec<Complex> {
+    let x: Complex = z.into();
+    if x.modulus() > n as f64 / 2.0 {
         upward_reccurence(x, n)
     } else {
-        let num_big_loop = n / 100;
-        let mut jn_all = Vec::<Vec<f64>>::new();
+        let num_big_loop = n / LOOP;
+        let mut jn_all = Vec::<Vec<Complex>>::new();
         for i in 0..num_big_loop {
-            jn_all.push(downward_reccurence(x, i * 100, (i + 1) * 100));
+            jn_all.push(downward_reccurence(x, i * LOOP, (i + 1) * LOOP));
         }
-        let rest = n % 100;
+        let rest = n % LOOP;
         if rest != 0 {
             jn_all.push(downward_reccurence(x, n - rest, n));
         }
 
-        let mut jn = Vec::<f64>::with_capacity(n);
+        let mut jn = Vec::<Complex>::with_capacity(n);
         let mut norm = x.sin() / x / jn_all[0][0];
         for i in 0..jn_all[0].len() {
             jn.push(jn_all[0][i] * norm);
         }
         for i in 1..jn_all.len() {
-            norm = jn.last().unwrap() / jn_all[i][0];
+            norm = *jn.last().unwrap() / jn_all[i][0];
             for k in 1..jn_all[i].len() {
                 jn.push(jn_all[i][k] * norm);
             }
@@ -227,16 +233,17 @@ fn miller(x: f64, order: usize) -> Vec<f64> {
     return jn;
 }
 
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut j0: Vec<(f64, f64)> = Vec::with_capacity(400);
     let mut j1: Vec<(f64, f64)> = Vec::with_capacity(400);
     let mut j2: Vec<(f64, f64)> = Vec::with_capacity(400);
     for i in 0..399 {
         let coord_x = (i + 1) as f64 / 10.0;
-        let jn_x = fucking_jn(coord_x, 500usize); //j_n_z(100usize, Complex::from(coord_x, 0.0));
-        j0.push((coord_x, jn_x[0]));
-        j1.push((coord_x, jn_x[1]));
-        j2.push((coord_x, jn_x[2]));
+        let jn_x = fucking_jn(Complex::from(coord_x, 0.0), 500usize); //j_n_z(100usize, Complex::from(coord_x, 0.0));
+        j0.push((coord_x, jn_x[0].re));
+        j1.push((coord_x, jn_x[1].re));
+        j2.push((coord_x, jn_x[2].re));
     }
 
     plot_png(
@@ -251,7 +258,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}
+}*/
 
 fn pitau_n(order: usize, theta: f64) -> (Vec<f64>, Vec<f64>) {
     assert!(order > 0);
@@ -799,22 +806,56 @@ impl Cast for f64 {
     }
 }
 
-/*
-fn main() -> Result<(), Box<dyn std::error::Error>> {
+use std::ops::{Add, Sub};
 
+fn approx_eq<T: PartialOrd + Add<Output = T> + Sub<Output = T> + Copy>(exact: T, value: T, approx: T) -> bool {
+    if (exact - approx) < value && (exact + approx) > value {
+        return true;
+    } 
+    false
+}
+
+fn get_ref_index(csv_file: &Vec<(f64, f64, f64)>, wavelength: f64) -> Complex {
+    for i in 0..csv_file.len() - 1 {
+        if approx_eq(csv_file[i].0, wavelength, 1e-3) {
+            return Complex::from(csv_file[i].1, csv_file[i].2);
+        } else if csv_file[i].0 < wavelength && csv_file[i + 1].0 > wavelength {
+            let point_re = utils::linear_interpolation_2D(
+                (csv_file[i].0, csv_file[i].1),
+                (csv_file[i + 1].0, csv_file[i + 1].1),
+                wavelength,
+            );
+            let point_im = utils::linear_interpolation_2D(
+                (csv_file[i].0, csv_file[i].2),
+                (csv_file[i + 1].0, csv_file[i + 1].2),
+                wavelength,
+            );
+            return Complex::from(point_re.1, point_im.1);
+        }
+    }
+    Complex::from(csv_file.last().unwrap().1, csv_file.last().unwrap().2)
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
     let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
 
-    let wavelenght_boundaries = (400e-9, 1800e-9);
+    let ref_indices = csv::parse("./res/refractive-index-silicon.csv");
     let medium_n = 1.0;
-    let m = Complex::from(3.5, 0.05) / medium_n; // 1.0 : just to remember the refractive index of the air
+    let wavelength_boundaries = (
+        ref_indices[0].0 * 1e-6,
+        ref_indices.last().unwrap().0 * 1e-6,
+    );
+    let medium_n = 1.0;
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
-    let step = (wavelenght_boundaries.1 - wavelenght_boundaries.0) / 500.0;//((upper_limit - lower_limit) / 500.0).abs();
+    let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 500.0; //((upper_limit - lower_limit) / 500.0).abs();
     let max_n: usize = 3;
 
     for i in 0..=499 {
-        let current_wavelenght = wavelenght_boundaries.0 + step * (i + 1) as f64;
-        let coord_x = upper_x / current_wavelenght;
+        let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
+        let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
+        let m = ref_index / medium_n;
+        let coord_x = upper_x / current_wavelength;
 
         let jn_x = func::sj_array(coord_x, max_n);
         let yn_x = func::sy_array(coord_x, max_n);
@@ -831,15 +872,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let mut sum_sca = 0.0;
         let mut sum_ext = 0.0;
         for j in 1..=max_n {
-            sum_sca += (2.0 * j as f64 + 1.0) * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2));
+            sum_sca += (2.0 * j as f64 + 1.0)
+                * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2));
             sum_ext += (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re);
         }
-        let mul = (current_wavelenght / medium_n).powi(2) / (2.0 * std::f64::consts::PI);
+        let mul = (current_wavelength / medium_n).powi(2) / (2.0 * std::f64::consts::PI);
         sum_sca *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
         sum_ext *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
 
-        c_sca.push((current_wavelenght, sum_sca));
-        c_ext.push((current_wavelenght, sum_ext));
+        c_sca.push((current_wavelength, sum_sca));
+        c_ext.push((current_wavelength, sum_ext));
     }
 
     println!("calculating...");
@@ -847,7 +889,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "./results/cross-section-z.png",
         (2000, 400),
         "cross section c_sca & c_ext",
-        (wavelenght_boundaries.0, wavelenght_boundaries.1),
+        (wavelength_boundaries.0, wavelength_boundaries.1),
         (0.0, 10.0),
         &vec![c_sca, c_ext],
         &vec!["c_sca", "c_ext"],
@@ -855,4 +897,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}*/
+}
