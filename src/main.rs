@@ -650,6 +650,48 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 mod integration {
 
+    fn chunk_trapez(a: f64, b: f64, offset: f64) -> f64 {
+        if a.signum() != b.signum() {
+            // Zero
+            let a_abs = a.abs();
+            let b_abs = b.abs();
+            let thales = offset / (a_abs + b_abs);
+            let first_tri_base = a_abs * thales;
+            let second_tri_base = b_abs * thales;
+            return (first_tri_base * a + second_tri_base * b) / 2.0;
+        } else {
+            let max;
+            let min;
+            if a < b {
+                max = b;
+                min = a;
+            } else {
+                max = a;
+                min = b;
+            }
+            return (max - min) * offset / 2.0 + offset * min;
+        }
+    }
+
+    pub fn trapez(
+        function: impl Fn(f64) -> f64,
+        lower_bound: f64,
+        upper_bound: f64,
+        div: usize,
+    ) -> f64 {
+        assert!(div >= 1);
+        let mut area = 0.0;
+        let offset = upper_bound - lower_bound;
+        let mut a = function(lower_bound);
+        let step = offset / div as f64;
+        for i in 0..div {
+            let b = function(step * (i as f64 + 1.0));
+            area += chunk_trapez(a, b, step);
+            a = b;
+        }
+        area
+    }
+
     pub fn trapezoid(xy: &[(f64, f64)]) -> f64 {
         let mut area = 0.0;
         for i in 1..xy.len() {
@@ -808,10 +850,14 @@ impl Cast for f64 {
 
 use std::ops::{Add, Sub};
 
-fn approx_eq<T: PartialOrd + Add<Output = T> + Sub<Output = T> + Copy>(exact: T, value: T, approx: T) -> bool {
+fn approx_eq<T: PartialOrd + Add<Output = T> + Sub<Output = T> + Copy>(
+    exact: T,
+    value: T,
+    approx: T,
+) -> bool {
     if (exact - approx) < value && (exact + approx) > value {
         return true;
-    } 
+    }
     false
 }
 
@@ -836,30 +882,32 @@ fn get_ref_index(csv_file: &Vec<(f64, f64, f64)>, wavelength: f64) -> Complex {
     Complex::from(csv_file.last().unwrap().1, csv_file.last().unwrap().2)
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    {
-        let sj = func::sj_array(Complex::from(13, 5), 3usize);
-        assert_eq!(sj[0], Complex::from(3.8248700377925635, 3.708547263317134));
-        assert_eq!(sj[1], Complex::from(-3.357143112679857, 3.9747696875545517));
-        assert_eq!(sj[2], Complex::from(-4.1924320794482135, -2.6499227040139104));
-        println!("{}, {}, {}", sj[0], sj[1], sj[2]);
-        let sj2 = func::sj_array(0.2, 25usize);
-        println!("{}, {}, {}", sj2[13], sj2[17], sj2[25]);
-        assert_eq!(sj2[13], Complex::from(0.000000000000000000000003835110596379198, 0.0));
-        assert_eq!(sj2[17], Complex::from(0.000000000000000000000000000000005910455642760406, 0.0));
-        assert_eq!(sj2[25], Complex::from(0.000000000000000000000000000000000000000000000000001125476749298975, 0.0));
+#[macro_export]
+macro_rules! summation {
+    ($type:ty, $var:pat, $start:expr, $end:expr, $form:expr) => {{
+        let mut result: $type = 0 as $type;
+        for $var in $start..=$end {
+            result += $form;
+        }
+        result
+    }};
+}
 
-        let sy = func::sy_array(Complex::from(13, 5), 3usize);
-        println!("{}, {}, {}", sy[0], sy[1], sy[2]);
-        assert_eq!(sy[0], Complex::from(-3.7090299518957797, 3.8248379131516654));
-        assert_eq!(sy[1], Complex::from(-3.9748349852610523, -3.356650136356049));
-        assert_eq!(sy[2], Complex::from(1.9446973361696478, -4.437267728778557));
-        let sy2 = func::sy_array(0.2, 25usize);
-        println!("{}, {}, {}", sy2[13], sy2[17], sy2[25]);
-        assert_eq!(sy2[13], Complex::from(-438040564762039800000000.0, 0.0));
-        assert_eq!(sy2[17], Complex::from(-284225138610497950000000000000000.0, 0.0));
-        assert_eq!(sy2[25], Complex::from(-1492587957151948600000000000000000000000000000000000.0, 0.0));
-    }
+#[macro_export]
+macro_rules! product {
+    ($type:ty, $var:pat, $start:expr, $end:expr, $form:expr) => {{
+        let mut result: $type = 1 as $type;
+        for $var in $start..=$end {
+            result *= $form;
+        }
+        result
+    }};
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let area = integration::trapez(|x| x.sin(), 0.0, std::f64::consts::PI, 100);
+    println!("{}", area);
+
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
     let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
 
@@ -892,16 +940,35 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let an = func::a_array(coord_x, m, max_n, &psin_x, &xin_x, &dn_mx);
         let bn = func::b_array(coord_x, m, max_n, &psin_x, &xin_x, &dn_mx);
 
-        let mut sum_sca = 0.0;
-        let mut sum_ext = 0.0;
-        for j in 1..=max_n {
+        let mul = (current_wavelength / medium_n).powi(2)
+            / (2.0 * std::f64::consts::PI)
+            / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
+        let sum_sca = mul
+            * summation!(
+                f64,
+                j,
+                1,
+                max_n,
+                (2.0 * j as f64 + 1.0)
+                    * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2))
+            );
+        let sum_ext = mul
+            * summation!(
+                f64,
+                j,
+                1,
+                max_n,
+                (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)
+            );
+
+        /*for j in 1..=max_n {
             sum_sca += (2.0 * j as f64 + 1.0)
                 * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2));
             sum_ext += (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re);
         }
         let mul = (current_wavelength / medium_n).powi(2) / (2.0 * std::f64::consts::PI);
         sum_sca *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
-        sum_ext *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
+        sum_ext *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);*/
 
         c_sca.push((current_wavelength, sum_sca));
         c_ext.push((current_wavelength, sum_ext));
