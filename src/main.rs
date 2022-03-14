@@ -648,79 +648,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }*/
 
-mod integration {
-
-    fn chunk_trapez(a: f64, b: f64, offset: f64) -> f64 {
-        if a.signum() != b.signum() {
-            // Zero
-            let a_abs = a.abs();
-            let b_abs = b.abs();
-            let thales = offset / (a_abs + b_abs);
-            let first_tri_base = a_abs * thales;
-            let second_tri_base = b_abs * thales;
-            return (first_tri_base * a + second_tri_base * b) / 2.0;
-        } else {
-            let max;
-            let min;
-            if a < b {
-                max = b;
-                min = a;
-            } else {
-                max = a;
-                min = b;
-            }
-            return (max - min) * offset / 2.0 + offset * min;
-        }
-    }
-
-    pub fn trapez(
-        function: impl Fn(f64) -> f64,
-        lower_bound: f64,
-        upper_bound: f64,
-        div: usize,
-    ) -> f64 {
-        assert!(div >= 1);
-        let mut area = 0.0;
-        let offset = upper_bound - lower_bound;
-        let mut a = function(lower_bound);
-        let step = offset / div as f64;
-        for i in 0..div {
-            let b = function(step * (i as f64 + 1.0));
-            area += chunk_trapez(a, b, step);
-            a = b;
-        }
-        area
-    }
-
-    pub fn trapezoid(xy: &[(f64, f64)]) -> f64 {
-        let mut area = 0.0;
-        for i in 1..xy.len() {
-            let previous = xy[i - 1];
-            let current = xy[i];
-            let offset = current.0 - previous.0;
-            if previous.1.signum() != current.1.signum() {
-                // Zero in the middle
-                let thales = offset / (previous.1 + current.1);
-                let first_tri_base = previous.1 * thales;
-                let second_tri_base = current.1 * thales;
-                area += (first_tri_base * previous.1 + second_tri_base * current.1) / 2.0;
-            } else {
-                let max;
-                let min;
-                if previous.1 < current.1 {
-                    max = current.1;
-                    min = previous.1;
-                } else {
-                    max = previous.1;
-                    min = current.1;
-                }
-                area += (max - min) * offset / 2.0 + offset * min;
-            }
-        }
-        return area;
-    }
-}
-
 /*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
@@ -884,9 +811,9 @@ fn get_ref_index(csv_file: &Vec<(f64, f64, f64)>, wavelength: f64) -> Complex {
 
 #[macro_export]
 macro_rules! summation {
-    ($type:ty, $var:pat, $start:expr, $end:expr, $form:expr) => {{
+    ($type:ty, $var:pat, $range:expr, $form:expr) => {{
         let mut result: $type = 0 as $type;
-        for $var in $start..=$end {
+        for $var in $range {
             result += $form;
         }
         result
@@ -895,17 +822,115 @@ macro_rules! summation {
 
 #[macro_export]
 macro_rules! product {
-    ($type:ty, $var:pat, $start:expr, $end:expr, $form:expr) => {{
+    ($type:ty, $var:pat, $range:expr, $form:expr) => {{
         let mut result: $type = 1 as $type;
-        for $var in $start..=$end {
+        for $var in $range {
             result *= $form;
         }
         result
     }};
 }
 
+mod integration {
+
+    fn chunk_trapez(a: f64, b: f64, offset: f64) -> f64 {
+        if a.signum() != b.signum() {
+            // Zero
+            let a_abs = a.abs();
+            let b_abs = b.abs();
+            let thales = offset / (a_abs + b_abs);
+            let first_tri_base = a_abs * thales;
+            let second_tri_base = b_abs * thales;
+            return (first_tri_base * a + second_tri_base * b) / 2.0;
+        } else {
+            let max;
+            let min;
+            if a < b {
+                max = b;
+                min = a;
+            } else {
+                max = a;
+                min = b;
+            }
+            return (max - min) * offset / 2.0 + offset * min;
+        }
+    }
+
+    pub fn trapez_fn(
+        function: impl Fn(f64) -> f64,
+        lower_bound: f64,
+        upper_bound: f64,
+        div: usize,
+    ) -> f64 {
+        assert!(div >= 1);
+        let mut area = 0.0;
+        let offset = upper_bound - lower_bound;
+        let mut a = function(lower_bound);
+        let step = offset / div as f64;
+        for i in 0..div {
+            let b = function(step * (i as f64 + 1.0));
+            area += chunk_trapez(a, b, step);
+            a = b;
+        }
+        area
+    }
+
+    pub fn trapez_dt(data: &Vec<(f64, f64)>) -> f64 {
+        let mut area = 0.0;
+        for i in 0..data.len() - 1 {
+            area += chunk_trapez(data[i].1, data[i + 1].1, data[i + 1].0 - data[i].0);
+        }
+        area
+    }
+}
+
+fn get_en(e0: f64, n: i32) -> Complex {
+    let nf = n as f64;
+    Complex::i().powi(n as i32) * e0 * (2.0 * nf + 1.0) / (nf * (nf + 1.0))
+}
+
+fn get_comp(theta: f64, e0: f64, last_mode: usize, rho: f64, x: f64, m: Complex) -> (Complex, Complex, Complex, Complex) {
+    let jn_x = func::sj_array(x, last_mode as usize + 1);
+    let yn_x = func::sy_array(x, last_mode as usize + 1);
+    let pitaun = func::pitau_array(theta, last_mode as usize + 1);
+
+    let psin_x = func::psi_array(x, &jn_x);
+    let xin_x = func::xi_array(x, &jn_x, &yn_x);
+
+    let jn_rho = func::sj_array(rho, last_mode as usize + 1);
+    let yn_rho = func::sy_array(rho, last_mode as usize + 1);
+    let psin_rho = func::psi_array(rho, &jn_rho);
+    let xin_rho = func::xi_array(rho, &jn_rho, &yn_rho);
+    let xidn_rho = func::xi_deriv_array(rho, &xin_rho);
+
+    let jn_mx = func::sj_array(x * m, last_mode as usize + 1);
+    let psin_mx = func::psi_array(x * m, &jn_mx);
+    let dn_mx = func::d_array(x * m, &psin_mx);
+
+    let an = func::a_array(x, m, last_mode as usize + 1, &psin_x, &xin_x, &dn_mx);
+    let bn = func::b_array(x, m, last_mode as usize + 1, &psin_x, &xin_x, &dn_mx);
+
+    let mut sum_es_theta = Complex::new();
+    let mut sum_hs_theta = Complex::new();
+    let mut sum_es_phi = Complex::new();
+    let mut sum_hs_phi = Complex::new();
+    for n in 1..=last_mode {
+        let en = get_en(e0, n as i32);
+        sum_es_theta += en * (Complex::i() * an[n] * xidn_rho[n] * pitaun.1[n] - bn[n] * xin_rho[n] * pitaun.0[n]);
+        sum_hs_theta += en * (Complex::i() * bn[n] * xidn_rho[n] * pitaun.0[n] - an[n] * xin_rho[n] * pitaun.1[n]);
+        sum_es_phi += en * (bn[n] * xin_rho[n] * pitaun.1[n] - Complex::i() * an[n] * xidn_rho[n] * pitaun.0[n]);
+        sum_hs_phi += en * (Complex::i() * bn[n] * xidn_rho[n] * pitaun.1[n] - an[n] * xin_rho[n] * pitaun.0[n]);
+    }
+    (sum_es_theta, sum_hs_theta, sum_es_phi, sum_hs_phi)
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let area = integration::trapez(|x| x.sin(), 0.0, std::f64::consts::PI, 100);
+    let mut data = vec![(0.0, 0.0); 0];
+    for i in 0..=100 {
+        let x = (std::f64::consts::PI / 2.0) / 100.0 * i as f64;
+        data.push((x, x.cos()));
+    }
+    let area = integration::trapez_dt(&data);
     println!("{}", area);
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
@@ -920,7 +945,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let medium_n = 1.0;
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
     let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 500.0; //((upper_limit - lower_limit) / 500.0).abs();
-    let max_n: usize = 3;
+    let max_n: usize = 10;
 
     for i in 0..=499 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
@@ -947,8 +972,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             * summation!(
                 f64,
                 j,
-                1,
-                max_n,
+                1..=max_n,
                 (2.0 * j as f64 + 1.0)
                     * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2))
             );
@@ -956,8 +980,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             * summation!(
                 f64,
                 j,
-                1,
-                max_n,
+                1..=max_n,
                 (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)
             );
 
