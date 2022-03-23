@@ -120,11 +120,11 @@ pub fn xi_array<T: Into<Complex>>(x: T, jn: &Vec<Complex>, yn: &Vec<Complex>) ->
 
 pub fn xi_deriv_array<T: Into<Complex>>(x: T, xin: &Vec<Complex>) -> Vec<Complex> {
     let z: Complex = x.into();
-    let mut xidn = Vec::<Complex>::with_capacity(xin.len() - 1);
+    let mut xidn = Vec::<Complex>::with_capacity(xin.len());
     xidn.push(Complex::new());
-    for i in 1..xidn.len() {
+    for i in 1..xin.len() {
         let n: f64 = i as f64;
-        xidn.push((n * xin[i - 1] - (n + 1.0) * xin[i + 1]) / (2.0 * n + 1.0));
+        xidn.push(xin[i - 1] - n * xin[i] / z);
     }
     xidn
 }

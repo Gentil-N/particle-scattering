@@ -1,6 +1,8 @@
 use plotters::prelude::*;
+use scilib::constant::*;
 use scilib::math::complex::Complex;
 use std::cmp::*;
+use std::f64::consts::*;
 
 mod csv;
 mod func;
@@ -385,21 +387,47 @@ fn xi_n_z(jnz: &Vec<Complex>, ynz: &Vec<Complex>, z: Complex) -> Vec<Complex> {
 
 /*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-
-    let mut xi0: Vec<(f64, f64)> = Vec::with_capacity(400);
-    let mut xi1: Vec<(f64, f64)> = Vec::with_capacity(400);
-    let mut xi2: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut xid0im: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut xid1im: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut xid2im: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut xid0re: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut xid1re: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut xid2re: Vec<(f64, f64)> = Vec::with_capacity(400);
     for i in 0..399 {
         let coord_x = (i + 1) as f64 / 20.0;
-        let jn = j_n(2, coord_x);
-        let yn = y_n(2, coord_x);
-        let xin = xi_n(&jn, &yn, coord_x);
-        xi0.push((coord_x, xin[0].im));
-        xi1.push((coord_x, xin[1].im));
-        xi2.push((coord_x, xin[2].im));
+        let jn = func::sj_array(coord_x, 2usize);
+        let yn = func::sy_array(coord_x, 2usize);
+        let xin = func::xi_array(coord_x, &jn, &yn);
+        let xidn = func::xi_deriv_array(coord_x, &xin);
+        xid0im.push((coord_x, xidn[0].im));
+        xid1im.push((coord_x, xidn[1].im));
+        xid2im.push((coord_x, xidn[2].im));
+        xid0re.push((coord_x, xidn[0].re));
+        xid1re.push((coord_x, xidn[1].re));
+        xid2re.push((coord_x, xidn[2].re));
     }
 
-    plot_png("./results/riccati-bessel-xin-imaginary.png", (800, 800), "riccati-bessel xin (i)", (0.0, 20.0), (-10.0, 10.0), &vec![xi0, xi1, xi2], &vec!["xi0", "xi1", "xi2"], &vec![RED, BLUE, GREEN])?;
+    plot_png(
+        "./results/riccati-bessel-xin-imaginary.png",
+        (800, 800),
+        "riccati-bessel xin (i)",
+        (0.0, 20.0),
+        (-10.0, 10.0),
+        &vec![xid0im, xid1im, xid2im],
+        &vec!["xi0im", "xi1im", "xi2im"],
+        &vec![RED, BLUE, GREEN],
+    )?;
+
+    plot_png(
+        "./results/riccati-bessel-xin-real.png",
+        (800, 800),
+        "riccati-bessel xin (r)",
+        (0.0, 20.0),
+        (-10.0, 10.0),
+        &vec![xid0re, xid1re, xid2re],
+        &vec!["xi0re", "xi1re", "xi2re"],
+        &vec![RED, BLUE, GREEN],
+    )?;
 
     Ok(())
 }*/
@@ -889,26 +917,32 @@ fn get_en(e0: f64, n: i32) -> Complex {
     Complex::i().powi(n as i32) * e0 * (2.0 * nf + 1.0) / (nf * (nf + 1.0))
 }
 
-fn get_comp(theta: f64, e0: f64, last_mode: usize, rho: f64, x: f64, m: Complex) -> (Complex, Complex, Complex, Complex) {
-    let jn_x = func::sj_array(x, last_mode as usize + 1);
-    let yn_x = func::sy_array(x, last_mode as usize + 1);
-    let pitaun = func::pitau_array(theta, last_mode as usize + 1);
+fn get_comp(
+    theta: f64,
+    e0: f64,
+    last_mode: usize,
+    rho: f64,
+    x: f64,
+    m: Complex,
+) -> (Complex, Complex, Complex, Complex) {
+    let jn_x = func::sj_array(x, last_mode as usize);
+    let yn_x = func::sy_array(x, last_mode as usize);
+    let pitaun = func::pitau_array(theta, last_mode as usize);
 
     let psin_x = func::psi_array(x, &jn_x);
     let xin_x = func::xi_array(x, &jn_x, &yn_x);
 
-    let jn_rho = func::sj_array(rho, last_mode as usize + 1);
-    let yn_rho = func::sy_array(rho, last_mode as usize + 1);
-    let psin_rho = func::psi_array(rho, &jn_rho);
+    let jn_rho = func::sj_array(rho, last_mode as usize);
+    let yn_rho = func::sy_array(rho, last_mode as usize);
     let xin_rho = func::xi_array(rho, &jn_rho, &yn_rho);
     let xidn_rho = func::xi_deriv_array(rho, &xin_rho);
 
-    let jn_mx = func::sj_array(x * m, last_mode as usize + 1);
+    let jn_mx = func::sj_array(x * m, last_mode as usize);
     let psin_mx = func::psi_array(x * m, &jn_mx);
     let dn_mx = func::d_array(x * m, &psin_mx);
 
-    let an = func::a_array(x, m, last_mode as usize + 1, &psin_x, &xin_x, &dn_mx);
-    let bn = func::b_array(x, m, last_mode as usize + 1, &psin_x, &xin_x, &dn_mx);
+    let an = func::a_array(x, m, last_mode as usize, &psin_x, &xin_x, &dn_mx);
+    let bn = func::b_array(x, m, last_mode as usize, &psin_x, &xin_x, &dn_mx);
 
     let mut sum_es_theta = Complex::new();
     let mut sum_hs_theta = Complex::new();
@@ -916,22 +950,51 @@ fn get_comp(theta: f64, e0: f64, last_mode: usize, rho: f64, x: f64, m: Complex)
     let mut sum_hs_phi = Complex::new();
     for n in 1..=last_mode {
         let en = get_en(e0, n as i32);
-        sum_es_theta += en * (Complex::i() * an[n] * xidn_rho[n] * pitaun.1[n] - bn[n] * xin_rho[n] * pitaun.0[n]);
-        sum_hs_theta += en * (Complex::i() * bn[n] * xidn_rho[n] * pitaun.0[n] - an[n] * xin_rho[n] * pitaun.1[n]);
-        sum_es_phi += en * (bn[n] * xin_rho[n] * pitaun.1[n] - Complex::i() * an[n] * xidn_rho[n] * pitaun.0[n]);
-        sum_hs_phi += en * (Complex::i() * bn[n] * xidn_rho[n] * pitaun.1[n] - an[n] * xin_rho[n] * pitaun.0[n]);
+        sum_es_theta += en
+            * (Complex::i() * an[n] * xidn_rho[n] * pitaun.1[n] - bn[n] * xin_rho[n] * pitaun.0[n]);
+        sum_hs_theta += en
+            * (Complex::i() * bn[n] * xidn_rho[n] * pitaun.1[n] - an[n] * xin_rho[n] * pitaun.0[n]);
+        sum_es_phi += en
+            * (bn[n] * xin_rho[n] * pitaun.1[n] - Complex::i() * an[n] * xidn_rho[n] * pitaun.0[n]);
+        sum_hs_phi += en
+            * (Complex::i() * bn[n] * xidn_rho[n] * pitaun.0[n] - an[n] * xin_rho[n] * pitaun.1[n]);
     }
     (sum_es_theta, sum_hs_theta, sum_es_phi, sum_hs_phi)
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut data = vec![(0.0, 0.0); 0];
-    for i in 0..=100 {
-        let x = (std::f64::consts::PI / 2.0) / 100.0 * i as f64;
-        data.push((x, x.cos()));
+fn integ_whole_particle(
+    wavelength: f64,
+    medium_n: f64,
+    medium_mu: f64,
+    ref_index: Complex,
+    particle_size: f64,
+    e0: f64,
+    last_mode: usize,
+    div: usize,
+) -> f64 {
+    assert!(div >= 1);
+    let mul = wavelength.powi(2) / (8.0 * PI * C * medium_mu * std::f64::consts::PI * particle_size.powi(2));
+    let x = 2.0 * PI * medium_n * particle_size / wavelength;
+    let m = ref_index / medium_n;
+    let step = PI / div as f64;
+
+    let mut data = Vec::<(f64, f64)>::with_capacity(div + 1);
+    for i in 0..=div {
+        let theta = step * i as f64;
+        let res = get_comp(theta, e0, last_mode, x, x, m);
+        data.push((
+            theta,
+            (res.0 * res.3.conjugate()).re * theta.sin()
+                - (res.2 * res.1.conjugate()).re * theta.sin(),
+        ));
+        //println!("{} {}", (res.0 * res.3.conjugate()).re * theta.sin(), (res.2 * res.1.conjugate()).re * theta.sin());
     }
-    let area = integration::trapez_dt(&data);
-    println!("{}", area);
+    let integ = integration::trapez_dt(&data);
+    mul * integ * 750.0
+}
+
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
     let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
@@ -945,7 +1008,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let medium_n = 1.0;
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
     let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 500.0; //((upper_limit - lower_limit) / 500.0).abs();
-    let max_n: usize = 10;
+    let max_n: usize = 3;
 
     for i in 0..=499 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
@@ -984,24 +1047,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)
             );
 
-        /*for j in 1..=max_n {
-            sum_sca += (2.0 * j as f64 + 1.0)
-                * (an[j].re.powi(2) + an[j].im.powi(2) + bn[j].re.powi(2) + bn[j].im.powi(2));
-            sum_ext += (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re);
-        }
-        let mul = (current_wavelength / medium_n).powi(2) / (2.0 * std::f64::consts::PI);
-        sum_sca *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
-        sum_ext *= mul / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);*/
-
         c_sca.push((current_wavelength, sum_sca));
         c_ext.push((current_wavelength, sum_ext));
     }
 
     println!("calculating...");
     plot_png(
-        "./results/cross-section-z.png",
+        "./results/cross-section-z-3.png",
         (2000, 400),
-        "cross section c_sca & c_ext",
+        "cross section c_sca & c_ext - 3",
         (wavelength_boundaries.0, wavelength_boundaries.1),
         (0.0, 10.0),
         &vec![c_sca, c_ext],
@@ -1011,3 +1065,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+/*
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
+
+    let ref_indices = csv::parse("./res/refractive-index-silicon.csv");
+    let wavelength_boundaries = (
+        ref_indices[0].0 * 1e-6,
+        ref_indices.last().unwrap().0 * 1e-6,
+    );
+    let medium_n = 1.0;
+    let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 500.0; //((upper_limit - lower_limit) / 500.0).abs();
+    let max_n: usize = 3;
+
+    for i in 0..=499 {
+        let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
+        let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
+        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 200e-9, 1.0, max_n, 1000);
+        println!("{} /// {}", i, c_csa_local);
+        c_sca.push((current_wavelength, c_csa_local));
+    }
+
+    println!("calculating...");
+    plot_png(
+        "./results/integ-cross-section-z.png",
+        (2000, 400),
+        "integ cross section c_sca",
+        (wavelength_boundaries.0, wavelength_boundaries.1),
+        (0.0, 10.0),
+        &vec![c_sca],
+        &vec!["c_sca"],
+        &vec![RED],
+    )?;
+
+    Ok(())
+}*/
