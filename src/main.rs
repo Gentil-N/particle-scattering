@@ -862,26 +862,7 @@ macro_rules! product {
 mod integration {
 
     fn chunk_trapez(a: f64, b: f64, offset: f64) -> f64 {
-        if a.signum() != b.signum() {
-            // Zero
-            let a_abs = a.abs();
-            let b_abs = b.abs();
-            let thales = offset / (a_abs + b_abs);
-            let first_tri_base = a_abs * thales;
-            let second_tri_base = b_abs * thales;
-            return (first_tri_base * a + second_tri_base * b) / 2.0;
-        } else {
-            let max;
-            let min;
-            if a < b {
-                max = b;
-                min = a;
-            } else {
-                max = a;
-                min = b;
-            }
-            return (max - min) * offset / 2.0 + offset * min;
-        }
+        (a + b) * offset
     }
 
     pub fn trapez_fn(
@@ -990,7 +971,7 @@ fn integ_whole_particle(
         //println!("{} {}", (res.0 * res.3.conjugate()).re * theta.sin(), (res.2 * res.1.conjugate()).re * theta.sin());
     }
     let integ = integration::trapez_dt(&data);
-    mul * integ * 750.0
+    mul * integ * 300.0
 }
 
 
@@ -1000,15 +981,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
 
     let ref_indices = csv::parse("./res/refractive-index-silicon.csv");
-    let medium_n = 1.0;
     let wavelength_boundaries = (
         ref_indices[0].0 * 1e-6,
         ref_indices.last().unwrap().0 * 1e-6,
     );
     let medium_n = 1.0;
-    let upper_x = 2.0 * std::f64::consts::PI * medium_n * 200e-9;
+    let particle_size = 85e-9;
+    let upper_x = 2.0 * std::f64::consts::PI * medium_n * particle_size;
     let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 500.0; //((upper_limit - lower_limit) / 500.0).abs();
-    let max_n: usize = 3;
+    let max_n: usize = 10;
 
     for i in 0..=499 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
@@ -1030,7 +1011,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         let mul = (current_wavelength / medium_n).powi(2)
             / (2.0 * std::f64::consts::PI)
-            / ((200.0e-9) * (200.0e-9) * std::f64::consts::PI);
+            / ((particle_size) * (particle_size) * std::f64::consts::PI);
         let sum_sca = mul
             * summation!(
                 f64,
@@ -1083,7 +1064,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for i in 0..=499 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
         let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
-        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 200e-9, 1.0, max_n, 1000);
+        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 85e-9, 1.0, max_n, 1000);
         println!("{} /// {}", i, c_csa_local);
         c_sca.push((current_wavelength, c_csa_local));
     }
