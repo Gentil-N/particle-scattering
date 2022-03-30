@@ -989,10 +989,10 @@ fn integ_whole_particle(
         //println!("{} {}", (res.0 * res.3.conjugate()).re * theta.sin(), (res.2 * res.1.conjugate()).re * theta.sin());
     }
     let integ = integration::trapez_dt(&data);
-    mul * integ * 300.0
+    mul * integ * 350.0
 }
 
-
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(1000);
@@ -1004,7 +1004,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ref_indices.last().unwrap().0 * 1e-6,
     );
     let medium_n = 1.0;
-    let particle_size = 50e-9;
+    let particle_size = 85e-9;
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * particle_size;
     let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 1000.0; //((upper_limit - lower_limit) / 500.0).abs();
     let max_n: usize = 3;
@@ -1012,7 +1012,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for i in 0..=999 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
         let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
-        let m = 3.5 / medium_n;
+        let m = ref_index / medium_n;
         let coord_x = upper_x / current_wavelength;
 
         let jn_x = func::sj_array(coord_x, max_n);
@@ -1063,9 +1063,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}
+}*/
 
-/*
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
@@ -1082,7 +1082,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for i in 0..=499 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
         let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
-        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 85e-9, 1.0, max_n, 1000);
+        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 85e-9, 1.0, max_n, 500);
         println!("{} /// {}", i, c_csa_local);
         c_sca.push((current_wavelength, c_csa_local));
     }
@@ -1100,4 +1100,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}*/
+}
