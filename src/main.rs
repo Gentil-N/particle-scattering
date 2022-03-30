@@ -1,3 +1,4 @@
+use func::d_array;
 use plotters::prelude::*;
 use scilib::constant::*;
 use scilib::math::complex::Complex;
@@ -329,19 +330,35 @@ fn d_n_z(psinz: &Vec<Complex>, z: Complex) -> Vec<Complex> {
 
 /*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut psi0: Vec<(f64, f64)> = Vec::with_capacity(400);
+    /*let mut psi0: Vec<(f64, f64)> = Vec::with_capacity(400);
     let mut psi1: Vec<(f64, f64)> = Vec::with_capacity(400);
-    let mut psi2: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut psi2: Vec<(f64, f64)> = Vec::with_capacity(400);*/
+    let mut d0: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut d1: Vec<(f64, f64)> = Vec::with_capacity(400);
+    let mut d2: Vec<(f64, f64)> = Vec::with_capacity(400);
     for i in 0..399 {
         let coord_x = (i + 1) as f64 / 20.0;
         let jn = j_n(2, coord_x);
         let psin = psi_n(&jn, coord_x);
-        psi0.push((coord_x, psin[0]));
+        /*psi0.push((coord_x, psin[0]));
         psi1.push((coord_x, psin[1]));
-        psi2.push((coord_x, psin[2]));
+        psi2.push((coord_x, psin[2]));*/
+        let dn = d_n(&psin, coord_x);
+        d0.push((coord_x, dn[0]));
+        d1.push((coord_x, dn[1]));
+        d2.push((coord_x, dn[2]));
     }
 
-    plot_png("./results/riccati-bessel-psin.png", (800, 800), "riccati-bessel psin", (0.0, 20.0), (-2.0, 2.0), &vec![psi0, psi1, psi2], &vec!["psi0", "psi1", "psi2"], &vec![RED, BLUE, GREEN])?;
+    plot_png(
+        "./results/dn.png",
+        (800, 800),
+        "dn",
+        (0.0, 20.0),
+        (-10.0, 10.0),
+        &vec![d0, d1, d2],
+        &vec!["d0", "d1", "d2"],
+        &vec![RED, BLUE, GREEN],
+    )?;
 
     Ok(())
 }*/
@@ -954,7 +971,8 @@ fn integ_whole_particle(
     div: usize,
 ) -> f64 {
     assert!(div >= 1);
-    let mul = wavelength.powi(2) / (8.0 * PI * C * medium_mu * std::f64::consts::PI * particle_size.powi(2));
+    let mul = wavelength.powi(2)
+        / (8.0 * PI * C * medium_mu * std::f64::consts::PI * particle_size.powi(2));
     let x = 2.0 * PI * medium_n * particle_size / wavelength;
     let m = ref_index / medium_n;
     let step = PI / div as f64;
@@ -977,8 +995,8 @@ fn integ_whole_particle(
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
-    let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
-    let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(500);
+    let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(1000);
+    let mut c_ext: Vec<(f64, f64)> = Vec::with_capacity(1000);
 
     let ref_indices = csv::parse("./res/refractive-index-silicon.csv");
     let wavelength_boundaries = (
@@ -986,15 +1004,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ref_indices.last().unwrap().0 * 1e-6,
     );
     let medium_n = 1.0;
-    let particle_size = 85e-9;
+    let particle_size = 50e-9;
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * particle_size;
-    let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 500.0; //((upper_limit - lower_limit) / 500.0).abs();
-    let max_n: usize = 10;
+    let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 1000.0; //((upper_limit - lower_limit) / 500.0).abs();
+    let max_n: usize = 3;
 
-    for i in 0..=499 {
+    for i in 0..=999 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
         let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
-        let m = ref_index / medium_n;
+        let m = 3.5 / medium_n;
         let coord_x = upper_x / current_wavelength;
 
         let jn_x = func::sj_array(coord_x, max_n);
