@@ -137,7 +137,6 @@ def get_ref_index(data, wavelength):
 
 ref_indices_raw = load_ref_index("./res/refractive-index-silicon.csv")
 
-print("####################### MAIN #######################")
 particle_size = 85e-9
 medium_n = 1.0
 upper_x = 2 * math.pi * medium_n * particle_size
