@@ -1,5 +1,7 @@
 from scipy import special
 from matplotlib import pyplot as plt
+from matplotlib.cm import ScalarMappable
+from matplotlib.colors import Normalize
 import numpy as np
 import math
 
@@ -105,7 +107,7 @@ def a_array(m, psin, xin, dn, z):
 
 def b_array(m, psin, xin, dn, z):
     bn = [complex(0.0, 0.0)] * len(psin)
-    for i in range(1, len(an)):
+    for i in range(1, len(bn)):
         coeff_bi = dn[i] * m + i / z
         bn[i] = (coeff_bi * psin[i] - psin[i - 1]) / (coeff_bi * xin[i] - xin[i - 1])
     return bn
@@ -132,51 +134,75 @@ def get_ref_index(data, wavelength):
             return complex(ref_re, ref_im)
     return complex(data[-1][1], data[-1][2])
 
+def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
+    medium_n = 1.0
+    upper_x = 2 * math.pi * medium_n * particle_size
+    x = upper_x / wavelengths
+    m = np.zeros(len(wavelengths), dtype=complex)
+    mx = np.zeros(len(wavelengths), dtype=complex)
+    for i in range(len(wavelengths)):
+        m[i] = get_ref_index(ref_indices_raw, wavelengths[i]) / medium_n
+        mx[i] = m[i] * x[i]
+
+    sjn_x = []
+    syn_x = []
+    psin_x = []
+    xin_x = []
+    sjn_mx = []
+    psin_mx = []
+    dn_mx = []
+    for i in range(ORDER_MAX):
+        sjn_x.append(special.spherical_jn(i, x))
+        syn_x.append(special.spherical_yn(i, x))
+        psin_x.append(psi_array(sjn_x[i], x))
+        xin_x.append(xi_array(sjn_x[i], syn_x[i], x))
+
+        sjn_mx.append(special.spherical_jn(i, mx))
+        psin_mx.append(psi_array(sjn_mx[i], mx))
+
+    dn_mx = d_array(psin_mx, mx)
+    an = a_array(m, psin_x, xin_x, dn_mx, x)
+    bn = b_array(m, psin_x, xin_x, dn_mx, x)
+    mul = (wavelengths / medium_n)**2 / (2 * math.pi) / (particle_size**2 * math.pi)
+
+    part_res_csa = [0] * ORDER_MAX
+    part_res_ext = [0] * ORDER_MAX
+    for i in range(1, ORDER_MAX ):
+        part_res_csa[i] = (2 * i + 1) * (an[i].real**2 + an[i].imag**2 + bn[i].real**2 + bn[i].imag**2)
+        part_res_ext[i] = (2 * i + 1) * (an[i].real + bn[i].real)
+    res_csa = mul * sum(part_res_csa)
+    res_ext = mul * sum(part_res_ext)
+
+    return (res_csa, res_ext)
+
 
 ####################### MAIN #######################
 
+DIV = 100
+PARTSIZE_LOWER = 40e-9
+PARTSIZE_UPPER = 160e-9
 ref_indices_raw = load_ref_index("./res/refractive-index-silicon.csv")
+wavelengths = np.linspace(ref_indices_raw[0][0], ref_indices_raw[-1][0], DIV)
+partsizes = np.linspace(PARTSIZE_LOWER, PARTSIZE_UPPER, DIV)
+scattering_cross_section = np.zeros((len(partsizes), len(wavelengths)))
+extinction_cross_section = np.zeros((len(partsizes), len(wavelengths)))
+for i in range(len(partsizes)):
+    print(partsizes[i])
+    res = compute_cross_sections(ref_indices_raw, wavelengths, partsizes[i])
+    scattering_cross_section[i] = res[0]
+    extinction_cross_section[i] = res[1]
 
-particle_size = 85e-9
-medium_n = 1.0
-upper_x = 2 * math.pi * medium_n * particle_size
-wavelengths = np.linspace(ref_indices_raw[0][0], ref_indices_raw[-1][0], 1000)
-x = upper_x / wavelengths
-m = np.zeros(len(wavelengths), dtype=complex)
-mx = np.zeros(len(wavelengths), dtype=complex)
-for i in range(len(wavelengths)):
-    m[i] = get_ref_index(ref_indices_raw, wavelengths[i]) / medium_n
-    mx[i] = m[i] * x[i]
+fig = plt.figure(num=0, figsize=(12, 5))
+axs = fig.subplots(nrows=1, ncols=2)
+axs[0].set_title("Scattering Cross Section")
+axs[0].contourf(wavelengths, partsizes, scattering_cross_section, cmap='inferno', levels=70)
+axs[0].set(xlabel="wavelength", ylabel="particle radius")
+axs[0].grid()
+axs[1].set_title("Exctinction Cross Section")
+axs[1].contourf(wavelengths, partsizes, extinction_cross_section, cmap='inferno', levels=70)
+axs[1].set(xlabel="wavelength", ylabel="particle radius")
+axs[1].grid()
+fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[0])
+fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[1])
 
-sjn_x = []
-syn_x = []
-psin_x = []
-xin_x = []
-sjn_mx = []
-psin_mx = []
-dn_mx = []
-for i in range(ORDER_MAX):
-    sjn_x.append(special.spherical_jn(i, x))
-    syn_x.append(special.spherical_yn(i, x))
-    psin_x.append(psi_array(sjn_x[i], x))
-    xin_x.append(xi_array(sjn_x[i], syn_x[i], x))
-
-    sjn_mx.append(special.spherical_jn(i, mx))
-    psin_mx.append(psi_array(sjn_mx[i], mx))
-
-dn_mx = d_array(psin_mx, mx)
-an = a_array(m, psin_x, xin_x, dn_mx, x)
-bn = b_array(m, psin_x, xin_x, dn_mx, x)
-mul = (wavelengths / medium_n)**2 / (2 * math.pi) / (particle_size**2 * math.pi)
-
-part_res_csa = [0] * ORDER_MAX
-part_res_ext = [0] * ORDER_MAX
-for i in range(1, ORDER_MAX ):
-    part_res_csa[i] = (2 * i + 1) * (an[i].real**2 + an[i].imag**2 + bn[i].real**2 + bn[i].imag**2)
-    part_res_ext[i] = (2 * i + 1) * (an[i].real + bn[i].real)
-res_csa = mul * sum(part_res_csa)
-res_ext = mul * sum(part_res_ext)
-
-plt.plot(wavelengths, res_csa)
-plt.plot(wavelengths, res_ext)
 plt.show()
