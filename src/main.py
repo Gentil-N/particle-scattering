@@ -167,42 +167,80 @@ def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
 
     part_res_csa = [0] * ORDER_MAX
     part_res_ext = [0] * ORDER_MAX
-    for i in range(1, ORDER_MAX ):
-        part_res_csa[i] = (2 * i + 1) * (an[i].real**2 + an[i].imag**2 + bn[i].real**2 + bn[i].imag**2)
-        part_res_ext[i] = (2 * i + 1) * (an[i].real + bn[i].real)
+    part_res_csa_an = [0] * ORDER_MAX
+    part_res_csa_bn = [0] * ORDER_MAX
+    part_res_ext_an = [0] * ORDER_MAX
+    part_res_ext_bn = [0] * ORDER_MAX
+    for i in range(1, ORDER_MAX):
+        part_res_csa_an[i] = (2 * i + 1) * an[i].real**2 + an[i].imag**2
+        part_res_csa_bn[i] = (2 * i + 1) * bn[i].real**2 + bn[i].imag**2
+        part_res_ext_an[i] = (2 * i + 1) * an[i].real
+        part_res_ext_bn[i] = (2 * i + 1) * bn[i].real
+        part_res_csa[i] = part_res_csa_an[i] + part_res_csa_bn[i]
+        part_res_ext[i] = part_res_ext_an[i] + part_res_ext_bn[i]
+    res_csa_an = mul * sum(part_res_csa_an)
+    res_csa_bn = mul * sum(part_res_csa_bn)
+    res_ext_an = mul * sum(part_res_ext_an)
+    res_ext_bn = mul * sum(part_res_ext_bn)
     res_csa = mul * sum(part_res_csa)
     res_ext = mul * sum(part_res_ext)
 
-    return (res_csa, res_ext)
+    return (res_csa, res_ext, res_csa_an, res_csa_bn, res_ext_an, res_ext_bn)
 
+def plot_surface_sca_ext():
+    PARTSIZE_LOWER = 40e-9
+    PARTSIZE_UPPER = 160e-9
+    partsizes = np.linspace(PARTSIZE_LOWER, PARTSIZE_UPPER, DIV)
+    scattering_cross_section = np.zeros((len(partsizes), len(WAVELENGTHS)))
+    extinction_cross_section = np.zeros((len(partsizes), len(WAVELENGTHS)))
+    for i in range(len(partsizes)):
+        print(partsizes[i])
+        res = compute_cross_sections(REF_INDICES_RAW, WAVELENGTHS, partsizes[i])
+        scattering_cross_section[i] = res[0]
+        extinction_cross_section[i] = res[1]
+
+    fig = plt.figure(num=0, figsize=(12, 5))
+    axs = fig.subplots(nrows=1, ncols=2)
+    axs[0].set_title("Scattering Cross Section")
+    axs[0].contourf(WAVELENGTHS, partsizes, scattering_cross_section, cmap='inferno', levels=70)
+    axs[0].set(xlabel="wavelength", ylabel="particle radius")
+    axs[0].grid()
+    axs[1].set_title("Extinction Cross Section")
+    axs[1].contourf(WAVELENGTHS, partsizes, extinction_cross_section, cmap='inferno', levels=70)
+    axs[1].set(xlabel="wavelength", ylabel="particle radius")
+    axs[1].grid()
+    fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[0])
+    fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[1])
+
+    plt.show()
+
+def plot_coeff_sca_ext(particle_size):
+    res = compute_cross_sections(REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    fig = plt.figure(num=0, figsize=(13, 4))
+    axs = fig.subplots(nrows=1, ncols=2)
+    #axs.plot(WAVELENGTHS, res[0])
+    #axs.plot(WAVELENGTHS, res[1])
+    axs[0].set_title("Scattering Cross Section with Coeff")
+    axs[0].plot(WAVELENGTHS, res[0], label="Sca Total")
+    axs[0].plot(WAVELENGTHS, res[2], label="\'an\'")
+    axs[0].plot(WAVELENGTHS, res[3], label="\'bn\'")
+    axs[0].set(xlabel="wavelength")
+    axs[0].legend()
+    axs[0].grid()
+    axs[1].set_title("Extinction Cross Section with coeff")
+    axs[1].plot(WAVELENGTHS, res[1], label="Ext Total")
+    axs[1].plot(WAVELENGTHS, res[4], label="\'an\'")
+    axs[1].plot(WAVELENGTHS, res[5], label="\'bn\'")
+    axs[1].set(xlabel="wavelength")
+    axs[1].legend()
+    axs[1].grid()
+    plt.show()
 
 ####################### MAIN #######################
 
-DIV = 100
-PARTSIZE_LOWER = 40e-9
-PARTSIZE_UPPER = 160e-9
-ref_indices_raw = load_ref_index("./res/refractive-index-silicon.csv")
-wavelengths = np.linspace(ref_indices_raw[0][0], ref_indices_raw[-1][0], DIV)
-partsizes = np.linspace(PARTSIZE_LOWER, PARTSIZE_UPPER, DIV)
-scattering_cross_section = np.zeros((len(partsizes), len(wavelengths)))
-extinction_cross_section = np.zeros((len(partsizes), len(wavelengths)))
-for i in range(len(partsizes)):
-    print(partsizes[i])
-    res = compute_cross_sections(ref_indices_raw, wavelengths, partsizes[i])
-    scattering_cross_section[i] = res[0]
-    extinction_cross_section[i] = res[1]
+DIV = 500
+REF_INDICES_RAW = load_ref_index("./res/refractive-index-silicon.csv")
+WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
-fig = plt.figure(num=0, figsize=(12, 5))
-axs = fig.subplots(nrows=1, ncols=2)
-axs[0].set_title("Scattering Cross Section")
-axs[0].contourf(wavelengths, partsizes, scattering_cross_section, cmap='inferno', levels=70)
-axs[0].set(xlabel="wavelength", ylabel="particle radius")
-axs[0].grid()
-axs[1].set_title("Exctinction Cross Section")
-axs[1].contourf(wavelengths, partsizes, extinction_cross_section, cmap='inferno', levels=70)
-axs[1].set(xlabel="wavelength", ylabel="particle radius")
-axs[1].grid()
-fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[0])
-fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[1])
-
-plt.show()
+#plot_surface_sca_ext()
+plot_coeff_sca_ext(80e-9)
