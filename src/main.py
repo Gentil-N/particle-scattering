@@ -110,15 +110,44 @@ def b_array(m, psin, xin, dn, z):
         bn[i] = (coeff_bi * psin[i] - psin[i - 1]) / (coeff_bi * xin[i] - xin[i - 1])
     return bn
 
-# MAIN
-medium_n = 1
-particle_n = 3.5
-particle_size = 50e-9
+def load_ref_index(filename):
+    ref_file = open(filename, 'r')
+    lines = ref_file.readlines()
+    data = []
+    for line in lines:
+        numbers = line.split(',')
+        data.append((float(numbers[0].strip()) * 1e-6, float(numbers[1].strip()), float(numbers[2].strip())))
+    ref_file.close()
+    return data
+
+def get_ref_index(data, wavelength):
+    for i in range(len(data) - 1):
+        if data[i][0] < wavelength and data[i + 1][0] > wavelength:
+            alpha_re = (data[i + 1][1] - data[i][1]) / (data[i + 1][0] - data[i][0])
+            gamma_re = data[i][1] - alpha_re * data[i][0]
+            ref_re = alpha_re * wavelength + gamma_re
+            alpha_im = (data[i + 1][2] - data[i][2]) / (data[i + 1][0] - data[i][0])
+            gamma_im = data[i][2] - alpha_im * data[i][0]
+            ref_im = alpha_im * wavelength + gamma_im
+            return complex(ref_re, ref_im)
+    return complex(data[-1][1], data[-1][2])
+
+
+####################### MAIN #######################
+
+ref_indices_raw = load_ref_index("./res/refractive-index-silicon.csv")
+
+print("####################### MAIN #######################")
+particle_size = 85e-9
+medium_n = 1.0
 upper_x = 2 * math.pi * medium_n * particle_size
-wavelengths = np.linspace(200e-9, 850e-9, 1000)
+wavelengths = np.linspace(ref_indices_raw[0][0], ref_indices_raw[-1][0], 1000)
 x = upper_x / wavelengths
-m = particle_n / medium_n
-mx = m * x
+m = np.zeros(len(wavelengths), dtype=complex)
+mx = np.zeros(len(wavelengths), dtype=complex)
+for i in range(len(wavelengths)):
+    m[i] = get_ref_index(ref_indices_raw, wavelengths[i]) / medium_n
+    mx[i] = m[i] * x[i]
 
 sjn_x = []
 syn_x = []

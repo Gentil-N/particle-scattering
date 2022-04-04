@@ -992,7 +992,7 @@ fn integ_whole_particle(
     mul * integ * 350.0
 }
 
-/*
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(1000);
@@ -1004,7 +1004,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ref_indices.last().unwrap().0 * 1e-6,
     );
     let medium_n = 1.0;
-    let particle_size = 85e-9;
+    let particle_size = 92e-9;
     let upper_x = 2.0 * std::f64::consts::PI * medium_n * particle_size;
     let step = (wavelength_boundaries.1 - wavelength_boundaries.0) / 1000.0; //((upper_limit - lower_limit) / 500.0).abs();
     let max_n: usize = 3;
@@ -1045,17 +1045,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 1..=max_n,
                 (2.0 * j as f64 + 1.0) * (an[j].re + bn[j].re)
             );
-
-        c_sca.push((current_wavelength, sum_sca));
-        c_ext.push((current_wavelength, sum_ext));
+            
+        c_sca.push(((current_wavelength * 1e9), sum_sca));
+        c_ext.push(((current_wavelength * 1e9), sum_ext));
     }
 
     println!("calculating...");
     plot_png(
-        "./results/cross-section-z-3.png",
+        "./results/cross-section-z.png",
         (2000, 400),
         "cross section c_sca & c_ext - 3",
-        (wavelength_boundaries.0, wavelength_boundaries.1),
+        (wavelength_boundaries.0 * 1e9, wavelength_boundaries.1 * 1e9),
         (0.0, 10.0),
         &vec![c_sca, c_ext],
         &vec!["c_sca", "c_ext"],
@@ -1063,9 +1063,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}*/
+}
 
-
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
@@ -1082,7 +1082,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for i in 0..=499 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
         let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
-        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 85e-9, 1.0, max_n, 500);
+        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 73e-9, 1.0, max_n, 500);
         println!("{} /// {}", i, c_csa_local);
         c_sca.push((current_wavelength, c_csa_local));
     }
@@ -1100,4 +1100,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}
+}*/
