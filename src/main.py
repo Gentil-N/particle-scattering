@@ -242,5 +242,5 @@ DIV = 500
 REF_INDICES_RAW = load_ref_index("./res/refractive-index-silicon.csv")
 WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
-#plot_surface_sca_ext()
-plot_coeff_sca_ext(80e-9)
+plot_surface_sca_ext()
+#plot_coeff_sca_ext(90e-9)
