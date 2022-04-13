@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  12 APR 2022 17:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  13 APR 2022 16:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -247,16 +247,24 @@ Overfull \hbox (6.71439pt too wide) in paragraph at lines 78--79
 1/cmr/m/n/10 vec-tor field $([]\OML/cmm/m/it/10 ; []\OT1/cmr/m/n/10 )$
  []
 
-[3] [4] (./report.aux)
+[3] [4]
+Overfull \hbox (2.6943pt too wide) in paragraph at lines 223--226
+\OT1/cmr/m/n/10 That is to say, let's de-scribe the co-or-di-nate sys-tem throu
+gh
+ []
+
+[5
+
+] (./report.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 2348 strings out of 483183
- 32259 string characters out of 5966293
- 286370 words of memory out of 5000000
- 17360 multiletter control sequences out of 15000+600000
+ 2351 strings out of 483183
+ 32302 string characters out of 5966293
+ 287397 words of memory out of 5000000
+ 17363 multiletter control sequences out of 15000+600000
  538379 words of font info for 45 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  30i,20n,33p,738b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -270,12 +278,12 @@ t/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts
 public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pf
-b>
-Output written on report.pdf (4 pages, 416348 bytes).
+sy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on report.pdf (5 pages, 435633 bytes).
 PDF statistics:
- 66 PDF objects out of 1000 (max. 8388607)
- 46 compressed objects within 1 object stream
+ 73 PDF objects out of 1000 (max. 8388607)
+ 51 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
