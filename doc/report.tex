@@ -5,6 +5,7 @@
 \usepackage{indentfirst}
 \usepackage[a4paper, total={7in, 10in}]{geometry}
 \graphicspath{ {./../res/} }
+\numberwithin{equation}{section}
 
 \title{Nanoparticles size estimation throught Mie resonances}
 \author{Neven Gentil}
@@ -18,64 +19,13 @@
 
 \section{Introduction}
 
-Hello LaTeX World!
-
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\textwidth, height=0.25\textheight]{dn.png}
-    \caption{a nice plot}
-    \label{fig:dn_plot}
-\end{figure}
-Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.
-\section{EXP}
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.5\textwidth, height=0.25\textheight]{dn.png}
-    \caption{a nice plot}
-    \label{fig:dn_plot}
-\end{figure}
-\begin{equation} \label{eq:haha}
-\begin{aligned}
-    E = m*2+4*x-4 / 5000.0 + 4000000 \\
-    - 7777777 - 5 + 7777 + 4000000= 80a
-\end{aligned}
-\end{equation}
-Hello LaTeX World! Eq \ref{eq:haha} is...
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.
-Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.
-Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.
-Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.Hello LaTeX World!
-Hello, here is some text without a meaning. This text should show what a printed text will look like at this place.
-If you read this text, you will get no information. Really? Is there no information? Is there.
-
-\newpage
-
 \section{Theory}
 
-First of all, let's describe the general composition of our problem: given an arbitrary particle droped in a certain medium, we hit it with a monochromatic light. With a fixed size and other specifics parameters for electromagnetic materials like the permeability $\mu$ or the complex refractive index $N$, our objective is to, theoretically, compute the electromagntic field for the medium surrounding the particle and inside this particle itself, in order to find the expression of the scattered light.
+\subsection{Vector spherical harmonics}
 
-Let's start with an arbitrary electromagntic field represented by the couple of \textit{monochromatic} vector field $(\textbf{E}, \textbf{H})$ which satisfies the Maxwell equations:
+First of all, let's describe the general composition of our problem: given an arbitrary particle droped in a certain medium, we hit it with a monochromatic light. With a fixed size and other specifics parameters for electromagnetic materials like the permeability $\mu$ or the complex refractive index $N$, our objective is to, theoretically, compute the electromagnetic field for the medium surrounding the particle and inside this particle itself, in order to find the expression of the scattered light.
+
+Let's start with an arbitrary electromagnetic field represented by the couple of \textit{monochromatic} vector field $(\textbf{E}, \textbf{H})$ which satisfies the Maxwell equations:
 \begin{align}
 \nabla \cdot \textbf{E} &= 0\\
 \nabla \cdot \textbf{H} &= 0\\
@@ -107,9 +57,11 @@ To satisfy the vector wave equation, $\psi$ should also satisfy the equivalent s
 \begin{align}\label{eq:psi_wave_eq}
 \nabla ^{2} \psi + k^{2}\psi = 0
 \end{align}
-where, this time, $\nabla ^{2}$ is the scalar Laplace operator. By the way, as described above, if we denote $\nabla \times \textbf{N} = k \textbf{M}$, we have the perpendicular vector field of the associated artificial one, also satisfying the vector wave equation. Finally, we created the vector harmonics $\textbf{M}$ and $\textbf{N}$ with the scalar generating function $\psi$ associated to our initial electromagntic field.
+where, this time, $\nabla ^{2}$ is the scalar Laplace operator. By the way, as described above, if we denote $\nabla \times \textbf{N} = k \textbf{M}$, we have the perpendicular vector field of the associated artificial one, also satisfying the vector wave equation. Finally, we created the vector harmonics $\textbf{M}$ and $\textbf{N}$ with the scalar generating function $\psi$ associated to our initial electromagnetic field.
 
-The main idea to compute all solutions required is the following: given an incident electromagntic field, we use the boundary conditions on the surface of our particle to get all fields resulting from interaction. Thereby, it could be interesting to use the spherical polar coordinates during the calculation and particularly to express the boundary conditions. That is why we have constructed the vector harmonics above. Indeed, if we replace the constant vector $\textbf{c}$ by the radial coordinate $\textbf{r}$, $\textbf{M}$ is always a solution of the vector wave equation but, this time, for the spherical polar coordinates linked to the particle. In this way, from (\ref{eq:psi_wave_eq}), we obtain:
+\subsection{Associated factors}
+
+The main idea to compute all solutions required is the following: given an incident electromagnetic field, we use the boundary conditions on the surface of our particle to get all fields resulting from interaction. Thereby, it could be interesting to use the spherical polar coordinates during the calculation and particularly to express the boundary conditions. That is why we have constructed the vector harmonics above. Indeed, if we replace the constant vector $\textbf{c}$ by the radial coordinate $\textbf{r}$, $\textbf{M}$ is always a solution of the vector wave equation but, this time, for the spherical polar coordinates linked to the particle. In this way, from (\ref{eq:psi_wave_eq}), we obtain:
 \begin{equation}\label{eq:wave_sph}
 \begin{aligned}
 \frac{1}{r^{2}}\frac{\partial }{\partial r}(r^{2}\frac{\partial \psi}{\partial r}) \quad + \\ 
@@ -129,7 +81,7 @@ Finally, this kind of generating function $\psi$ satisfying the scalar wave equa
 \psi_{emn}&=cos(m\phi)P_{n}^{m}(cos\theta)z_{n}(kr)\\
 \psi_{omn}&=sin(m\phi)P_{n}^{m}(cos\theta)z_{n}(kr)
 \end{align}
-where the parity of our original function is led by the $cosinus$ and $sinus$ attached with the $\phi$ variable and the \textit{angle-dependant} $m$ variable. 
+where the parity of our original function is led by the $cosinus$ and $sinus$ attached with the $\phi$ variable and the \textit{angle-dependent} $m$ variable. 
 
 The other angular part described by $\theta$ , as a \textit{Legendre's differential equation}, is solved by the \textit{associated Legendre functions} of the first kind $P_{n}^{m}(cos\theta)$ orthogonally defined on the $n$ variable. 
 
@@ -170,12 +122,14 @@ Afterward, thanks to a bunch of properties from the associated Legendre function
 \end{align}
 Obviously, it is possible to calculate the perpendicular magnetic field $H_{i}$ with the curl (\ref{eq:rot_e}).
 
+\subsection{Boundary conditions}
+
 At this point, we have enough equation relative to the incident plane wave to apply the following boundary conditions:
 \begin{align}\label{eq:boundaries}
 (\textbf{E}_{i} + \textbf{E}_{s} - \textbf{E}_{I}) \times \overrightarrow{e_{r}} &= 0\\
 (\textbf{H}_{i} + \textbf{H}_{s} - \textbf{H}_{I}) \times \overrightarrow{e_{r}} &= 0
 \end{align}
-where $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$ are respectively the scattering and internal electromagnetic field resulting from the interaction between the incident field and our particle. Then, we assume that these last fields have the same mathematical shape, when developped in vector spherical harmonics, than $(\textbf{E}_{i}, \textbf{H}_{i})$; that is to say, the scattering and internal field are linearly dependant from the incident field up to some factors taking into account the behavior of $j_{n}$ at the boundary of our particle:
+where $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$ are respectively the scattering and internal electromagnetic field resulting from the interaction between the incident field and our particle. Then, we assume that these last fields have the same mathematical shape, when developped in vector spherical harmonics, than $(\textbf{E}_{i}, \textbf{H}_{i})$; that is to say, the scattering and internal field are linearly dependent from the incident field up to some factors taking into account the behavior of $j_{n}$ at the boundary of our particle:
 \begin{align}
 \textbf{E}_{I}&=\sum_{n=1}^{\infty }E_{n}(c_{n}\textbf{M}^{(1)}_{o1n} - id_{n}\textbf{N}^{(1)}_{e1n})\\
 \textbf{H}_{I}&=\frac{-k_{I}}{\omega\mu_{I}}\sum_{n=1}^{\infty }E_{n}(d_{n}\textbf{M}^{(1)}_{e1n} + ic_{n}\textbf{N}^{(1)}_{o1n})\\
@@ -220,28 +174,54 @@ b_{n} = \frac{\psi_{n}(mx)\psi^{'}_{n}(x)-m\psi_{n}(x)\psi^{'}_{n}(mx)}{\psi_{n}
 \end{aligned}
 \end{equation}
 
+\subsection{Cross sections}
+
 From now on, we have enough theory to think about the experimental approach and fit all our requirements. That is to say, let's describe the coordinate system through an explicit diagram:
-"INCLUDE SCHEMA"
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.4\textwidth]{system.png}
+    \caption{Coordinate System}
+    \label{fig:system}
+\end{figure}
 As we can see, this reference frame is really common and our incomming plane wave is going throught our particle along the z-axis. That said, our actual way to mesure the particle's size is to, roughly, retrieve the power emitted by it thanks to an optical microscope. Thereby, our goal is currently is to calculate this associated power, that is to say the net rate at which electromagnetic field crosses the surface A of an arbitrary sphere, which might be expressed as follow:
 \begin{align}
 W=\int_{A}^{}\textbf{S}\cdot \overrightarrow{e_{r}}dA
 \end{align}
 where $\textbf{S}$ is the \textit{Pointing vector} defined as:
 \begin{align}
-\textbf{S} = Re\left\{\textbf{E} \times \textbf{H}\right\}
+\textbf{S} = \frac{1}{2}Re\left\{\textbf{E}_{*} \times \textbf{H}\right\}
 \end{align}
 Note that an arbitrary sign can be added in fonction of our physical assumptions. In this way, we can now compute this power for the scattered electromagnetic field $(\textbf{E}_{s}, \textbf{B}_{s})$ and we obtain:
-\begin{align}
-W_{s}=\frac{1}{2}Re\left\{ \int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (E_{s\theta}H^{*}_{s\phi}- E_{s\phi}H^{*}_{s\theta})r^{2}sin\theta d\theta d\phi\right\}
+\begin{align}\label{eq:w_s}
+W_{s}=\frac{1}{2}Re\left\{ \int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (E_{s\theta}H^{*}_{s\phi} - E_{s\phi}H^{*}_{s\theta})r^{2}sin\theta d\theta d\phi\right\}
 \end{align}
 which might be easily calculated thanks to (\ref{eq:an_bn}) included into the expression of the scattered field and, after a bit of mathematical manipulations, we have:
 \begin{align}
 W_{s}=\frac{\pi\left| E_{0} \right|^{2}}{k\omega\mu}\sum_{n=1}^{\infty }(2n+1)Re\left\{ g_{n} \right\}(\left| a_{n} \right|^{2}+\left| b_{n} \right|^{2})
 \end{align}
-where $g_{n}=(\chi^{*}_{n}\psi^{'}_{n}-\psi^{*}_{n}\chi^{'}_{n})-i(\chi^{*}_{n}\chi^{'}_{n}+\psi^{*}_{n}\psi^{'}_{n})$. Moreover this power could be \textit{normalized}, that is to say, divided by the intensity from the incident light. We introduce the associated cross section:
-\begin{align}
-C_{sca}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)(\left| a_{n} \right|^{2}+\left| b_{n} \right|^{2})
+where $g_{n}=(\chi^{*}_{n}\psi^{'}_{n}-\psi^{*}_{n}\chi^{'}_{n})-i(\chi^{*}_{n}\chi^{'}_{n}+\psi^{*}_{n}\psi^{'}_{n})$. This last definition can be simplified by the identity $\chi_{n}\psi^{'}_{n}-\psi_{n}\chi^{'}_{n}=1$. Moreover this power could be \textit{normalized}, that is to say, divided by the intensity from the incident light. Thereby, we introduce the associated cross section:
+\begin{align}\label{eq:csca}
+C_{sca}=\frac{W_{s}}{I_{i}}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)(\left| a_{n} \right|^{2}+\left| b_{n} \right|^{2})
 \end{align}
+
+In the same way, all of these previous step from (\ref{eq:w_s}) might be re-used for any other fields instead of the scattered field. Until now, only the light emitted by the particle was studied thanks to three fields: $(\textbf{E}_{i}, \textbf{H}_{i})$, $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$. However, it is possible to express a variable of extinction, opposed to the scattering \textit{power} $W_{s}$, due to the interaction between the electromagnetic plane wave and our particle:
+\begin{align}\label{eq:wext_ws_wa}
+W_{ext} = W_{s} + W_{a}
+\end{align}
+this additional term, combined with the new one $W_{a}$, should be easily understood throught a \textit{power balance}, that is to say an energy balance replaced by the equivalent power. Indeed, if we denote $W_{a}$ the amount of power which was varying during the interaction ($W_{a} > 0$ means that power is absorbed within the particle whereas $W_{a} > 0$ means that power is being created within the particle), it might be possible to write the following:
+\begin{align}
+W_{a} = W_{i} - W_{s} + W_{ext}
+\end{align}
+As our actual medium is nonabsorbing, $W_{i}$ vanishes identically and we retrieve the relation (\ref{eq:wext_ws_wa}). Now, the extinction \textit{power} might be evaluated in fonction of our previous vector spherical harmonic terms:
+\begin{align}
+W_{s}=\frac{1}{2}Re\left\{ \int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (E_{i\phi}H^{*}_{s\theta} - E_{i\theta}H^{*}_{s\phi} - E_{s\theta}H^{*}_{i\phi} + E_{s\phi}H^{*}_{i\theta})r^{2}sin\theta d\theta d\phi\right\}
+\end{align}
+and, as stated above in (\ref{eq:csca}), we finally obtain the extinction cross section by proportionality:
+\begin{align}
+C_{ext}=\frac{W_{ext}}{I_{i}}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)Re\left\{a_{n} + b_{n} \right\}
+\end{align}
+
+At last, we have calculated and theoretically established the expression of two general terms which we might be retrieved by experiments: $C_{sca}$ and $C_{ext}$. It is important to note that these cross section are, not only dependent on, but also strongly linked to our hypothesis, that is to say our input variables like the refractive index. Thereby, $C_{sca}$ and $C_{ext}$ are directly reliant on the size of our studied particle.
 
 \section{Simulations}
 
