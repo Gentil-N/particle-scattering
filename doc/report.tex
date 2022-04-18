@@ -84,7 +84,7 @@ where the parity of our original function is led by the $cosinus$ and $sinus$ at
 The other angular part described by $\theta$ , as a \textit{Legendre's differential equation}, is solved by the \textit{associated Legendre functions} of the first kind $P_{n}^{m}(cos\theta)$ orthogonally defined on the $n$ variable. 
 
 Moreover, the radial part, described by $r$, might be reintroduced as follow:
-\begin{align}
+\begin{align}\label{eq:radial_part}
 \rho\frac{d }{d\rho}(\rho\frac{d Z}{d\rho})+[\rho^{2}-(n+\frac{1}{2})^{2}]Z=0
 \end{align}
 where we assume that $\rho=kr$ and $Z=R\sqrt{\rho}$. Thereby, to solve the previous equation, we can use any linear combination of the spherical Bessel functions $j_{n}$, $y_{n}$, $h^{(1)}_{n}=j_{n}+iy_{n}$ or $h^{(2)}_{n}=j_{n}-iy_{n}$: we named this kind of combination $z_{n}$.
@@ -184,14 +184,14 @@ From now on, we have enough theory to think about the experimental approach and 
     \label{fig:system}
 \end{figure}
 As we can see, this reference frame is really common and our incomming plane wave is going through our particle along the z-axis. That said, our actual way to mesure the particle's size is to, roughly, retrieve the power emitted by it thanks to an optical microscope. Thereby, our goal is currently is to calculate this associated power, that is to say the net rate at which electromagnetic field crosses the surface A of an arbitrary sphere, which might be expressed as follow:
-\begin{align}
+\begin{align}\label{eq:power_def}
 W=\int_{A}^{}\textbf{S}\cdot \overrightarrow{e_{r}}dA
 \end{align}
 where $\textbf{S}$ is the \textit{Pointing vector} defined as:
 \begin{align}
 \textbf{S} = \frac{1}{2}Re\left\{\textbf{E}^{*} \times \textbf{H}\right\}
 \end{align}
-Note that an arbitrary sign can be added in fonction of our physical assumptions. In this way, we can now compute this power for the scattered electromagnetic field $(\textbf{E}_{s}, \textbf{B}_{s})$ and we obtain:
+Note that an arbitrary sign can be added to (\ref{eq:power_def}) in fonction of our physical assumptions. In this way, we can now compute this power for the scattered electromagnetic field $(\textbf{E}_{s}, \textbf{B}_{s})$ and we obtain:
 \begin{align}\label{eq:w_s}
 W_{s}=\frac{1}{2}Re\left\{ \int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (E_{s\theta}H^{*}_{s\phi} - E_{s\phi}H^{*}_{s\theta})r^{2}sin\theta d\theta d\phi\right\}
 \end{align}
@@ -231,7 +231,7 @@ At last, we have calculated and theoretically established the expression of two 
 
 \subsection{Equations adjustment}
 
-First at all, our main issue to numerically compute the cross sections $C_{sca}$ and $C_{ext}$ is to calculate the associated scattering coefficients $a_{n}$ and $b_{n}$. Globally, these two numbers are obtained through Bessel functions as we can see from (\ref{eq:an_bn}) and our goal is to retrieve each value of them between a certain range of wavlength in order to obtain a kind of spectrum. However, due to the size of our nanoparticle close to the incident wavelength included in a visible range, the variable $\rho=kr$, as a dependency for the Bessel functions, is also restrained into a small range of value close to zero along the x-axis. In fact, in the context of a computer, these targeted values could be too sensitive to be calculated with a reasonably high precision. Thereby, we could introduce the \textit{logarithmic derivative}:
+First at all, our main issue to numerically compute the cross sections $C_{sca}$ and $C_{ext}$ is to calculate the associated scattering coefficients $a_{n}$ and $b_{n}$. Globally, these two numbers are obtained through Bessel functions as we can see from (\ref{eq:an_bn}) and our goal is to retrieve each value of them between a certain range of wavelength in order to obtain a kind of spectrum. However, due to the size of our nanoparticle close to the incident wavelength included in a visible range, the variable $\rho=kr$, as a dependency for the Bessel functions, is also restrained into a small range of value close to zero along the x-axis. In fact, in the context of a computer, these targeted values could be too sensitive to be calculated with a reasonably high precision. Thereby, we could introduce the \textit{logarithmic derivative}:
 \begin{align}
 D_{n}(\rho)=\frac{d}{d\rho}ln[\psi_{n}(\rho)]
 \end{align}
@@ -253,6 +253,35 @@ D_{n-1}(\rho)=\frac{n}{\rho}-\frac{1}{D_{n}(\rho)+n/\rho}
 Because of the link existing between $D_{n}$ and Bessel functions, this previous recurrence (\ref{eq:rec_dn}) should be runned downwardly, that is to say begining with the higher $n$ owned by the scattering coefficients, in order to avoid the unstability of our computation as stated in the subsection below. Otherwise, the calculated data could be rapidly \textit{flawed} while $n$ is increasing.
 
 \subsection{Computation of Bessel functions}
+
+Then, our last issue is to numerically compute the spherical Bessel functions, as the first, second and the associated Hankel functions or even the Ricatti-Bessel functions. Hopefully, in our preferred scientific language that is \textit{Python}, all of these features are already implemented. Thereby, as a first approach and taking into account that \textit{Mie Theory} is not really heavy, it is completly useless and counterproductive to re-write this mathematic area. However, it could be interesting to speed up the computation thanks to a low-level programming language, or more generally, a compiled one. At least, for a better understanding of the computation, we can define a way to numerically implement these tools.
+
+To contextually replace our problem, these Bessel functions are introduced in our theory through the resolution of the radial part (\ref{eq:radial_part}) in order to get a global expression of the generating couple of function $\psi_{emn}$ and $\psi_{omn}$. Involving spherical coordinates in our calculation, we must use the spherical Bessel functions $j_{n}$ and $y_{n}$ which are a special case of general Bessel functions $J_{n}$ and $Y_{n}$ solving the Bessel's differential equation:
+\begin{align}
+x^{2}\frac{d^{2}y}{dx^{2}} + x\frac{dy}{dx} + (x^{2} - \alpha^{2})y = 0
+\end{align}
+where $\alpha$ is a complex number without restriction. Thereby, we have the following definitions:
+\begin{align}
+j_{n}(x)=\sqrt{\frac{\pi}{2x}}J_{n+\frac{1}{2}}(x) \qquad y_{n}(x)=\sqrt{\frac{\pi}{2x}}Y_{n+\frac{1}{2}}(x)
+\end{align}
+Note that the actual $x$ might be real or a complex value and is, by definition, different from all previous sections.
+
+After some mathematics calculation, it is possible to demonstrate the following recurrence relations:
+\begin{align}\label{eq:rec_sph_bess}
+\frac{2n+1}{x}z_{n}(x) &= z_{n-1}(x) + z_{n+1}(x)\\
+(2n+1)\frac{d}{dx}z_{n}(x) &= nz_{n-1}(x) - (n+1)z_{n+1}(x)
+\end{align}
+where $z_{n}$ is either $j_{n}$ or $y_{n}$. Thanks to these previous equations (\ref{eq:rec_sph_bess}), and given each the two first exact expression for the spherical Bessel functions, we can theoretically obtain all wished order $n$. So, \textit{by hand}, we have the following:
+\begin{equation}
+\begin{aligned}
+j_{0}(x)=\frac{sin(x)}{x} \qquad &j_{1}(x)=\frac{sin(x)}{x^{2}} - \frac{cos(x)}{x}\\
+y_{0}(x)=-\frac{cos(x)}{x} \qquad &y_{1}(x)=-\frac{cos(x)}{x^{2}}-\frac{sin(x)}{x}
+\end{aligned}
+\end{equation}
+
+Thereby, by inverting the main recurrence relations (\ref{eq:rec_sph_bess}), we should be able to compute the next order $n=2$ for a given $x$ either real or complex. Continuing with the same idea, we can obtain $j_{3}$, $j_{4}$... coupled with the associated $y_{n}$. This way to compute all wished spherical Bessel function, or more generally any function recursively defined, from the lowest order $n=0$ reaching the highest order $n=\infty$, is commonly called a \textit{upward recurrence}. Assuming that we have in our possession a couple of spherical Bessel function at the order $n=i$ and $n=i+1$, an opposed computation from the previous one, should allow us to recursively reach $n=0$: that is called a \textit{downward recurrence} because of the decrement of $n$ for each calculated value.
+
+No difference mathematicaly but there is by computation! Describe the stability of each function and why stable or unstable
 
 Useless because Python already do that. However... (recurrence relations, why unstable, solutions!)
 
