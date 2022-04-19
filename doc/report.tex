@@ -2,6 +2,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
 \usepackage{indentfirst}
 \usepackage[a4paper, total={7in, 10in}]{geometry}
 \graphicspath{ {./../res/} }
@@ -271,19 +273,72 @@ After some mathematics calculation, it is possible to demonstrate the following 
 \frac{2n+1}{x}z_{n}(x) &= z_{n-1}(x) + z_{n+1}(x)\\
 (2n+1)\frac{d}{dx}z_{n}(x) &= nz_{n-1}(x) - (n+1)z_{n+1}(x)
 \end{align}
-where $z_{n}$ is either $j_{n}$ or $y_{n}$. Thanks to these previous equations (\ref{eq:rec_sph_bess}), and given each the two first exact expression for the spherical Bessel functions, we can theoretically obtain all wished order $n$. So, \textit{by hand}, we have the following:
+where $z_{n}$ is either $j_{n}$ or $y_{n}$. Thanks to these previous equations (\ref{eq:rec_sph_bess}), and given the two first exact expression for the spherical Bessel functions, we can theoretically obtain all wished order $n$. So, \textit{by hand}, we have the following:
 \begin{equation}
 \begin{aligned}
 j_{0}(x)=\frac{sin(x)}{x} \qquad &j_{1}(x)=\frac{sin(x)}{x^{2}} - \frac{cos(x)}{x}\\
 y_{0}(x)=-\frac{cos(x)}{x} \qquad &y_{1}(x)=-\frac{cos(x)}{x^{2}}-\frac{sin(x)}{x}
 \end{aligned}
 \end{equation}
+with the associated figures:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth, height=0.5\textwidth]{jnyn.png}
+    \caption{$j_{0}$, $j_{1}$ with $y_{0}$, $y_{1}$}
+    \label{fig:jnyn}
+\end{figure}
 
-Thereby, by inverting the main recurrence relations (\ref{eq:rec_sph_bess}), we should be able to compute the next order $n=2$ for a given $x$ either real or complex. Continuing with the same idea, we can obtain $j_{3}$, $j_{4}$... coupled with the associated $y_{n}$. This way to compute all wished spherical Bessel function, or more generally any function recursively defined, from the lowest order $n=0$ reaching the highest order $n=\infty$, is commonly called a \textit{upward recurrence}. Assuming that we have in our possession a couple of spherical Bessel function at the order $n=i$ and $n=i+1$, an opposed computation from the previous one, should allow us to recursively reach $n=0$: that is called a \textit{downward recurrence} because of the decrement of $n$ for each calculated value.
+Thereby, by inverting the main recurrence relations (\ref{eq:rec_sph_bess}) into this way:
+\begin{align}\label{eq:sph_bess_up_rec}
+z_{n+1}(x) &= \frac{2n+1}{x}z_{n}(x) - z_{n-1}(x)
+\end{align}
+we should be able to compute the next order $n=2$ for a given $x$ either real or complex. Continuing with the same idea, we can obtain $j_{3}$, $j_{4}$... coupled with the associated $y_{n}$. This way to compute all wished spherical Bessel function, or more generally any function recursively defined, from the lowest order $n=0$ reaching the highest order $n=\infty$, is commonly called an \textit{upward recurrence}. Assuming that we have in our possession a couple of spherical Bessel function at the order $n=i$ and $n=i+1$, an opposed computation from the previous one, should allow us to recursively reach $n=0$: 
+\begin{align}\label{eq:sph_bess_down_rec}
+z_{n-1}(x) &= \frac{2n+1}{x}z_{n}(x) - z_{n+1}(x)
+\end{align}
+that is called a \textit{downward recurrence} because of the decrement of $n$ for each calculated value. Despite these two recursive ways are strictly equivalent from a mathematical point of view, there is a not negligible difference between them. Indeed, taking into account boundaries of coding number (currently 64 bit for a common \textit{float}) and the behavior of spherical bessel functions, it is possible, but tough, to demonstrate either the stability or the unstability for the first and second kind calculated through downward or upward reccurency. Otherwise, by a \textit{hand} way, we can easily retrieve these theoritical results by comparing our calculations with exact curves already tabulated:
+\begin{itemize}
+\item Stable by \textbf{upward} recurrency: 
+\begin{itemize}
+\item[*]$y_{n}, \forall x$
+\item[*]$j_{n}$, if $|x| \geqslant n$
+\end{itemize}
+\item Stable by \textbf{downward} reccurency:
+\begin{itemize}
+\item[*]$j_{n}$, if $|x| < n$
+\end{itemize}
+\end{itemize}
+assuming that $Re\{x\} \in\mathbb{R}_{+}$. Now, we can think about the programming steps in order to compute our spherical Bessel functions of the first and second kind through an upward recurrency: we get $j_{0}$/$y_{0}$ and $j_{1}$/$y_{1}$ from a given $x$ then, thanks to (\ref{eq:sph_bess_up_rec}), we compute all required order $j_{n}$/$y_{n}$ with $n \geqslant 2$. However, a question remains in a downward reccurency: How to get starting Bessel function values for higher order $n=i$ and $n=i+1$?
 
-test
+Theoretically, it is well know that Bessel functions of the first kind $J_{n}$ satistfies the following relation:
+\begin{align}
+\forall\,x\,|\,Re\{x\} \in\mathbb{R}_{+}, \lim_{n \to \infty } J_{n}(x)=0
+\end{align}
+Thereby a common approach, called the \textit{Miller} method, is to suppose that our targeted higher order $i$ is arbitrary equal to $1$ whereas the $i+1$ order is null. Afterward, we can easily pull down the order thanks to (\ref{eq:sph_bess_down_rec}). Once we obtain the first order $n=0$, because of the linearity of our recurrence relations, we \textit{normalize} this serie by the true value of $j_{0}(x)$. 
 
-No difference mathematicaly but there is by computation! Describe the stability of each function and why stable or unstable
+For example:
+\begin{equation}\label{eq:j_computed}
+\begin{aligned}
+j^{computed}_{i+1}(x) &= 0\\
+j^{computed}_{i}(x) &= 1\\
+j^{computed}_{i-1}(x) &= \frac{2i+1}{x}j^{computed}_{i}(x) - j^{computed}_{i+1}\\
+&...\\
+j^{computed}_{0}(x) &= \alpha
+\end{aligned}
+\end{equation}
+Now, we can \textit{normalize}:
+\begin{equation}\label{eq:j_final}
+\begin{aligned}
+j_{0}(x) &= \frac{sin(x)}{x} \qquad\textnormal{(by definition)}\\
+j^{final}_{0}(x) &= j^{computed}_{0}(x) \times \frac{j_{0}(x)}{\alpha} = j_{0}(x)\\
+j^{final}_{1}(x) &= j^{computed}_{1}(x) \times \frac{j_{0}(x)}{\alpha}\\
+&...\\
+j^{final}_{i}(x) &= j^{computed}_{i}(x) \times \frac{j_{0}(x)}{\alpha}\\
+\end{aligned}
+\end{equation}
+where $j^{final}_{X}$ is the wished result. In fact, we just have \textit{normalized} our serie $j^{computed}_{X}$ by the initial factor $\frac{j_{0}(x)}{\alpha}$. It is important to notice that any serie constructed through this way always verifies the recurrence relation (\ref{eq:sph_bess_up_rec}) and each term is, by definition, a solution of the radial part (\ref{eq:radial_part}).
+
+Unfortunately, a last issue still remain in our downward recurrency approach. Something that is not obvious at the first glance, we see that for a given $i$ and for any $x$, the serie $j^{computed}_{X}$ always has the same value for all terms in it. That is to say, only the \textit{normalization} factor introduce the value $x$ in our final serie and, finally, $j^{computed}_{X}(x)$ is not really dependent on $x$ (we can omit this parameter afterwards). In this way, due to the mathematical shape of our recurrence relation (\ref{eq:sph_bess_down_rec}), each value of a lower computed order is bigger than its previous higher order: $j^{computed}_{0} > j^{computed}_{1} > ... > j^{computed}_{i}$. So, if we target a really high order with, for instance, $i=10^{10}$, the first order will ineluctably get a really high value. Thereby, for a computer with \textit{physical} boundaries for its numbers, this previous result will give us an invalid value for an intermediate order and all order below will be saturated with the same invalid state. In this way, the \textit{normalization} step is impossible because $\alpha$ in (\ref{eq:j_final}) will own a \textit{NaN} value (that is a computer overflow indicator). Even if, for a first approximation, we use the ten first order for calculation, this phenomenon will be rapidly visible even for our range of value (from $n=50$) and it could be intersting to avoid this \textit{blocking} state. So, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitray minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon. A second solution is to divide the downward reccurency into multiple chunks. As mentioned above, $j^{computed}_{X}$ is recursive and completly dependent on the targeted order $i$. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). Then, it is possible to assume that $\{j^{computed}_{0}...j^{computed}_{50}\} = \{j^{computed}_{50}...j^{computed}_{100}\}$ due to the arbitrary recurrence relation. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$ (which is not arbitrary but dependent on $x$). This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain every order wished without overflowing the computer results.
 
 Useless because Python already do that. However... (recurrence relations, why unstable, solutions!)
 

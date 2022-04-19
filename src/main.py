@@ -198,7 +198,6 @@ def plot_surface_sca_ext():
         res = compute_cross_sections(REF_INDICES_RAW, WAVELENGTHS, partsizes[i])
         scattering_cross_section[i] = res[0]
         extinction_cross_section[i] = res[1]
-
     fig = plt.figure(num=0, figsize=(12, 5))
     axs = fig.subplots(nrows=1, ncols=2)
     axs[0].set_title("Scattering Cross Section")
@@ -211,7 +210,6 @@ def plot_surface_sca_ext():
     axs[1].grid()
     fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[0])
     fig.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=axs[1])
-
     plt.show()
 
 def plot_coeff_sca_ext(particle_size):
@@ -242,5 +240,22 @@ DIV = 500
 REF_INDICES_RAW = load_ref_index("./res/refractive-index-silicon.csv")
 WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
-plot_surface_sca_ext()
+#plot_surface_sca_ext()
 #plot_coeff_sca_ext(90e-9)
+
+x = np.linspace(0, 30, 1000)
+sjn_x = []
+syn_x = []
+for i in range(ORDER_MAX):
+    sjn_x.append(special.spherical_jn(i, x))
+    syn_x.append(special.spherical_yn(i, x))
+plt.plot(x, sjn_x[0], label="j0")
+plt.plot(x, sjn_x[1], label="j1")
+plt.plot(x, syn_x[0], label="y0")
+plt.plot(x, syn_x[1], label="y1")
+plt.ylim(top=1.2, bottom=-1)
+plt.xlim(right=20)
+plt.xlim(left=0)
+plt.grid()
+plt.legend()
+plt.show()
