@@ -172,8 +172,8 @@ def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
     part_res_ext_an = [0] * ORDER_MAX
     part_res_ext_bn = [0] * ORDER_MAX
     for i in range(1, ORDER_MAX):
-        part_res_csa_an[i] = (2 * i + 1) * an[i].real**2 + an[i].imag**2
-        part_res_csa_bn[i] = (2 * i + 1) * bn[i].real**2 + bn[i].imag**2
+        part_res_csa_an[i] = (2 * i + 1) * (an[i].real**2 + an[i].imag**2)
+        part_res_csa_bn[i] = (2 * i + 1) * (bn[i].real**2 + bn[i].imag**2)
         part_res_ext_an[i] = (2 * i + 1) * an[i].real
         part_res_ext_bn[i] = (2 * i + 1) * bn[i].real
         part_res_csa[i] = part_res_csa_an[i] + part_res_csa_bn[i]
@@ -234,6 +234,19 @@ def plot_coeff_sca_ext(particle_size):
     axs[1].grid()
     plt.show()
 
+def plot_sca_ext(particle_size):
+    res = compute_cross_sections(REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    fig0 = plt.figure(num=0)
+    ax0 = fig0.subplots(nrows=1, ncols=1)
+    ax0.set_title("Scattering/Extinction Cross Sections")
+    ax0.plot(WAVELENGTHS, res[0], label="Sca")
+    ax0.plot(WAVELENGTHS, res[1], label="Ext")
+    ax0.plot(WAVELENGTHS, res[1] - res[0], label="Abs")
+    ax0.legend()
+    ax0.grid()
+    plt.show()
+
+
 ####################### MAIN #######################
 
 DIV = 500
@@ -242,20 +255,21 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
 #plot_surface_sca_ext()
 #plot_coeff_sca_ext(90e-9)
+plot_sca_ext(100e-9)
 
-x = np.linspace(0, 30, 1000)
-sjn_x = []
-syn_x = []
-for i in range(ORDER_MAX):
-    sjn_x.append(special.spherical_jn(i, x))
-    syn_x.append(special.spherical_yn(i, x))
-plt.plot(x, sjn_x[0], label="j0")
-plt.plot(x, sjn_x[1], label="j1")
-plt.plot(x, syn_x[0], label="y0")
-plt.plot(x, syn_x[1], label="y1")
-plt.ylim(top=1.2, bottom=-1)
-plt.xlim(right=20)
-plt.xlim(left=0)
-plt.grid()
-plt.legend()
-plt.show()
+#x = np.linspace(0, 30, 1000)
+#sjn_x = []
+#syn_x = []
+#for i in range(ORDER_MAX):
+#    sjn_x.append(special.spherical_jn(i, x))
+#    syn_x.append(special.spherical_yn(i, x))
+#plt.plot(x, sjn_x[0], label="j0")
+#plt.plot(x, sjn_x[1], label="j1")
+#plt.plot(x, syn_x[0], label="y0")
+#plt.plot(x, syn_x[1], label="y1")
+#plt.ylim(top=1.2, bottom=-1)
+#plt.xlim(right=20)
+#plt.xlim(left=0)
+#plt.grid()
+#plt.legend()
+#plt.show()

@@ -157,7 +157,7 @@ j_{n}(mx)c_{n} + h^{(1))}_{n}(x)b_{n} = j_{n}(x) \\
 \end{aligned}
 \end{equation}
 where the prime sign means derivation along the same argument between parenthesis. Moreover, we have the following definitions:
-\begin{equation}
+\begin{equation}\label{eq:def_x_m}
 \begin{aligned}
 x = ka = \frac{2\pi Na}{\lambda} \qquad m = \frac{N_{I}}{N}
 \end{aligned}
@@ -223,7 +223,7 @@ W_{s}=\frac{1}{2}\int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (&Re\{E_{i\phi}H^{*}_
 \end{aligned}
 \end{equation}
 and, as stated above in (\ref{eq:csca}), we finally obtain the extinction cross section by proportionality:
-\begin{align}
+\begin{align}\label{eq:cext}
 C_{ext}=\frac{W_{ext}}{I_{i}}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)Re\left\{a_{n} + b_{n} \right\}
 \end{align}
 
@@ -340,7 +340,41 @@ where $j^{final}_{X}$ is the wished result. In fact, we just have \textit{normal
 
 Unfortunately, a last issue still remain in our downward recurrency approach. Something that is not obvious at the first glance, we see that for a given $i$ and for any $x$, the serie $j^{computed}_{X}$ always has the same value for all terms in it. That is to say, only the \textit{normalization} factor introduce the value $x$ in our final serie and, finally, $j^{computed}_{X}(x)$ is not really dependent on $x$ (we can omit this parameter afterwards). In this way, due to the mathematical shape of our recurrence relation (\ref{eq:sph_bess_down_rec}), each value of a lower computed order is bigger than its previous higher order: $j^{computed}_{0} > j^{computed}_{1} > ... > j^{computed}_{i}$. So, if we target a really high order with, for instance, $i=10^{10}$, the first order will ineluctably get a really high value. Thereby, for a computer with \textit{physical} boundaries for its numbers, this previous result will give us an invalid value for an intermediate order and all order below will be saturated with the same invalid state. In this way, the \textit{normalization} step is impossible because $\alpha$ in (\ref{eq:j_final}) will own a \textit{NaN} value (that is a computer overflow indicator). Even if, for a first approximation, we use the ten first order for calculation, this phenomenon will be rapidly visible even for our range of value (from $n=50$) and it could be intersting to avoid this \textit{blocking} state. So, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitray minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon. A second solution is to divide the downward reccurency into multiple chunks. As mentioned above, $j^{computed}_{X}$ is recursive and completly dependent on the targeted order $i$. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). Then, it is possible to assume that $\{j^{computed}_{0}...j^{computed}_{50}\} = \{j^{computed}_{50}...j^{computed}_{100}\}$ due to the arbitrary recurrence relation. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$ (which is not arbitrary but dependent on $x$). This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain every order wished without overflowing the computer results.
 
-Useless because Python already do that. However... (recurrence relations, why unstable, solutions!)
+\subsection{Input variables}
+
+At this point of our simulation part, we have to precisely fix and set our input variables, that is to say with, roughly, this following pattern:
+\begin{align}
+Output = Simulation(Input)
+\end{align}
+where $Output$ is our wished scattering and extinction cross sections. Given the relations (\ref{eq:csca}) and (\ref{eq:cext}) coupled with the expressions of $a_{n}$ and $b_{n}$ previously established, we are able to recognize these variables. Thereby, all inputs are included into (\ref{eq:def_x_m}) with refractive indices of the medium $N_{I}$ and the particle $N$, the particle's size $a$ then the wavelength $\lambda$.
+
+First at all, let's consider the $\lambda$ variable. The problem is the following: from our theory, we send an incident monochromatic light, that is to say $\lambda=constant$ in the visible range. However, in reality, the experimental tool produce multiple monochromatic lights in order to reach all values in the visible range and compute the associated cross sections. In fact, the wavelength $\lambda$ will vary for each computation and, by the way, is an $Input$ variable. Therefore, we have $x=x(\lambda)$ and more precisely $k=k(\lambda)$
+
+Secondly, the particle's size $a$ represents the radius of this last one. Obviously, from the purpose of this study, it is also an $Input$ variable.
+
+Then, the refractive index of the medium, taking into account that the environment is homogenous, this last one is a constant value. Even more, if we consider that the medium is the ambiant air, it might be possible to approximate it as the void and finally set $N_{I}=1$. Moreover, we have now the following relation $m=N$.
+
+The last variable to describe is the refractive index $N$ of our particle. At this point, we can introduce the targeted material, that is to say, the substance used into our spherical sample: silicon. As a first approximation, we can say that silicon has a constant refractive index commonly setted around $3.5$. Thereby, for $a=100^{-9}m$ and $\lambda=[206^{-9}, 826^{-9}]$ (visible range a bit extended in the \textit{UV} range), we obtain the following cross sections:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_const.png}
+    \caption{Cross sections with $N=3.5$}
+\end{figure}
+where $Sca$ is the scattering, $Ext$ the extinction and $Abs$ the absorbtion cross section linked with (\ref{eq:wext_ws_wa}): $C_{abs} = C_{ext} - C_{sca}$. We can see that there is no absorbtion and the scattering cross section equals the extinction one. However, to properly describe physical states of matter, we have to consider that the refractive index is varying depending on the wavelength of the incident light, that is to say, $N=N(\lambda)$. In this way we obtain:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_var_real.png}
+    \caption{Cross sections with $N=N(\lambda)$}
+\end{figure}
+where we use the real part of pre-computed refractive indices from another scientific experiment (Aspnes and Studna, 1983). We easily see that the main maximums, called \textit{Mie resonances}, are shifted to the right but this approach globally keep the previous shape. It is always remarkable that $C_{sca}=C_{ext}$. That is due to the real expression of the refractive index. Indeed, the absorbtion behavior of our material is mathematicaly implemented through the imaginary part of $N$. In this way, we should have $N=N_{re}+iN_{im}$ Thereby, when we use a complex varying index, we obtain:
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_var_complex.png}
+    \caption{Cross sections with $N=N(\lambda)$ complex}
+\end{figure}
+Now, in addition to the previous shape then according to each Mie's resonance pike, we have a maximum of absorbtion describing the capacity of our particle to redistribute the energy of the incident light into another form, like a thermal energy. It is important to notice that the varying imaginary part doesn't change the position of the pikes in contrary to the varying real part.
+
+Finally, our $Input$ variables are the following: $a$ (particle's size), $\lambda$ (incident light's wavelength) and $N(\lambda)$ (refractive index depending on $\lambda$).
 
 \section{Experiments}
 
