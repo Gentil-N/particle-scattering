@@ -257,7 +257,7 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
 #plot_surface_sca_ext()
 #plot_coeff_sca_ext(100e-9)
-plot_sca_ext(100e-9)
+plot_sca_ext(107e-9)
 
 #x = np.linspace(0, 30, 1000)
 #sjn_x = []

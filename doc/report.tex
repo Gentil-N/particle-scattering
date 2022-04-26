@@ -21,9 +21,9 @@
 
 \section{Theory}
 
-\subsection{Vector spherical harmonics}
+\subsection{Vector Spherical Harmonics}
 
-First of all, let's describe the general composition of our problem: given an arbitrary particle droped in a certain medium, we hit it with a monochromatic light. With a fixed size and other specifics parameters for electromagnetic materials like the permeability $\mu$ or the complex refractive index $N$, our objective is to, theoretically, compute the electromagnetic field for the medium surrounding the particle and inside this particle itself, in order to find the expression of the scattered light.
+First at all, let's describe the general composition of our problem: given an arbitrary particle droped in a certain medium, we hit it with a monochromatic light. With a fixed size and other specifics parameters for electromagnetic materials like the permeability $\mu$ or the complex refractive index $N$, our objective is to, theoretically, compute the electromagnetic field for the medium surrounding the particle and inside this particle itself, in order to find the expression of the scattered light.
 
 Let's start with an arbitrary electromagnetic field represented by the couple of \textit{monochromatic} vector field $(\textbf{E}, \textbf{H})$ which satisfies the Maxwell equations:
 \begin{align}
@@ -59,7 +59,7 @@ To satisfy the vector wave equation, $\psi$ should also satisfy the equivalent s
 \end{align}
 where, this time, $\nabla ^{2}$ is the scalar Laplace operator. By the way, as described above, if we denote $\nabla \times \textbf{N} = k \textbf{M}$, we have the perpendicular vector field of the associated artificial one, also satisfying the vector wave equation. Finally, we created the vector harmonics $\textbf{M}$ and $\textbf{N}$ with the scalar generating function $\psi$ associated to our initial electromagnetic field.
 
-\subsection{Associated factors}
+\subsection{Associated Factors}
 
 The main idea to compute all solutions required is the following: given an incident electromagnetic field, we use the boundary conditions on the surface of our particle to get all fields resulting from interaction. Thereby, it could be interesting to use the spherical polar coordinates during the calculation and particularly to express the boundary conditions. That is why we have constructed the vector harmonics above. Indeed, if we replace the constant vector $\textbf{c}$ by the radial coordinate $\textbf{r}$, $\textbf{M}$ is always a solution of the vector wave equation but, this time, for the spherical polar coordinates linked to the particle. In this way, from (\ref{eq:psi_wave_eq}), we obtain:
 \begin{equation}\label{eq:wave_sph}
@@ -122,7 +122,7 @@ Afterward, thanks to a bunch of properties from the associated Legendre function
 \end{align}
 Obviously, it is possible to calculate the perpendicular magnetic field $H_{i}$ with the curl (\ref{eq:rot_e}).
 
-\subsection{Boundary conditions}
+\subsection{Boundary Conditions}
 
 At this point, we have enough equation relative to the incident plane wave to apply the following boundary conditions:
 \begin{align}\label{eq:boundaries}
@@ -176,7 +176,7 @@ b_{n} = \frac{\psi_{n}(mx)\psi^{'}_{n}(x)-m\psi_{n}(x)\psi^{'}_{n}(mx)}{\psi_{n}
 \end{aligned}
 \end{equation}
 
-\subsection{Cross sections}
+\subsection{Cross Sections}
 
 From now on, we have enough theory to think about the experimental approach and fit all our requirements. That is to say, let's describe the coordinate system through an explicit diagram:
 \begin{figure}[h]
@@ -231,7 +231,7 @@ At last, we have calculated and theoretically established the expression of two 
 
 \section{Simulations}
 
-\subsection{Equations adjustment}
+\subsection{Equations Adjustment}
 
 First at all, our main issue to numerically compute the cross sections $C_{sca}$ and $C_{ext}$ is to calculate the associated scattering coefficients $a_{n}$ and $b_{n}$. Globally, these two numbers are obtained through Bessel functions as we can see from (\ref{eq:an_bn}) and our goal is to retrieve each value of them between a certain range of wavelength in order to obtain a kind of spectrum. However, due to the size of our nanoparticle close to the incident wavelength included in a visible range, the variable $\rho=kr$, as a dependency for the Bessel functions, is also restrained into a small range of value close to zero along the x-axis. In fact, in the context of a computer, these targeted values could be too sensitive to be calculated with a reasonably high precision. Thereby, we could introduce the \textit{logarithmic derivative}:
 \begin{align}
@@ -254,7 +254,7 @@ D_{n-1}(\rho)=\frac{n}{\rho}-\frac{1}{D_{n}(\rho)+n/\rho}
 \end{align}
 Because of the link existing between $D_{n}$ and Bessel functions, this previous recurrence (\ref{eq:rec_dn}) should be runned downwardly, that is to say begining with the higher $n$ owned by the scattering coefficients, in order to avoid the unstability of our computation as stated in the subsection below. Otherwise, the calculated data could be rapidly \textit{flawed} while $n$ is increasing.
 
-\subsection{Computation of Bessel functions}
+\subsection{Computation of Bessel Functions}
 
 Then, our last issue is to numerically compute the spherical Bessel functions, as the first, second and the associated Hankel functions or even the Ricatti-Bessel functions. Hopefully, in our preferred scientific language that is \textit{Python}, all of these features are already implemented. Thereby, as a first approach and taking into account that \textit{Mie Theory} is not really heavy, it is completly useless and counterproductive to re-write this mathematic area. However, it could be interesting to speed up the computation thanks to a low-level programming language, or more generally, a compiled one. At least, for a better understanding of the computation, we can define a way to numerically implement these tools.
 
@@ -340,7 +340,7 @@ where $j^{final}_{X}$ is the wished result. In fact, we just have \textit{normal
 
 Unfortunately, a last issue still remain in our downward recurrency approach. Something that is not obvious at the first glance, we see that for a given $i$ and for any $x$, the serie $j^{computed}_{X}$ always has the same value for all terms in it. That is to say, only the \textit{normalization} factor introduce the value $x$ in our final serie and, finally, $j^{computed}_{X}(x)$ is not really dependent on $x$ (we can omit this parameter afterwards). In this way, due to the mathematical shape of our recurrence relation (\ref{eq:sph_bess_down_rec}), each value of a lower computed order is bigger than its previous higher order: $j^{computed}_{0} > j^{computed}_{1} > ... > j^{computed}_{i}$. So, if we target a really high order with, for instance, $i=10^{10}$, the first order will ineluctably get a really high value. Thereby, for a computer with \textit{physical} boundaries for its numbers, this previous result will give us an invalid value for an intermediate order and all order below will be saturated with the same invalid state. In this way, the \textit{normalization} step is impossible because $\alpha$ in (\ref{eq:j_final}) will own a \textit{NaN} value (that is a computer overflow indicator). Even if, for a first approximation, we use the ten first order for calculation, this phenomenon will be rapidly visible even for our range of value (from $n=50$) and it could be intersting to avoid this \textit{blocking} state. So, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitray minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon. A second solution is to divide the downward reccurency into multiple chunks. As mentioned above, $j^{computed}_{X}$ is recursive and completly dependent on the targeted order $i$. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). Then, it is possible to assume that $\{j^{computed}_{0}...j^{computed}_{50}\} = \{j^{computed}_{50}...j^{computed}_{100}\}$ due to the arbitrary recurrence relation. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$ (which is not arbitrary but dependent on $x$). This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain every order wished without overflowing the computer results.
 
-\subsection{Input variables}
+\subsection{Input Variables}
 
 At this point of our simulation part, we have to precisely fix and set our input variables, that is to say with, roughly, this following pattern:
 \begin{align}
@@ -412,7 +412,7 @@ Secondly, as stated in the previous subsection, we have three $Input$ variables 
     \caption{$C_{ext}$ for three different sizes}
     \label{fig:ext_var}
 \end{figure}
-As we can see, we can consider a \textit{recursive} shape which is composed by the boundary of the first and second global maximum. In fact, the principal Mie's resonancy is moving left when the size decreases and reciprocally. Moreover the scale and the maximum y-value are also decreasing. However, it might be roughly possible to assess that, for our targeted range of values, this shape thus defined is moving left for smaller sizes then right for larger sizes.
+As we can see, it is possible to consider a \textit{recursive} shape which is composed by the boundary of the first and second global maximum. In fact, the principal Mie's resonancy is moving left when the size decreases and reciprocally. Moreover the scale and the maximum y-value are also decreasing. However, it might be roughly possible to assess that, for our targeted range of values, this shape thus defined is moving left for smaller sizes then right for larger sizes.
 
 After all, if we reproduce our computations with, this time, the radius as a \textit{real} free parameter instead of an arbitrary fixed value, we obtain the following figures (\ref{fig:surface_sca}) and (\ref{fig:surface_ext}) for the scattering and extinction cross sections respectively. In this way, we can easily visualize our wished $Output$ results and compare later with the collected experimental data.
 \begin{figure}[h]
@@ -431,6 +431,67 @@ Now, it is obvious that, as a really first approximation in our range of values,
 
 \section{Experiments}
 
-\section{Conclusion}
+\subsection{Base Description}
+
+First, let's describe the procedure to experimentaly test and compare our simulation part. In theory, our studied particle should have a spherical shape and, as stated in the previous section, the associated material should be \textit{silicon}. Thereby, we are supposed to create a sample composed of spherical nanoparticles of silicon with different sizes included between $100nm$ and $200nm$ of diameter. Moreover, in order to approve our theorical approach and all of the approximation employed until now, we have to retrieve experimentaly the \textit{defined shape} made up of the first and second principal Mie resonancies linked with an equivalent gradient. In fact, our different sized nanoparticles being randomly scattered on the sample, we have to collect the size of some nanoparticles coupled with both scattering and extinction cross section spectrums. In this way, we will be able to link $C_{sca}$ and $C_{ext}$ shapes according to the respective sizes to finally check if those actually fit the simulation. Therefore, the tools used to collect each spectrums associated with the size are the \textit{optical} and \textit{atomic force} microscopes respectively.
+
+\subsection{Sample Preparation}
+
+Chronologically, the first experimental stuff we have to realize is the preparation of the silicon nanoparticle sample. 
+
+\subsection{Optical Microscope}
+
+\subsection{Atomic Force Microscope}
+
+At this point of the experiment part, we have to couple the spectrum, previously retrieved thanks to the optical microscope, with the size of each studied particle. Thereby, we need another kind of tool in order to detect physically the wished size, that is to say, an instrument able to mesure the diameter, or at least to give an equivalent data, of the desired particle instead of collecting the scattered light intensity. In this way, the best suited tool for this task is the \textit{atomic force microscope}.
+
+The working principle of that kind of microscope is pretty simple. At our \textit{human} scale, the operating mode is roughly similar to the Braille system. Indeed, our sample being totally flat at a macroscopic point of view, the main idea is to drag a tip on the desired experimental surface. This tip is directly connected to a detector collecting the nanometric height variations along the advancement of the last one as shown on figure (\ref{fig:afm_base}). In this way, if the tip runs into a nanoparticle, it could be possible to substract the maximum height to the base one, referencing the surface's sample which is the minimum in that case, in order to get the diameter of the particle (assuming that those are spherical).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{afm_base.png}
+    \caption{AFM working principle}
+    \label{fig:afm_base}
+\end{figure}
+
+Technically, even if in general an AFM can use different methods to scan the sample, in our case, the microscope use the \textit{Van der Waals} forces existing between the tip and the nanoparticles. These forces are responsible of the attraction between atoms in a molecule, for instance. Thereby, with no movement, the tip is in balance above the sample without touching it: this is a \textit{non-destructive} scanning tool. The height detector itself is composed of a laser reflecting on the end piece of the cantilever maintaining the tip. When we scan a sample, the tip attached to the cantilever and the laser are moving as a whole block and the tip oscillate around its balance position. In this way, if the tip moves up, compared to its small oscillations, because of a nanoparticle (or another kind of \textit{perturbartion}), the optical way runned by the light, and emited from the laser, is shorter: we detect a height variation. Effectively, the same process happens when the tip moves down. Then, in order to scan a sample, the tip must move along an arbitrary line and, with a pre-defined length, must shift on the next line to reproduce this task until the quantity of line correspond to the length of these last. Afterward, we obtain a square shaped area of our sample. Moreover, as shown on figure (\ref{fig:afm_scan_dir_config}), multiple scanning modes are available like a double sens scan, that is to say, the tip re-run the scanned line instead of moving out it at the end point, or an horizontal/vertical direction scan, that is to say, the scanned line might be oriented North-South or East-West, and even a start/end point selector, among plenty of other configurations.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{afm_scan_dir_config.png}
+    \caption{AFM direction configuration}
+    \label{fig:afm_scan_dir_config}
+\end{figure}
+Additionaly, as the tip is slightly oscillating around its balance position, it is possible to choose the amount of scanned \textit{points} as shown on figure (\ref{fig:afm_scan_point_config}), that is to say, the number of periods made compared to the advancement of the system (tip, cantilever and laser) corresponding to the amount of generating pixels for a line. 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{afm_scan_point_config.png}
+    \caption{AFM point configuration}
+    \label{fig:afm_scan_point_config}
+\end{figure}
+This parameter, associated with the user-defined line's length, might increase or decrease the quality of the collected data. However, increasing the image resolution increases the scanning time by the same. As a rough idea, to scan a $200 \times 200 nm$ square with $100$ points/pixels takes around $10$ minutes whereas, for a $50 \times 50 nm$ area with $256$ points/pixels takes the same amount of time. Therefore, a precise distribution must be adopted between quality, surface and speed in order to collect enough data and retrieve the nanoparticle's size.
+
+In order to illustrate the whole procedure to retrieve the associated size of our studied particle, we will arbitrary choose a nanosphere of silicon as shown on figure (\ref{fig:gwyddion_df_ex}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_df_ex.png}
+    \caption{Example Particle's Image (Dark Field)}
+    \label{fig:gwyddion_df_ex}
+\end{figure}
+At first glance, knowing that a blue scattered light is equivalent to the \textit{smallest} size ($\sim 50 nm$) whereas a red color means the \textit{biggest} one ($\sim 100 nm$), we can easily say that through the yellow-orange color emitted by this particle, we approximate $80 nm$ of radius. However, we need more precision to check our simulation. Thereby, we use the AFM microscope and execute a scan of the targeted area. Unfortunately, for some technical reasons, collecting the final data with enough \textit{quality/pixels} to analyse, requires multiple scan in \textit{low quality} and \textit{large dimension} to locate the right particle. Finally, we obtain the following image (\ref{fig:gwyddion_scan_ex}), through the \textit{Gwyddion} software specialized in AFM data analysis, with a resolution of $256$ \textit{pixels/points} for the line's width.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_scan_ex.png}
+    \caption{AFM point configuration}
+    \label{fig:gwyddion_scan_ex}
+\end{figure}
+Note that the scan procedure, started from the bottom side, was aborted when the particle has entirely been scanned: that is why we observe a rectangular area instead of a squared one. Now, it is much more easier to visualize and get the proper data. As we can see, the shape of our particle is close to a disc although some residual silicon \textit{waste} on the North-East side. However this image don't reveal the exact diameter, even if we assume a spherical particle, because of the random pertubration on the edge due to the oscillations of the tip. In this way, the height, being graduated thanks to a grey-scale put on the right, will give us the maximum of the scan. It is already possible to approximate the diameter as included between $160 nm$ and $190 nm$. Then, we use a tool from the software, exctracting precisely the height scanned along a specific line as shown on figure (\ref{fig:gwyddion_mesure_ex}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_mesure_ex.png}
+    \caption{AFM point configuration}
+    \label{fig:gwyddion_mesure_ex}
+\end{figure}
+The exctracted pattern was put on the arbitrary defined top of the particle, that is to say the most white part, producing an horizontal and vertical line in black and red respectively. Therefore, we can differentiate the height between the \textit{flat} area and the maximum in order to retrieve the diameter which is, in this case, $176.7 nm$ giving approximately $88 nm$ and confirm our first hypothesis.
+
+\section{Discussion}
 
 \end{document}
