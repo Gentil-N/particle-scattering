@@ -437,7 +437,27 @@ First, let's describe the procedure to experimentaly test and compare our simula
 
 \subsection{Sample Preparation}
 
-Chronologically, the first experimental stuff we have to realize is the preparation of the silicon nanoparticle sample. 
+Chronologically, the first experimental stuff we have to realize is the preparation of the silicon nanoparticle sample.
+
+First of all, we have to find a proper support for our different particles. In this way, we use a glass substrat which is composed of a matrix where micrometric number elements are engraved on the bottom side, in order to see and locate the position of our experiment area on this sample during observation through optical or AFM microscopes. The substrat has the particularity to be transparent which allow the light to cross it and let numbers to be visible as shown on figure (\ref{fig:substrat}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{glass substrat}
+    \label{fig:substrat}
+\end{figure}
+Moreover, our goal being to put nanoparticles on this substrat, we have the following layers described on figure (\ref{fig:substrat_layers}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{substrat layers}
+    \label{fig:substrat_layers}
+\end{figure}
+From a technical point of view, the base glass substrat is too large to be placed on the different microscope. Thereby, this last one must be broke into several pieces, each with dimensions smaller than $2 \times 2 cm$.
+
+Secondly, we have to physically produce silicon nanoparticles with \textit{random} sizes included between $50 nm$ and $100 nm$ in radius. Hopefully, this step is realized thanks to another research team from the \textit{DTU} (see ...). Globally, they are created from $SiO$ lumps annealed at, approximately, $1500°C$ then etched to produce $Si$ nanoparticles in a solution.
+
+Finally, these nanoparticles are placed on the glass substrat pieces thanks to a micropipette: we put a droplet of around $10$ microliter on each chip. Afterward, we must either dry in air, or blow dry to progressively remove water from the samples. In the end, our silicon nanoparticles are \textit{dropcasted}.
 
 \subsection{Optical Microscope}
 
@@ -480,14 +500,14 @@ At first glance, knowing that a blue scattered light is equivalent to the \texti
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_scan_ex.png}
-    \caption{AFM point configuration}
+    \caption{Example Particle's Scan}
     \label{fig:gwyddion_scan_ex}
 \end{figure}
-Note that the scan procedure, started from the bottom side, was aborted when the particle has entirely been scanned: that is why we observe a rectangular area instead of a squared one. Now, it is much more easier to visualize and get the proper data. As we can see, the shape of our particle is close to a disc although some residual silicon \textit{waste} on the North-East side. However this image don't reveal the exact diameter, even if we assume a spherical particle, because of the random pertubration on the edge due to the oscillations of the tip. In this way, the height, being graduated thanks to a grey-scale put on the right, will give us the maximum of the scan. It is already possible to approximate the diameter as included between $160 nm$ and $190 nm$. Then, we use a tool from the software, exctracting precisely the height scanned along a specific line as shown on figure (\ref{fig:gwyddion_mesure_ex}).
+Note that the scan procedure, started from the bottom side, was aborted when the particle has entirely been scanned: that is why we observe a rectangular area instead of a squared one. Now, it is much more easier to visualize and get the proper data. As we can see, the shape of our particle is close to a disc although some residual silicon \textit{waste} on the North-East side. However this image don't reveal the exact diameter, even if we assume a spherical particle, because of the random pertubration on the edge due to the oscillations of the tip when encountering a particle. In this way, the height, being graduated thanks to a grey-scale put on the right, will give us the maximum of the scan. It is already possible to approximate the diameter as included between $160 nm$ and $190 nm$. Then, we use a tool from the software, exctracting precisely the height scanned along a specific line as shown on figure (\ref{fig:gwyddion_mesure_ex}).
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_mesure_ex.png}
-    \caption{AFM point configuration}
+    \caption{Example Particle's Measurements}
     \label{fig:gwyddion_mesure_ex}
 \end{figure}
 The exctracted pattern was put on the arbitrary defined top of the particle, that is to say the most white part, producing an horizontal and vertical line in black and red respectively. Therefore, we can differentiate the height between the \textit{flat} area and the maximum in order to retrieve the diameter which is, in this case, $176.7 nm$ giving approximately $88 nm$ and confirm our first hypothesis.
