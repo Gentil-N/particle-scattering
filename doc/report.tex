@@ -461,6 +461,81 @@ Finally, these nanoparticles are placed on the glass substrat pieces thanks to a
 
 \subsection{Optical Microscope}
 
+Now, our goal is to collect the spectrum from some intersting particles, preferably with a large distribution of size starting from $50 nm$ to $100 nm$ in radius. In order to select these wished particle and get the equivalent of scattering cross and extinction cross section, we have to use the \textit{optical} microscope. Globally, this tool is working like a \textit{basic} microscope, numerically connected to a computer where where recorded images might be seen through a normal screen, composed of $3$ different scopes ($\times 10$, ask Kirstine) and working with $2$ different modes of lighting: \textit{bright} and \textit{dark} field. The first one mode is a standard lighting: the ingoing light is emitted from the top of the device and the reflecting light is also collected from the top to be transfered to a detector and finally to the computer or directly to the \textit{user-eyes}.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{bright field ex}
+    \label{fig:bright_field_ex}
+\end{figure}
+Secondly, the \textit{dark field} is used to increase the contrast and avoid the emitted light to be directly collected. Indeed in our case, with the standard mode, all silicon nanoparticles look generally the same, that is to say, the reflected light is pretty close due to the slight difference between each sphere (we are talking about less than $50 nm$ in radius). Thereby, the \textit{dark field} mode allow us to send an incident light and only catch the scattered light as shown on figure (\ref{fig:dark_field_working_ex}). Unfortunately, it means that only the scattering cross section should be reached for comparison with simulation results.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{dark field working ex}
+    \label{fig:dark_field_working_ex}
+\end{figure}
+As we can see, the incident direction is described as the edge of a cone and, due to the refractive index of the studied sample (not only nanospheres), the scattered light is collected inside the same cone.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{dark field ex}
+    \label{fig:dark_field_ex}
+\end{figure}
+The figure (\ref{fig:dark_field_ex}) show an example of our actual sample viewed through the \textit{dark field} mode. Note that the we have a really high contrast and it possible to clearly recognize each color associated to a specific particle or another object.
+
+Then, to collect our wished spectrum, we have to reduce the detected light thanks to a slit. Thereby, only a few vertical area, with approximately $300 nm$ of width, should be visible by the detector: the \textit{light noise} created by other particles, horizontally next to our studied nanosphere, is avoided. In fact, the computer software parse each horizontal lines in the \textit{extended-}visible range in order to collect the spectrum of this area: if two particles are on the same line, they will be treated as the same entity.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{slit ex}
+    \label{fig:slit_ex}
+\end{figure}
+Therefore, that is why we put a narrow aperture to the detector, as shown one the previous figure (\ref{fig:slit_ex}).
+
+The first step before actually start our experiment is to numerically calibrate our microscope, that is to say, we have to get some initial data which will be important for computations of the experimental spectrums. In this way, without any incoming light, we save the background spectrum which represents the ambient noise involved by natural emitters like spot lights of the experimental room.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{background ex}
+    \label{fig:background_ex}
+\end{figure}
+
+In the same way, the incoming light, either in dark or bright field, has a specific distribution (close to a Gaussian one). Thereby, we put a \textit{reference} object as sample on the microscope's repository: a white material involves an exact collected distribution of the incident light.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{reference ex}
+    \label{fig:reference_ex}
+\end{figure}
+
+The next step is to get the actual spectrum of our wished nanoparticle. Obviously, because of the dimension of the detected area, we get more than one particle on each image. However, with a clever configuration, we obtain a similar figure from (\ref{fig:raw_data_ex}) after software computations and treatments.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{raw data ex}
+    \label{fig:raw_data_ex}
+\end{figure}
+Now, if we extract the line corresponding to our studied particle, we obtain a weird spectrum, pretty close to the following (\ref{fig:spectrum_wout_calc_ex}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{spectrum without calcul ex}
+    \label{fig:spectrum_wout_calc_ex}
+\end{figure}
+This particular shape, very far from our wished simulation results for nanosphere of silicon, is due to the lack of \textit{background} and \textit{reference} data. In fact, we have to apply this formula for each pixel.
+\begin{align}
+FinalSpectrum = \frac{RawSpectrum - Reference}{Background - Reference}
+\end{align}
+Note that $Background$ is not necessarly a \textit{per pixel} value but could be an average of each horizontal line from the \textit{background} because of the poor offset between pixels. Thereby, we obtain the final spectrum, with for instance the figure (\ref{fig:spectrum_w_calc_ex}).
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \caption{spectrum with calcul ex}
+    \label{fig:spectrum_w_calc_ex}
+\end{figure}
+Therefore, this previous result is much more close to our simulation part with two global Mie resonacies and approximately the same shape shifted along the wavelength axis.
+
 \subsection{Atomic Force Microscope}
 
 At this point of the experiment part, we have to couple the spectrum, previously retrieved thanks to the optical microscope, with the size of each studied particle. Thereby, we need another kind of tool in order to detect physically the wished size, that is to say, an instrument able to mesure the diameter, or at least to give an equivalent data, of the desired particle instead of collecting the scattered light intensity. In this way, the best suited tool for this task is the \textit{atomic force microscope}.
@@ -473,7 +548,7 @@ The working principle of that kind of microscope is pretty simple. At our \texti
     \label{fig:afm_base}
 \end{figure}
 
-Technically, even if in general an AFM can use different methods to scan the sample, in our case, the microscope use the \textit{Van der Waals} forces existing between the tip and the nanoparticles. These forces are responsible of the attraction between atoms in a molecule, for instance. Thereby, with no movement, the tip is in balance above the sample without touching it: this is a \textit{non-destructive} scanning tool. The height detector itself is composed of a laser reflecting on the end piece of the cantilever maintaining the tip. When we scan a sample, the tip attached to the cantilever and the laser are moving as a whole block and the tip oscillate around its balance position. In this way, if the tip moves up, compared to its small oscillations, because of a nanoparticle (or another kind of \textit{perturbartion}), the optical way runned by the light, and emited from the laser, is shorter: we detect a height variation. Effectively, the same process happens when the tip moves down. Then, in order to scan a sample, the tip must move along an arbitrary line and, with a pre-defined length, must shift on the next line to reproduce this task until the quantity of line correspond to the length of these last. Afterward, we obtain a square shaped area of our sample. Moreover, as shown on figure (\ref{fig:afm_scan_dir_config}), multiple scanning modes are available like a double sens scan, that is to say, the tip re-run the scanned line instead of moving out it at the end point, or an horizontal/vertical direction scan, that is to say, the scanned line might be oriented North-South or East-West, and even a start/end point selector, among plenty of other configurations.
+Technically, even if in general an AFM can use different methods to scan the sample, in our case, the microscope use the \textit{Van der Waals} forces existing between the tip and the nanoparticles. These forces are responsible of the attraction between atoms in a molecule, for instance. Thereby, with no movement, the tip is in balance above the sample without touching it: this is a \textit{non-destructive} scanning tool. The height detector itself is composed of a laser reflecting on the end piece of the cantilever maintaining the tip. When we scan a sample, the tip attached to the cantilever and the laser are moving as a whole block and the tip oscillate around its balance position. In this way, if the tip moves up, compared to its small oscillations, because of a nanoparticle (or another kind of \textit{perturbartion}), the optical way runned by the light, and emitted from the laser, is shorter: we detect a height variation. Effectively, the same process happens when the tip moves down. Then, in order to scan a sample, the tip must move along an arbitrary line and, with a pre-defined length, must shift on the next line to reproduce this task until the quantity of line correspond to the length of these last. Afterward, we obtain a square shaped area of our sample. Moreover, as shown on figure (\ref{fig:afm_scan_dir_config}), multiple scanning modes are available like a double sens scan, that is to say, the tip re-run the scanned line instead of moving out it at the end point, or an horizontal/vertical direction scan, that is to say, the scanned line might be oriented North-South or East-West, and even a start/end point selector, among plenty of other configurations.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{afm_scan_dir_config.png}
