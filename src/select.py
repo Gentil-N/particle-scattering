@@ -11,13 +11,19 @@ class AscData:
         self.min_w = 0.0
         self.max_w = 0.0
         self.max_val = 0.0
-    def to_image(self):
+        self.min_val = 100000.0
+    def to_image(self, normalize=False):
         img = np.zeros((256, 1024, 3))
         for i in range(256):
             for j in range(1024):
-                img[i][j][0] = self.data[i][j] / self.max_val
-                img[i][j][1] = self.data[i][j] / self.max_val
-                img[i][j][2] = self.data[i][j] / self.max_val
+                if normalize == True:
+                    img[i][j][0] = (self.data[i][j] - self.min_val) / (self.max_val - self.min_val)
+                    img[i][j][1] = (self.data[i][j] - self.min_val) / (self.max_val - self.min_val)
+                    img[i][j][2] = (self.data[i][j] - self.min_val) / (self.max_val - self.min_val)
+                else:
+                    img[i][j][0] = self.data[i][j] / self.max_val
+                    img[i][j][1] = self.data[i][j] / self.max_val
+                    img[i][j][2] = self.data[i][j] / self.max_val
         return img
     def extract_curve(self, vmin, vmax, bck, ref):
         x = np.linspace(self.min_w, self.max_w, 1024)
@@ -42,6 +48,7 @@ class AscData:
             for j in range(1, len(line_data) - 1):
                 val = float(line_data[j])
                 self.max_val = max(val, self.max_val)
+                self.min_val = min(val, self.min_val)
                 self.data[j][i] = val
             i += 1
         asc_file.close()
@@ -146,6 +153,8 @@ def choose_bck_ref():
         ASC_BCK.read_file(filename_bg)
         print("done")
         print("Selected background: ", filename_bg)
+        plt.imshow(ASC_BCK.to_image(normalize=True))
+        plt.show()
     filename_ref = fd.askopenfilename()
     if filename_ref != () and filename_ref != "":
         print("Reading reference...", end='', flush=True)

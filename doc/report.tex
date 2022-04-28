@@ -449,8 +449,8 @@ First of all, we have to find a proper support for our different particles. In t
 Moreover, our goal being to put nanoparticles on this substrat, we have the following layers described on figure (\ref{fig:substrat_layers}).
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{substrat layers}
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{substrat_layers.png}
+    \caption{Substrat Layers (Not To Scale)}
     \label{fig:substrat_layers}
 \end{figure}
 From a technical point of view, the base glass substrat is too large to be placed on the different microscope. Thereby, this last one must be broke into several pieces, each with dimensions smaller than $2 \times 2 cm$.
@@ -464,22 +464,22 @@ Finally, these nanoparticles are placed on the glass substrat pieces thanks to a
 Now, our goal is to collect the spectrum from some intersting particles, preferably with a large distribution of size starting from $50 nm$ to $100 nm$ in radius. In order to select these wished particle and get the equivalent of scattering cross and extinction cross section, we have to use the \textit{optical} microscope. Globally, this tool is working like a \textit{basic} microscope, numerically connected to a computer where where recorded images might be seen through a normal screen, composed of $3$ different scopes ($\times 10$, ask Kirstine) and working with $2$ different modes of lighting: \textit{bright} and \textit{dark} field. The first one mode is a standard lighting: the ingoing light is emitted from the top of the device and the reflecting light is also collected from the top to be transfered to a detector and finally to the computer or directly to the \textit{user-eyes}.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{bright field ex}
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{bright_field_ex.png}
+    \caption{Bright Field Example}
     \label{fig:bright_field_ex}
 \end{figure}
-Secondly, the \textit{dark field} is used to increase the contrast and avoid the emitted light to be directly collected. Indeed in our case, with the standard mode, all silicon nanoparticles look generally the same, that is to say, the reflected light is pretty close due to the slight difference between each sphere (we are talking about less than $50 nm$ in radius). Thereby, the \textit{dark field} mode allow us to send an incident light and only catch the scattered light as shown on figure (\ref{fig:dark_field_working_ex}). Unfortunately, it means that only the scattering cross section should be reached for comparison with simulation results.
+Secondly, the \textit{dark field} is used to increase the contrast and avoid the emitted light to be directly collected. Indeed in our case, with the standard mode, all silicon nanoparticles look generally the same, that is to say, the reflected light is pretty close due to the slight difference between each sphere (we are talking about less than $50 nm$ in radius). Thereby, the \textit{dark field} mode allow us to send an incident light and only catch the scattered light as shown on figure (\ref{fig:dark_field_working}). Unfortunately, it means that only the scattering cross section should be reached for comparison with simulation results.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{dark field working ex}
-    \label{fig:dark_field_working_ex}
+    \includegraphics[width=0.4\textwidth, height=0.37\textwidth]{dark_field_working.png}
+    \caption{Dark Field Working}
+    \label{fig:dark_field_working}
 \end{figure}
 As we can see, the incident direction is described as the edge of a cone and, due to the refractive index of the studied sample (not only nanospheres), the scattered light is collected inside the same cone.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{dark field ex}
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dark_field_ex.png}
+    \caption{Dark Field Example}
     \label{fig:dark_field_ex}
 \end{figure}
 The figure (\ref{fig:dark_field_ex}) show an example of our actual sample viewed through the \textit{dark field} mode. Note that the we have a really high contrast and it possible to clearly recognize each color associated to a specific particle or another object.
@@ -487,8 +487,8 @@ The figure (\ref{fig:dark_field_ex}) show an example of our actual sample viewed
 Then, to collect our wished spectrum, we have to reduce the detected light thanks to a slit. Thereby, only a few vertical area, with approximately $300 nm$ of width, should be visible by the detector: the \textit{light noise} created by other particles, horizontally next to our studied nanosphere, is avoided. In fact, the computer software parse each horizontal lines in the \textit{extended-}visible range in order to collect the spectrum of this area: if two particles are on the same line, they will be treated as the same entity.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{slit ex}
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{slit_ex.png}
+    \caption{Example Of Slit Closed On Two Particles}
     \label{fig:slit_ex}
 \end{figure}
 Therefore, that is why we put a narrow aperture to the detector, as shown one the previous figure (\ref{fig:slit_ex}).
@@ -496,24 +496,26 @@ Therefore, that is why we put a narrow aperture to the detector, as shown one th
 The first step before actually start our experiment is to numerically calibrate our microscope, that is to say, we have to get some initial data which will be important for computations of the experimental spectrums. In this way, without any incoming light, we save the background spectrum which represents the ambient noise involved by natural emitters like spot lights of the experimental room.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \includegraphics[width=0.45\textwidth, height=0.20\textwidth]{background_ex.png}
     \caption{background ex}
     \label{fig:background_ex}
 \end{figure}
+We could say that these data are collected on a really specific area because of the slit's thickness, but technically, the stored values are really close and only the average is relevant in that case.
 
 In the same way, the incoming light, either in dark or bright field, has a specific distribution (close to a Gaussian one). Thereby, we put a \textit{reference} object as sample on the microscope's repository: a white material involves an exact collected distribution of the incident light.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
+    \includegraphics[width=0.45\textwidth, height=0.20\textwidth]{reference_ex.png}
     \caption{reference ex}
     \label{fig:reference_ex}
 \end{figure}
+Note that the area is, here too, really specific, but this homogenous reference object involves the same patch of light distribution whatever the targeted location.
 
 The next step is to get the actual spectrum of our wished nanoparticle. Obviously, because of the dimension of the detected area, we get more than one particle on each image. However, with a clever configuration, we obtain a similar figure from (\ref{fig:raw_data_ex}) after software computations and treatments.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{raw data ex}
+    \includegraphics[width=0.50\textwidth, height=0.17\textwidth]{raw_data_ex.png}
+    \caption{Raw Data Example}
     \label{fig:raw_data_ex}
 \end{figure}
 Now, if we extract the line corresponding to our studied particle, we obtain a weird spectrum, pretty close to the following (\ref{fig:spectrum_wout_calc_ex}).
@@ -527,7 +529,7 @@ This particular shape, very far from our wished simulation results for nanospher
 \begin{align}
 FinalSpectrum = \frac{RawSpectrum - Reference}{Background - Reference}
 \end{align}
-Note that $Background$ is not necessarly a \textit{per pixel} value but could be an average of each horizontal line from the \textit{background} because of the poor offset between pixels. Thereby, we obtain the final spectrum, with for instance the figure (\ref{fig:spectrum_w_calc_ex}).
+Note that $Background$ is not necessarly a \textit{per pixel} value but could be an average of all pixels stored in \textit{background} as stated previously. Thereby, we obtain the final spectrum, with for instance the figure (\ref{fig:spectrum_w_calc_ex}).
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
