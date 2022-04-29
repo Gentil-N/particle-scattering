@@ -77,6 +77,19 @@ import math
 #        res[i] = a[n]
 #    return res
 
+def sj_downward_reccurence(z, nu):
+    count = nu + 1
+    jn = [complex(0.0, 0.0)] * (count + 2);
+    jn[count + 1] = complex(0.0, 0.0)
+    jn[count] = complex(1.0, 0.0)
+    for i in range(count, 0, -1):
+        jn[i - 1] = (2 * i + 1) / z * jn[i] - jn[i + 1]
+    del jn[count:]
+    norm = math.sin(z) / z / jn[0]
+    for i in range(1, count):
+        jn[i] *= norm;
+    return jn
+
 ORDER = 3
 ORDER_MAX = ORDER + 1
 
@@ -257,16 +270,16 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
 #plot_surface_sca_ext()
 #plot_coeff_sca_ext(100e-9)
-plot_sca_ext(107e-9)
+#plot_sca_ext(107e-9)
 
-#x = np.linspace(0, 30, 1000)
-#sjn_x = []
+x = np.linspace(0, 30, 1000)
+sjn_x = []
 #syn_x = []
-#for i in range(ORDER_MAX):
-#    sjn_x.append(special.spherical_jn(i, x))
-#    syn_x.append(special.spherical_yn(i, x))
-#plt.plot(x, sjn_x[0], label="j0")
-#plt.plot(x, sjn_x[1], label="j1")
+for i in range(ORDER_MAX):
+    sjn_x.append(sj_downward_reccurence(x, i))
+    #syn_x.append(special.spherical_yn(i, x))
+plt.plot(x, sjn_x[0], label="j0")
+plt.plot(x, sjn_x[1], label="j1")
 #plt.plot(x, syn_x[0], label="y0")
 #plt.plot(x, syn_x[1], label="y1")
 #plt.ylim(top=1.2, bottom=-1)

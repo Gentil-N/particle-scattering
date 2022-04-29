@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  28 APR 2022 16:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  29 APR 2022 15:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -464,105 +464,97 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 File: ./../res/raw_data_ex.png Graphic file (type png)
 <use ./../res/raw_data_ex.png>
 Package pdftex.def Info: ./../res/raw_data_ex.png  used on input line 517.
-(pdftex.def)             Requested size: 252.95189pt x 86.00858pt.
-
-Overfull \hbox (5.0069pt too wide) in paragraph at lines 517--518
- [][] 
- []
-
-File: ./../res/dn.png Graphic file (type png)
-<use ./../res/dn.png>
-Package pdftex.def Info: ./../res/dn.png  used on input line 524.
-(pdftex.def)             Requested size: 202.35461pt x 177.06488pt.
+(pdftex.def)             Requested size: 227.65369pt x 75.88704pt.
+<./../res/spectrum_wout_calc_ex.png, id=84, 404.712pt x 317.988pt>
+File: ./../res/spectrum_wout_calc_ex.png Graphic file (type png)
+<use ./../res/spectrum_wout_calc_ex.png>
+Package pdftex.def Info: ./../res/spectrum_wout_calc_ex.png  used on input line
+ 524.
+(pdftex.def)             Requested size: 202.3555pt x 177.06282pt.
 [11 <./../res/dark_field_working.png> <./../res/dark_field_ex.png> <./../res/sl
 it_ex.png> <./../res/background_ex.png>]
-File: ./../res/dn.png Graphic file (type png)
-<use ./../res/dn.png>
-Package pdftex.def Info: ./../res/dn.png  used on input line 535.
-(pdftex.def)             Requested size: 202.35461pt x 177.06488pt.
+<./../res/spectrum_w_calc_ex.png, id=91, 407.6028pt x 317.2653pt>
+File: ./../res/spectrum_w_calc_ex.png Graphic file (type png)
+<use ./../res/spectrum_w_calc_ex.png>
+Package pdftex.def Info: ./../res/spectrum_w_calc_ex.png  used on input line 53
+5.
+(pdftex.def)             Requested size: 202.35175pt x 177.0719pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./../res/afm_base.png, id=90, 477.9456pt x 386.4036pt>
-File: ./../res/afm_base.png Graphic file (type png)
-<use ./../res/afm_base.png>
-Package pdftex.def Info: ./../res/afm_base.png  used on input line 548.
-(pdftex.def)             Requested size: 202.3548pt x 161.89336pt.
-<./../res/afm_scan_dir_config.png, id=91, 481.8pt x 481.8pt>
+<./../res/afm_working_principle.png, id=92, 2007.5pt x 2007.5pt>
+File: ./../res/afm_working_principle.png Graphic file (type png)
+<use ./../res/afm_working_principle.png>
+Package pdftex.def Info: ./../res/afm_working_principle.png  used on input line
+ 548.
+(pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/afm_scan_dir_config.png, id=93, 2007.5pt x 2007.5pt>
 File: ./../res/afm_scan_dir_config.png Graphic file (type png)
 <use ./../res/afm_scan_dir_config.png>
 Package pdftex.def Info: ./../res/afm_scan_dir_config.png  used on input line 5
 56.
-(pdftex.def)             Requested size: 202.34726pt x 161.88368pt.
-<./../res/afm_scan_point_config.png, id=92, 481.8pt x 481.8pt>
+(pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
+<./../res/afm_scan_point_config.png, id=94, 2007.5pt x 2007.5pt>
 File: ./../res/afm_scan_point_config.png Graphic file (type png)
 <use ./../res/afm_scan_point_config.png>
 Package pdftex.def Info: ./../res/afm_scan_point_config.png  used on input line
  563.
-(pdftex.def)             Requested size: 202.34726pt x 161.88368pt.
-[12 <./../res/reference_ex.png> <./../res/raw_data_ex.png> <./../res/afm_base.p
-ng>]
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<./../res/gwyddion_df_ex.png, id=99, 493.3632pt x 356.532pt>
+(pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
+[12 <./../res/reference_ex.png> <./../res/raw_data_ex.png> <./../res/spectrum_w
+out_calc_ex.png> <./../res/spectrum_w_calc_ex.png>]
+<./../res/gwyddion_df_ex.png, id=102, 493.3632pt x 356.532pt>
 File: ./../res/gwyddion_df_ex.png Graphic file (type png)
 <use ./../res/gwyddion_df_ex.png>
 Package pdftex.def Info: ./../res/gwyddion_df_ex.png  used on input line 572.
 (pdftex.def)             Requested size: 202.34798pt x 161.89044pt.
-<./../res/gwyddion_scan_ex.png, id=100, 712.6625pt x 423.5825pt>
+<./../res/gwyddion_scan_ex.png, id=103, 712.6625pt x 423.5825pt>
 File: ./../res/gwyddion_scan_ex.png Graphic file (type png)
 <use ./../res/gwyddion_scan_ex.png>
 Package pdftex.def Info: ./../res/gwyddion_scan_ex.png  used on input line 579.
 
 (pdftex.def)             Requested size: 202.34972pt x 161.88727pt.
-<./../res/gwyddion_mesure_ex.png, id=101, 542.025pt x 392.46625pt>
+<./../res/gwyddion_mesure_ex.png, id=104, 542.025pt x 392.46625pt>
 File: ./../res/gwyddion_mesure_ex.png Graphic file (type png)
 <use ./../res/gwyddion_mesure_ex.png>
 Package pdftex.def Info: ./../res/gwyddion_mesure_ex.png  used on input line 58
 6.
 (pdftex.def)             Requested size: 202.3491pt x 161.88832pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[13 <./../res/afm_scan_dir_config.png> <./../res/afm_scan_point_config.png> <./
-../res/gwyddion_df_ex.png>] [14
-
- <./../res/gwyddion_scan_ex.png> <./../res/gwyddion_mesure_ex.png>] (./report.a
-ux)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+ [13 <./../res/afm_working_principle.png> <./../res/afm_scan_dir_config.png> <.
+/../res/afm_scan_point_config.png> <./../res/gwyddion_df_ex.png>] [14 <./../res
+/gwyddion_scan_ex.png> <./../res/gwyddion_mesure_ex.png>] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 3049 strings out of 483183
- 42142 string characters out of 5966293
- 288260 words of memory out of 5000000
- 18016 multiletter control sequences out of 15000+600000
+ 3062 strings out of 483183
+ 42644 string characters out of 5966293
+ 288271 words of memory out of 5000000
+ 18027 multiletter control sequences out of 15000+600000
  541501 words of font info for 59 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  30i,20n,33p,2781b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/nev/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk
-></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
-0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on report.pdf (14 pages, 8334024 bytes).
+ </ho
+me/nev/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
+texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on report.pdf (14 pages, 8554318 bytes).
 PDF statistics:
- 166 PDF objects out of 1000 (max. 8388607)
+ 172 PDF objects out of 1000 (max. 8388607)
  86 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 131 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 141 words of extra memory for PDF output out of 10000 (max. 10000000)
 

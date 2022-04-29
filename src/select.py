@@ -153,8 +153,6 @@ def choose_bck_ref():
         ASC_BCK.read_file(filename_bg)
         print("done")
         print("Selected background: ", filename_bg)
-        plt.imshow(ASC_BCK.to_image(normalize=True))
-        plt.show()
     filename_ref = fd.askopenfilename()
     if filename_ref != () and filename_ref != "":
         print("Reading reference...", end='', flush=True)

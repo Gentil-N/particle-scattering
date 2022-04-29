@@ -497,7 +497,7 @@ The first step before actually start our experiment is to numerically calibrate 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.45\textwidth, height=0.20\textwidth]{background_ex.png}
-    \caption{background ex}
+    \caption{Example of Background}
     \label{fig:background_ex}
 \end{figure}
 We could say that these data are collected on a really specific area because of the slit's thickness, but technically, the stored values are really close and only the average is relevant in that case.
@@ -506,7 +506,7 @@ In the same way, the incoming light, either in dark or bright field, has a speci
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.45\textwidth, height=0.20\textwidth]{reference_ex.png}
-    \caption{reference ex}
+    \caption{Example of Reference}
     \label{fig:reference_ex}
 \end{figure}
 Note that the area is, here too, really specific, but this homogenous reference object involves the same patch of light distribution whatever the targeted location.
@@ -514,54 +514,54 @@ Note that the area is, here too, really specific, but this homogenous reference 
 The next step is to get the actual spectrum of our wished nanoparticle. Obviously, because of the dimension of the detected area, we get more than one particle on each image. However, with a clever configuration, we obtain a similar figure from (\ref{fig:raw_data_ex}) after software computations and treatments.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.50\textwidth, height=0.17\textwidth]{raw_data_ex.png}
+    \includegraphics[width=0.45\textwidth, height=0.15\textwidth]{raw_data_ex.png}
     \caption{Raw Data Example}
     \label{fig:raw_data_ex}
 \end{figure}
 Now, if we extract the line corresponding to our studied particle, we obtain a weird spectrum, pretty close to the following (\ref{fig:spectrum_wout_calc_ex}).
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{spectrum without calcul ex}
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{spectrum_wout_calc_ex.png}
+    \caption{Spectrum Without (\ref{eq:final_spectrum}) Example}
     \label{fig:spectrum_wout_calc_ex}
 \end{figure}
 This particular shape, very far from our wished simulation results for nanosphere of silicon, is due to the lack of \textit{background} and \textit{reference} data. In fact, we have to apply this formula for each pixel.
-\begin{align}
+\begin{align}\label{eq:final_spectrum}
 FinalSpectrum = \frac{RawSpectrum - Reference}{Background - Reference}
 \end{align}
-Note that $Background$ is not necessarly a \textit{per pixel} value but could be an average of all pixels stored in \textit{background} as stated previously. Thereby, we obtain the final spectrum, with for instance the figure (\ref{fig:spectrum_w_calc_ex}).
+Note that $Background$ is not necessarly a \textit{per pixel} value but could be an average of all pixels stored in \textit{background} as stated previously. Thereby, we obtain the final spectrum, with for instance the figure (\ref{fig:spectrum_w_calc_ex}) from the particle in (\ref{fig:spectrum_wout_calc_ex}).
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dn.png}
-    \caption{spectrum with calcul ex}
+    \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{spectrum_w_calc_ex.png}
+    \caption{Spectrum With (\ref{eq:final_spectrum}) Example}
     \label{fig:spectrum_w_calc_ex}
 \end{figure}
-Therefore, this previous result is much more close to our simulation part with two global Mie resonacies and approximately the same shape shifted along the wavelength axis.
+Therefore, this previous result is much more close to our simulation part with two global Mie resonacies and approximately the same shape shifted along the wavelength axis excepted for all values below, approximately, $450 nm$. This last issue is due to the precision of the microscope that is not guaranteed under the visible wavelengths.
 
 \subsection{Atomic Force Microscope}
 
 At this point of the experiment part, we have to couple the spectrum, previously retrieved thanks to the optical microscope, with the size of each studied particle. Thereby, we need another kind of tool in order to detect physically the wished size, that is to say, an instrument able to mesure the diameter, or at least to give an equivalent data, of the desired particle instead of collecting the scattered light intensity. In this way, the best suited tool for this task is the \textit{atomic force microscope}.
 
-The working principle of that kind of microscope is pretty simple. At our \textit{human} scale, the operating mode is roughly similar to the Braille system. Indeed, our sample being totally flat at a macroscopic point of view, the main idea is to drag a tip on the desired experimental surface. This tip is directly connected to a detector collecting the nanometric height variations along the advancement of the last one as shown on figure (\ref{fig:afm_base}). In this way, if the tip runs into a nanoparticle, it could be possible to substract the maximum height to the base one, referencing the surface's sample which is the minimum in that case, in order to get the diameter of the particle (assuming that those are spherical).
+The working principle of that kind of microscope is pretty simple. At our \textit{human} scale, the operating mode is roughly similar to the Braille system. Indeed, our sample being totally flat at a macroscopic point of view, the main idea is to drag a tip on the desired experimental surface. This tip is directly connected to a detector collecting the nanometric height variations along the advancement of the last one as shown on figure (\ref{fig:afm_working_principle}). In this way, if the tip runs into a nanoparticle, it could be possible to substract the maximum height to the base one, referencing the surface's sample which is the minimum in that case, in order to get the diameter of the particle (assuming that those are spherical).
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{afm_base.png}
-    \caption{AFM working principle}
-    \label{fig:afm_base}
+    \includegraphics[width=0.4\textwidth, height=0.4\textwidth]{afm_working_principle.png}
+    \caption{AFM Working Principle}
+    \label{fig:afm_working_principle}
 \end{figure}
 
 Technically, even if in general an AFM can use different methods to scan the sample, in our case, the microscope use the \textit{Van der Waals} forces existing between the tip and the nanoparticles. These forces are responsible of the attraction between atoms in a molecule, for instance. Thereby, with no movement, the tip is in balance above the sample without touching it: this is a \textit{non-destructive} scanning tool. The height detector itself is composed of a laser reflecting on the end piece of the cantilever maintaining the tip. When we scan a sample, the tip attached to the cantilever and the laser are moving as a whole block and the tip oscillate around its balance position. In this way, if the tip moves up, compared to its small oscillations, because of a nanoparticle (or another kind of \textit{perturbartion}), the optical way runned by the light, and emitted from the laser, is shorter: we detect a height variation. Effectively, the same process happens when the tip moves down. Then, in order to scan a sample, the tip must move along an arbitrary line and, with a pre-defined length, must shift on the next line to reproduce this task until the quantity of line correspond to the length of these last. Afterward, we obtain a square shaped area of our sample. Moreover, as shown on figure (\ref{fig:afm_scan_dir_config}), multiple scanning modes are available like a double sens scan, that is to say, the tip re-run the scanned line instead of moving out it at the end point, or an horizontal/vertical direction scan, that is to say, the scanned line might be oriented North-South or East-West, and even a start/end point selector, among plenty of other configurations.
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{afm_scan_dir_config.png}
-    \caption{AFM direction configuration}
+    \includegraphics[width=0.4\textwidth, height=0.40\textwidth]{afm_scan_dir_config.png}
+    \caption{AFM Direction Configurations (\textit{S} = Start / \textit{E} = End)}
     \label{fig:afm_scan_dir_config}
 \end{figure}
 Additionaly, as the tip is slightly oscillating around its balance position, it is possible to choose the amount of scanned \textit{points} as shown on figure (\ref{fig:afm_scan_point_config}), that is to say, the number of periods made compared to the advancement of the system (tip, cantilever and laser) corresponding to the amount of generating pixels for a line. 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{afm_scan_point_config.png}
-    \caption{AFM point configuration}
+    \includegraphics[width=0.4\textwidth, height=0.40\textwidth]{afm_scan_point_config.png}
+    \caption{AFM Point Configurations}
     \label{fig:afm_scan_point_config}
 \end{figure}
 This parameter, associated with the user-defined line's length, might increase or decrease the quality of the collected data. However, increasing the image resolution increases the scanning time by the same. As a rough idea, to scan a $200 \times 200 nm$ square with $100$ points/pixels takes around $10$ minutes whereas, for a $50 \times 50 nm$ area with $256$ points/pixels takes the same amount of time. Therefore, a precise distribution must be adopted between quality, surface and speed in order to collect enough data and retrieve the nanoparticle's size.
