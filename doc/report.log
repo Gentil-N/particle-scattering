@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  29 APR 2022 15:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  2 MAY 2022 12:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -124,6 +124,9 @@ LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty
 Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 )
+(/usr/share/texlive/texmf-dist/tex/latex/was/gensymb.sty
+Package: gensymb 2003/07/02 v1.0 (WaS)
+)
 (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
 
@@ -154,20 +157,20 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 16.
-LaTeX Font Info:    ... okay on input line 16.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 17.
+LaTeX Font Info:    ... okay on input line 17.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -191,6 +194,18 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
+LaTeX Info: Redefining \celsius on input line 17.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 17.
+
+
+
+Package gensymb Warning: Not defining \perthousand.
+
+LaTeX Info: Redefining \ohm on input line 17.
+Package gensymb Info: Using \Omega for \ohm on input line 17.
+
+Package gensymb Warning: Not defining \micro.
+
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -225,12 +240,12 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 18.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 19.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 18.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 19.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -238,10 +253,13 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (6.71439pt too wide) in paragraph at lines 28--29
+Overfull \hbox (6.71439pt too wide) in paragraph at lines 31--32
 \OT1/cmr/m/n/10 re-sented by the cou-ple of \OT1/cmr/m/it/10 monochro-matic \OT
 1/cmr/m/n/10 vec-tor field $([]\OML/cmm/m/it/10 ; []\OT1/cmr/m/n/10 )$
  []
+
+
+LaTeX Warning: Reference `eq:rot_rot_a' on page 2 undefined on input line 51.
 
 [2
 
@@ -249,21 +267,30 @@ Overfull \hbox (6.71439pt too wide) in paragraph at lines 28--29
 <./../res/system.png, id=24, 398.9304pt x 393.1488pt>
 File: ./../res/system.png Graphic file (type png)
 <use ./../res/system.png>
-Package pdftex.def Info: ./../res/system.png  used on input line 184.
+Package pdftex.def Info: ./../res/system.png  used on input line 185.
 (pdftex.def)             Requested size: 202.35611pt x 202.3509pt.
 
-Overfull \hbox (2.6943pt too wide) in paragraph at lines 181--189
+Overfull \hbox (2.6943pt too wide) in paragraph at lines 182--190
 \OT1/cmr/m/n/10 That is to say, let's de-scribe the co-or-di-nate sys-tem throu
 gh
  []
 
+
+LaTeX Warning: Reference `eq:w_s' on page 4 undefined on input line 202.
+
+
+Overfull \hbox (2.44423pt too wide) in paragraph at lines 223--224
+\OT1/cmr/m/n/10 lished the ex-pres-sion of two gen-eral terms which are closely
+
+ []
+
 [4 <./../res/system.png>]
-Overfull \hbox (2.11093pt too wide) in paragraph at lines 261--262
+Overfull \hbox (2.11093pt too wide) in paragraph at lines 254--255
 []\OT1/cmr/m/n/10 To con-tex-tu-ally re-place our prob-lem, these Bessel func-
  []
 
 
-Overfull \hbox (3.64684pt too wide) in paragraph at lines 264--266
+Overfull \hbox (3.64684pt too wide) in paragraph at lines 257--259
 \OT1/cmr/m/n/10 where $\OML/cmm/m/it/10 $ \OT1/cmr/m/n/10 is a com-plex num-be
 r with-out re-stric-tion. Thereby,
  []
@@ -271,10 +298,10 @@ r with-out re-stric-tion. Thereby,
 <./../res/jnyn.png, id=31, 462.528pt x 346.896pt>
 File: ./../res/jnyn.png Graphic file (type png)
 <use ./../res/jnyn.png>
-Package pdftex.def Info: ./../res/jnyn.png  used on input line 286.
+Package pdftex.def Info: ./../res/jnyn.png  used on input line 279.
 (pdftex.def)             Requested size: 252.94437pt x 252.94614pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 286--287
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 279--280
  [][] 
  []
 
@@ -282,7 +309,7 @@ Overfull \hbox (4.99937pt too wide) in paragraph at lines 286--287
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [5]
-Overfull \hbox (3.72212pt too wide) in paragraph at lines 338--340
+Overfull \hbox (3.72212pt too wide) in paragraph at lines 331--333
 \OT1/cmr/m/n/10 It is im-por-tant to no-tice that any se-rie con-structed throu
 gh
  []
@@ -291,96 +318,114 @@ gh
 <./../res/ri_const.png, id=43, 462.528pt x 346.896pt>
 File: ./../res/ri_const.png Graphic file (type png)
 <use ./../res/ri_const.png>
-Package pdftex.def Info: ./../res/ri_const.png  used on input line 360.
+Package pdftex.def Info: ./../res/ri_const.png  used on input line 353.
 (pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 360--361
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 353--354
  [][] 
  []
 
 <./../res/ri_var_real.png, id=44, 462.528pt x 346.896pt>
 File: ./../res/ri_var_real.png Graphic file (type png)
 <use ./../res/ri_var_real.png>
-Package pdftex.def Info: ./../res/ri_var_real.png  used on input line 366.
+Package pdftex.def Info: ./../res/ri_var_real.png  used on input line 359.
 (pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 366--367
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 359--360
  [][] 
  []
 
 <./../res/ri_var_complex.png, id=45, 462.528pt x 346.896pt>
 File: ./../res/ri_var_complex.png Graphic file (type png)
 <use ./../res/ri_var_complex.png>
-Package pdftex.def Info: ./../res/ri_var_complex.png  used on input line 372.
+Package pdftex.def Info: ./../res/ri_var_complex.png  used on input line 365.
 (pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 372--373
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 365--366
  [][] 
  []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 [7 <./../res/ri_const.png> <./../res/ri_var_real.png>]
 <./../res/sca_coeff.png, id=52, 462.528pt x 346.896pt>
 File: ./../res/sca_coeff.png Graphic file (type png)
 <use ./../res/sca_coeff.png>
-Package pdftex.def Info: ./../res/sca_coeff.png  used on input line 390.
+Package pdftex.def Info: ./../res/sca_coeff.png  used on input line 383.
 (pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 390--391
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 383--384
  [][] 
  []
 
 <./../res/ext_coeff.png, id=53, 462.528pt x 346.896pt>
 File: ./../res/ext_coeff.png Graphic file (type png)
 <use ./../res/ext_coeff.png>
-Package pdftex.def Info: ./../res/ext_coeff.png  used on input line 396.
+Package pdftex.def Info: ./../res/ext_coeff.png  used on input line 389.
 (pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 396--397
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 389--390
  [][] 
  []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 <./../res/sca_var.png, id=54, 462.528pt x 346.896pt>
 File: ./../res/sca_var.png Graphic file (type png)
 <use ./../res/sca_var.png>
-Package pdftex.def Info: ./../res/sca_var.png  used on input line 405.
+Package pdftex.def Info: ./../res/sca_var.png  used on input line 398.
 (pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 405--406
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 398--399
  [][] 
  []
 
 <./../res/ext_var.png, id=55, 462.528pt x 346.896pt>
 File: ./../res/ext_var.png Graphic file (type png)
 <use ./../res/ext_var.png>
-Package pdftex.def Info: ./../res/ext_var.png  used on input line 411.
+Package pdftex.def Info: ./../res/ext_var.png  used on input line 404.
 (pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
 
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 411--412
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 404--405
+ [][] 
+ []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/surface_sca.png, id=56, 462.528pt x 346.896pt>
+File: ./../res/surface_sca.png Graphic file (type png)
+<use ./../res/surface_sca.png>
+Package pdftex.def Info: ./../res/surface_sca.png  used on input line 413.
+(pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
+
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 413--414
+ [][] 
+ []
+
+<./../res/surface_ext.png, id=57, 462.528pt x 346.896pt>
+File: ./../res/surface_ext.png Graphic file (type png)
+<use ./../res/surface_ext.png>
+Package pdftex.def Info: ./../res/surface_ext.png  used on input line 419.
+(pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
+
+Overfull \hbox (4.99937pt too wide) in paragraph at lines 419--420
  [][] 
  []
 
 [8 <./../res/ri_var_complex.png> <./../res/sca_coeff.png> <./../res/ext_coeff.p
 ng>]
-<./../res/surface_sca.png, id=62, 462.528pt x 346.896pt>
-File: ./../res/surface_sca.png Graphic file (type png)
-<use ./../res/surface_sca.png>
-Package pdftex.def Info: ./../res/surface_sca.png  used on input line 420.
-(pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
-
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 420--421
- [][] 
- []
-
-<./../res/surface_ext.png, id=63, 462.528pt x 346.896pt>
-File: ./../res/surface_ext.png Graphic file (type png)
-<use ./../res/surface_ext.png>
-Package pdftex.def Info: ./../res/surface_ext.png  used on input line 426.
-(pdftex.def)             Requested size: 252.94437pt x 202.35373pt.
-
-Overfull \hbox (4.99937pt too wide) in paragraph at lines 426--427
- [][] 
- []
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -392,32 +437,21 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <./../res/dn.png, id=71, 803.0pt x 803.0pt>
 File: ./../res/dn.png Graphic file (type png)
 <use ./../res/dn.png>
-Package pdftex.def Info: ./../res/dn.png  used on input line 445.
+Package pdftex.def Info: ./../res/dn.png  used on input line 438.
 (pdftex.def)             Requested size: 202.35461pt x 177.06488pt.
 <./../res/substrat_layers.png, id=72, 481.8pt x 429.7656pt>
 File: ./../res/substrat_layers.png Graphic file (type png)
 <use ./../res/substrat_layers.png>
-Package pdftex.def Info: ./../res/substrat_layers.png  used on input line 452.
+Package pdftex.def Info: ./../res/substrat_layers.png  used on input line 445.
 (pdftex.def)             Requested size: 202.34726pt x 177.06409pt.
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 458.
-
-
-LaTeX Warning: Command \textdegree invalid in math mode on input line 458.
-
-Missing character: There is no ° in font cmr10!
-
-Overfull \hbox (7.44434pt too wide) in paragraph at lines 458--459
+Overfull \hbox (7.44434pt too wide) in paragraph at lines 451--452
 []\OT1/cmr/m/n/10 Secondly, we have to phys-i-cally pro-duce sil-i-con nanopar-
 
  []
 
 
-Overfull \hbox (7.33716pt too wide) in paragraph at lines 458--459
+Overfull \hbox (7.33716pt too wide) in paragraph at lines 451--452
 \OT1/cmr/m/n/10 ti-cles with \OT1/cmr/m/it/10 ran-dom \OT1/cmr/m/n/10 sizes in-
 cluded be-tween $50\OML/cmm/m/it/10 nm$ \OT1/cmr/m/n/10 and $100\OML/cmm/m/it/1
 0 nm$
@@ -426,132 +460,148 @@ cluded be-tween $50\OML/cmm/m/it/10 nm$ \OT1/cmr/m/n/10 and $100\OML/cmm/m/it/1
 <./../res/bright_field_ex.png, id=73, 2007.5pt x 1679.27374pt>
 File: ./../res/bright_field_ex.png Graphic file (type png)
 <use ./../res/bright_field_ex.png>
-Package pdftex.def Info: ./../res/bright_field_ex.png  used on input line 467.
+Package pdftex.def Info: ./../res/bright_field_ex.png  used on input line 460.
 (pdftex.def)             Requested size: 202.32399pt x 177.05922pt.
 <./../res/dark_field_working.png, id=74, 2007.5pt x 1854.93pt>
 File: ./../res/dark_field_working.png Graphic file (type png)
 <use ./../res/dark_field_working.png>
-Package pdftex.def Info: ./../res/dark_field_working.png  used on input line 47
-4.
+Package pdftex.def Info: ./../res/dark_field_working.png  used on input line 46
+7.
 (pdftex.def)             Requested size: 202.32399pt x 187.1738pt.
 <./../res/dark_field_ex.png, id=75, 589.7232pt x 493.3632pt>
 File: ./../res/dark_field_ex.png Graphic file (type png)
 <use ./../res/dark_field_ex.png>
-Package pdftex.def Info: ./../res/dark_field_ex.png  used on input line 481.
+Package pdftex.def Info: ./../res/dark_field_ex.png  used on input line 474.
 (pdftex.def)             Requested size: 202.34792pt x 177.06107pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 [10 <./../res/dn.png (PNG copy)> <./../res/substrat_layers.png> <./../res/brigh
 t_field_ex.png>]
 <./../res/slit_ex.png, id=80, 179.4705pt x 174.6525pt>
 File: ./../res/slit_ex.png Graphic file (type png)
 <use ./../res/slit_ex.png>
-Package pdftex.def Info: ./../res/slit_ex.png  used on input line 490.
+Package pdftex.def Info: ./../res/slit_ex.png  used on input line 483.
 (pdftex.def)             Requested size: 202.3529pt x 177.07452pt.
-<./../res/background_ex.png, id=81, 635.2533pt x 251.4996pt>
-File: ./../res/background_ex.png Graphic file (type png)
-<use ./../res/background_ex.png>
-Package pdftex.def Info: ./../res/background_ex.png  used on input line 499.
-(pdftex.def)             Requested size: 227.64415pt x 101.17752pt.
-<./../res/reference_ex.png, id=82, 401.8212pt x 182.8431pt>
-File: ./../res/reference_ex.png Graphic file (type png)
-<use ./../res/reference_ex.png>
-Package pdftex.def Info: ./../res/reference_ex.png  used on input line 508.
-(pdftex.def)             Requested size: 227.64865pt x 101.1778pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
+<./../res/background_ex.png, id=81, 635.2533pt x 251.4996pt>
+File: ./../res/background_ex.png Graphic file (type png)
+<use ./../res/background_ex.png>
+Package pdftex.def Info: ./../res/background_ex.png  used on input line 492.
+(pdftex.def)             Requested size: 227.64415pt x 101.17752pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/reference_ex.png, id=82, 401.8212pt x 182.8431pt>
+File: ./../res/reference_ex.png Graphic file (type png)
+<use ./../res/reference_ex.png>
+Package pdftex.def Info: ./../res/reference_ex.png  used on input line 501.
+(pdftex.def)             Requested size: 227.64865pt x 101.1778pt.
 <./../res/raw_data_ex.png, id=83, 246.6816pt x 61.6704pt>
 File: ./../res/raw_data_ex.png Graphic file (type png)
 <use ./../res/raw_data_ex.png>
-Package pdftex.def Info: ./../res/raw_data_ex.png  used on input line 517.
+Package pdftex.def Info: ./../res/raw_data_ex.png  used on input line 510.
 (pdftex.def)             Requested size: 227.65369pt x 75.88704pt.
 <./../res/spectrum_wout_calc_ex.png, id=84, 404.712pt x 317.988pt>
 File: ./../res/spectrum_wout_calc_ex.png Graphic file (type png)
 <use ./../res/spectrum_wout_calc_ex.png>
 Package pdftex.def Info: ./../res/spectrum_wout_calc_ex.png  used on input line
- 524.
+ 517.
 (pdftex.def)             Requested size: 202.3555pt x 177.06282pt.
-[11 <./../res/dark_field_working.png> <./../res/dark_field_ex.png> <./../res/sl
-it_ex.png> <./../res/background_ex.png>]
-<./../res/spectrum_w_calc_ex.png, id=91, 407.6028pt x 317.2653pt>
-File: ./../res/spectrum_w_calc_ex.png Graphic file (type png)
-<use ./../res/spectrum_w_calc_ex.png>
-Package pdftex.def Info: ./../res/spectrum_w_calc_ex.png  used on input line 53
-5.
-(pdftex.def)             Requested size: 202.35175pt x 177.0719pt.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./../res/afm_working_principle.png, id=92, 2007.5pt x 2007.5pt>
+[11 <./../res/dark_field_working.png> <./../res/dark_field_ex.png> <./../res/sl
+it_ex.png> <./../res/background_ex.png> <./../res/reference_ex.png>]
+<./../res/spectrum_w_calc_ex.png, id=92, 407.6028pt x 317.2653pt>
+File: ./../res/spectrum_w_calc_ex.png Graphic file (type png)
+<use ./../res/spectrum_w_calc_ex.png>
+Package pdftex.def Info: ./../res/spectrum_w_calc_ex.png  used on input line 52
+8.
+(pdftex.def)             Requested size: 202.35175pt x 177.0719pt.
+<./../res/afm_working_principle.png, id=93, 2007.5pt x 2007.5pt>
 File: ./../res/afm_working_principle.png Graphic file (type png)
 <use ./../res/afm_working_principle.png>
 Package pdftex.def Info: ./../res/afm_working_principle.png  used on input line
- 548.
+ 541.
 (pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<./../res/afm_scan_dir_config.png, id=93, 2007.5pt x 2007.5pt>
+<./../res/afm_scan_dir_config.png, id=94, 2007.5pt x 2007.5pt>
 File: ./../res/afm_scan_dir_config.png Graphic file (type png)
 <use ./../res/afm_scan_dir_config.png>
 Package pdftex.def Info: ./../res/afm_scan_dir_config.png  used on input line 5
-56.
+49.
 (pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
-<./../res/afm_scan_point_config.png, id=94, 2007.5pt x 2007.5pt>
+<./../res/afm_scan_point_config.png, id=95, 2007.5pt x 2007.5pt>
 File: ./../res/afm_scan_point_config.png Graphic file (type png)
 <use ./../res/afm_scan_point_config.png>
 Package pdftex.def Info: ./../res/afm_scan_point_config.png  used on input line
- 563.
+ 556.
 (pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
-[12 <./../res/reference_ex.png> <./../res/raw_data_ex.png> <./../res/spectrum_w
-out_calc_ex.png> <./../res/spectrum_w_calc_ex.png>]
-<./../res/gwyddion_df_ex.png, id=102, 493.3632pt x 356.532pt>
+ [12 <./../res/raw_data_ex.png> <./../res/spectrum_wout_calc_ex.png> <./../res/
+spectrum_w_calc_ex.png> <./../res/afm_working_principle.png>]
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/gwyddion_df_ex.png, id=103, 493.3632pt x 356.532pt>
 File: ./../res/gwyddion_df_ex.png Graphic file (type png)
 <use ./../res/gwyddion_df_ex.png>
-Package pdftex.def Info: ./../res/gwyddion_df_ex.png  used on input line 572.
+Package pdftex.def Info: ./../res/gwyddion_df_ex.png  used on input line 565.
 (pdftex.def)             Requested size: 202.34798pt x 161.89044pt.
-<./../res/gwyddion_scan_ex.png, id=103, 712.6625pt x 423.5825pt>
+<./../res/gwyddion_scan_ex.png, id=104, 712.6625pt x 423.5825pt>
 File: ./../res/gwyddion_scan_ex.png Graphic file (type png)
 <use ./../res/gwyddion_scan_ex.png>
-Package pdftex.def Info: ./../res/gwyddion_scan_ex.png  used on input line 579.
+Package pdftex.def Info: ./../res/gwyddion_scan_ex.png  used on input line 572.
 
 (pdftex.def)             Requested size: 202.34972pt x 161.88727pt.
-<./../res/gwyddion_mesure_ex.png, id=104, 542.025pt x 392.46625pt>
+<./../res/gwyddion_mesure_ex.png, id=105, 542.025pt x 392.46625pt>
 File: ./../res/gwyddion_mesure_ex.png Graphic file (type png)
 <use ./../res/gwyddion_mesure_ex.png>
-Package pdftex.def Info: ./../res/gwyddion_mesure_ex.png  used on input line 58
-6.
+Package pdftex.def Info: ./../res/gwyddion_mesure_ex.png  used on input line 57
+9.
 (pdftex.def)             Requested size: 202.3491pt x 161.88832pt.
- [13 <./../res/afm_working_principle.png> <./../res/afm_scan_dir_config.png> <.
-/../res/afm_scan_point_config.png> <./../res/gwyddion_df_ex.png>] [14 <./../res
-/gwyddion_scan_ex.png> <./../res/gwyddion_mesure_ex.png>] (./report.aux) ) 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[13 <./../res/afm_scan_dir_config.png> <./../res/afm_scan_point_config.png> <./
+../res/gwyddion_df_ex.png>] [14
+
+ <./../res/gwyddion_scan_ex.png> <./../res/gwyddion_mesure_ex.png>] (./report.a
+ux)
+
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 3062 strings out of 483183
- 42644 string characters out of 5966293
- 288271 words of memory out of 5000000
- 18027 multiletter control sequences out of 15000+600000
+ 3106 strings out of 483183
+ 43234 string characters out of 5966293
+ 289490 words of memory out of 5000000
+ 18067 multiletter control sequences out of 15000+600000
  541501 words of font info for 59 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 30i,20n,33p,2781b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
- </ho
-me/nev/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></usr/
-share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
-/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on report.pdf (14 pages, 8554318 bytes).
+ 30i,11n,33p,2781b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/nev/.texlive2019/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
+0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on report.pdf (14 pages, 8555454 bytes).
 PDF statistics:
  172 PDF objects out of 1000 (max. 8388607)
  86 compressed objects within 1 object stream

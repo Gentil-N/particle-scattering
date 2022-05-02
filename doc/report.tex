@@ -5,11 +5,12 @@
 \usepackage{amssymb}
 \usepackage{amsfonts}
 \usepackage{indentfirst}
+\usepackage{gensymb}
 \usepackage[a4paper, total={7in, 10in}]{geometry}
 \graphicspath{ {./../res/} }
 \numberwithin{equation}{section}
 
-\title{Nanoparticles size estimation through Mie resonances}
+\title{Optical Mie resonances in high-refractive-index nanostructures}
 \author{Neven Gentil}
 \date{April 2022}
 
@@ -21,9 +22,11 @@
 
 \section{Theory}
 
+The first step is to produce a theorical support in order to experimentally check the simulation created on these equations. More precisely, we will mathematicaly represent our nanostructure and extract measurable factors from this.
+
 \subsection{Vector Spherical Harmonics}
 
-First at all, let's describe the general composition of our problem: given an arbitrary particle droped in a certain medium, we hit it with a monochromatic light. With a fixed size and other specifics parameters for electromagnetic materials like the permeability $\mu$ or the complex refractive index $N$, our objective is to, theoretically, compute the electromagnetic field for the medium surrounding the particle and inside this particle itself, in order to find the expression of the scattered light.
+First at all, let's describe the general composition of our problem: given a spherical particle of radius $a$ droped in a certain medium, we hit it with a monochromatic light. With a fixed refractive index $N$ for the nanosphere, respectively $N_{I}$ for the medium and other specifics parameters for electromagnetic materials like the permeability $\mu$, our objective is to, theoretically, compute the electromagnetic field for the medium surrounding the particle and inside this particle itself, in order to find the expression of the scattered light.
 
 Let's start with an arbitrary electromagnetic field represented by the couple of \textit{monochromatic} vector field $(\textbf{E}, \textbf{H})$ which satisfies the Maxwell equations:
 \begin{align}
@@ -32,16 +35,12 @@ Let's start with an arbitrary electromagnetic field represented by the couple of
 \nabla \times \textbf{E} &= i\omega \mu \textbf{H} \label{eq:rot_e} \\
 \nabla \times \textbf{H} &= -i\omega \epsilon \textbf{E} \label{eq:rot_h}
 \end{align}
-Given the relation $k^{2} = \omega ^{2}\epsilon \mu$ and the following formula:
-\begin{align}\label{eq:rot_rot_a}
-\nabla \times (\nabla \times \textbf{A}) = \nabla (\nabla \cdot \textbf{A}) - \nabla \cdot (\nabla \textbf{A})
-\end{align}
-we obtain a couple of \textit{vector wave equation}:
+Given the relation $k^{2} = \omega ^{2}\epsilon \mu$ and standards formula from vectorial analysis, we obtain a couple of \textit{vector wave equation}:
 \begin{align}
 \nabla ^{2} \textbf{E} + k^{2}\textbf{E}&=0\\
 \nabla ^{2} \textbf{H} + k^{2}\textbf{H}&=0
 \end{align}
-where $\nabla ^{2}$ is the vector Laplace operator, that is to say, we explicitly have $\Delta \textbf{A} = \nabla ^{2} \textbf{A} = (\nabla \cdot \nabla) \textbf{A}$.
+where $\nabla ^{2}$ is the vector Laplace operator.
 
 An important thing to notice is that any vector field with zero divergence and satisfying the vector wave equation is a valid electric/magnetic field where we can obtain the corresponding magnetic/electric field by the curl (\ref{eq:rot_e})/(\ref{eq:rot_h}).
 
@@ -57,20 +56,20 @@ To satisfy the vector wave equation, $\psi$ should also satisfy the equivalent s
 \begin{align}\label{eq:psi_wave_eq}
 \nabla ^{2} \psi + k^{2}\psi = 0
 \end{align}
-where, this time, $\nabla ^{2}$ is the scalar Laplace operator. By the way, as described above, if we denote $\nabla \times \textbf{N} = k \textbf{M}$, we have the perpendicular vector field of the associated artificial one, also satisfying the vector wave equation. Finally, we created the vector harmonics $\textbf{M}$ and $\textbf{N}$ with the scalar generating function $\psi$ associated to our initial electromagnetic field.
+where, this time, $\nabla ^{2}$ is the scalar Laplace operator. By the way, if we denote $\nabla \times \textbf{N} = k \textbf{M}$, we have the perpendicular vector field of the artificial $M$, also satisfying the vector wave equation. Finally, we created the vector harmonics $\textbf{M}$ and $\textbf{N}$ with the scalar generating function $\psi$ associated to our initial electromagnetic field.
 
-\subsection{Associated Factors}
+\subsection{Explicit Expansion Of Vector Spherical Harmonics}
 
 The main idea to compute all solutions required is the following: given an incident electromagnetic field, we use the boundary conditions on the surface of our particle to get all fields resulting from interaction. Thereby, it could be interesting to use the spherical polar coordinates during the calculation and particularly to express the boundary conditions. That is why we have constructed the vector harmonics above. Indeed, if we replace the constant vector $\textbf{c}$ by the radial coordinate $\textbf{r}$, $\textbf{M}$ is always a solution of the vector wave equation but, this time, for the spherical polar coordinates linked to the particle. In this way, from (\ref{eq:psi_wave_eq}), we obtain:
 \begin{equation}\label{eq:wave_sph}
 \begin{aligned}
-\frac{1}{r^{2}}\frac{\partial }{\partial r}(r^{2}\frac{\partial \psi}{\partial r}) \quad + \\ 
-\frac{1}{r^{2}sin(\theta)}\frac{\partial }{\partial \theta}(sin(\theta)\frac{\partial \psi}{\partial \theta}) \quad + \\
-\frac{1}{r^{2}sin(\theta)}\frac{\partial^{2} \psi}{\partial^{2} \phi} \quad + \\
+\frac{1}{r^{2}}\frac{\partial }{\partial r}\left(r^{2}\frac{\partial \psi}{\partial r}\right) \quad + \\ 
+\frac{1}{r^{2}\sin(\theta)}\frac{\partial }{\partial \theta}\left(\sin(\theta)\frac{\partial \psi}{\partial \theta}\right) \quad + \\
+\frac{1}{r^{2}\sin(\theta)}\frac{\partial^{2} \psi}{\partial^{2} \phi} \quad + \\
 k^{2}\psi \quad = 0
 \end{aligned}
 \end{equation}
-Obviously, from the previous formula, we can separate each variable to create $\psi$:
+Therefore, from the previous formula (\ref{eq:wave_sph}), we can separate each variable to create $\psi$:
 \begin{align}\label{eq:psi_r_t_p}
 \psi(r, \theta, \phi) = R(r)\Theta(\theta)\Phi(\phi)
 \end{align}
@@ -81,17 +80,18 @@ Finally, this kind of generating function $\psi$ satisfying the scalar wave equa
 \psi_{emn}&=cos(m\phi)P_{n}^{m}(cos\theta)z_{n}(kr)\\
 \psi_{omn}&=sin(m\phi)P_{n}^{m}(cos\theta)z_{n}(kr)
 \end{align}
-where the parity of our original function is led by the $cosinus$ and $sinus$ attached with the $\phi$ variable and the \textit{angle-dependent} $m$ variable. 
+where the parity of our original function is led by the $cosine$ and $sine$ attached with the $\phi$ variable and the \textit{angle-dependent} $m$ variable. 
 
 The other angular part described by $\theta$ , as a \textit{Legendre's differential equation}, is solved by the \textit{associated Legendre functions} of the first kind $P_{n}^{m}(cos\theta)$ orthogonally defined on the $n$ variable. 
 
-Moreover, the radial part, described by $r$, might be reintroduced as follow:
+Moreover, the radial part satisfies the spherical Bessel differential equations, given by:
 \begin{align}\label{eq:radial_part}
 \rho\frac{d }{d\rho}(\rho\frac{d Z}{d\rho})+[\rho^{2}-(n+\frac{1}{2})^{2}]Z=0
 \end{align}
-where we assume that $\rho=kr$ and $Z=R\sqrt{\rho}$. Thereby, to solve the previous equation, we can use any linear combination of the spherical Bessel functions $j_{n}$, $y_{n}$, $h^{(1)}_{n}=j_{n}+iy_{n}$ or $h^{(2)}_{n}=j_{n}-iy_{n}$: we named this kind of combination $z_{n}$.
+where $\rho=kr$ and $Z=R(r)\sqrt{\rho(r)}$. Thereby, to solve this previous equation (\ref{eq:radial_part}), we can use any linear combination of the spherical Bessel functions $j_{n}$, $y_{n}$, $h^{(1)}_{n}=j_{n}+iy_{n}$ or $h^{(2)}_{n}=j_{n}-iy_{n}$: we named this kind of combination $z_{n}$.
 
-Note that $m$ and $n$ are produced by subsidiary conditions when obtaining these three equations by rewriting (\ref{eq:wave_sph}) with separate variables: it is inherent to our physical assumptions.
+Note that $m$ and $n$ are \textit{mathematical artefacts} obtained by rewriting (\ref{eq:wave_sph}), that is to say, they are not physical input variables like the radius or the refractive indices.
+%Note that $m$ and $n$ are produced by subsidiary conditions when obtaining these three equations by rewriting (\ref{eq:wave_sph}) with separate variables: it is inherent to our physical assumptions.
 
 In the end, we can retrieve our initial vector spherical harmonics generated by $\psi_{emn}$ or $\psi_{omn}$:
 \begin{align}
@@ -101,14 +101,14 @@ In the end, we can retrieve our initial vector spherical harmonics generated by 
 \textbf{N}_{omn}=\frac{\nabla \times \textbf{M}_{omn}}{k}
 \end{align}
 
-At this point of the theory, it is still possible to restrain our hypothesis and more precisely the shape of the incident light. Let's consider a planar incident electromagnetic wave $E_{i}$. Now, we can easily describe this wave in terms of vector spherical harmonics:
+At this point of the theory, it is still possible to restrain our hypothesis and more precisely the shape of the incident light. Let's consider an incident plane wave given by $\textbf{E}_{i}=E_{0}e^{ikr\cos\theta}\textbf{e}_{r}$, polarized along z-axis. Now, we can easily describe this wave in terms of vector spherical harmonics:
 \begin{equation}\label{eq:ei_harmo}
 \begin{aligned}
 \textbf{E}_{i}=\sum_{m=0}^{\infty }\sum_{n=m}^{\infty }B_{emn}\textbf{M}_{emn}+B_{omn}\textbf{M}_{omn}\\
 +A_{emn}\textbf{N}_{emn}+A_{omn}\textbf{N}_{omn}
 \end{aligned}
 \end{equation}
-where $B_{X}$ and $A_{X}$ are arbitrary factors. Thanks to the orthogonality of all the vector spherical harmonics which could be demonstrated through properties from $cos(m\phi)$, $sin(m\phi)$ and $P_{n}^{m}(cos\theta)$, we easily exctract each factor of this linear summation (\ref{eq:ei_harmo}):
+where $B_{X}$ and $A_{X}$ are vector spherical harmonic associated factors. Thanks to the orthogonality of all the vector spherical harmonics which could be demonstrated through properties from $\cos(m\phi)$, $\sin(m\phi)$, $P_{n}^{m}(\cos\theta)$ and the linear summation (\ref{eq:ei_harmo}), we explicitly have the associated factors as follow:
 \begin{align}\label{eq:bemn}
 \textbf{B}_{emn}=\frac{\int_{0}^{2\pi}\int_{0}^{\pi}\textbf{E}_{i}\cdot \textbf{M}_{emn}sin\theta d\theta d\phi}{\int_{0}^{2\pi}\int_{0}^{\pi}|\textbf{M}_{emn}|^{2}sin\theta d\theta d\phi}
 \end{align}
@@ -116,18 +116,18 @@ with here, for instance, the first coefficient. With the orthogonality of the si
 \begin{align}
 \textbf{E}_{i}=\sum_{n=1}^{\infty }B_{o1n}\textbf{M}^{(1)}_{o1n} + A_{e1n}\textbf{N}^{(1)}_{e1n}
 \end{align}
-Afterward, thanks to a bunch of properties from the associated Legendre functions, we deduce explicitly these two remaining factors $B_{o1n}$ and $A_{e1n}$ from (\ref{eq:bemn}) or the equivalent expression:
+Afterward, thanks to a set of properties from the associated Legendre functions, we deduce explicitly these two remaining factors $B_{o1n}$ and $A_{e1n}$ from (\ref{eq:bemn}) or the equivalent expression:
 \begin{align}
 \textbf{E}_{i}=E_{0}\sum_{n=1}^{\infty }i^{n}\frac{2n+1}{n(n+1)}(\textbf{M}^{(1)}_{o1n} - i\textbf{N}^{(1)}_{e1n})
 \end{align}
-Obviously, it is possible to calculate the perpendicular magnetic field $H_{i}$ with the curl (\ref{eq:rot_e}).
+%Obviously, it is possible to calculate the perpendicular magnetic field $H_{i}$ with the curl (\ref{eq:rot_e}).
 
 \subsection{Boundary Conditions}
 
 At this point, we have enough equation relative to the incident plane wave to apply the following boundary conditions:
 \begin{align}\label{eq:boundaries}
-(\textbf{E}_{i} + \textbf{E}_{s} - \textbf{E}_{I}) \times \overrightarrow{e_{r}} &= 0\\
-(\textbf{H}_{i} + \textbf{H}_{s} - \textbf{H}_{I}) \times \overrightarrow{e_{r}} &= 0
+(\textbf{E}_{i} + \textbf{E}_{s} - \textbf{E}_{I}) \times \textbf{e}_{r} &= 0\\
+(\textbf{H}_{i} + \textbf{H}_{s} - \textbf{H}_{I}) \times \textbf{e}_{r} &= 0
 \end{align}
 where $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$ are respectively the scattering and internal electromagnetic field resulting from the interaction between the incident field and our particle. Then, we assume that these last fields have the same mathematical shape, when developped in vector spherical harmonics, than $(\textbf{E}_{i}, \textbf{H}_{i})$; that is to say, the scattering and internal field are linearly dependent from the incident field up to some factors taking into account the behavior of $j_{n}$ at the boundary of our particle:
 \begin{align}
@@ -138,7 +138,7 @@ where $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$ 
 \end{align}
 Note that $^{(3)}$ means we use the spherical Bessel function of the third kind $h^{(1)}_{n}$ and $\textbf{H}_{X}$ has the same factors than $\textbf{E}_{X}$ due to the curl (\ref{eq:rot_e}). Moreover, $k_{I}$ and $\mu_{I}$ are respectively the wave vector and the permeability of the particle.
 
-Now, we can rewrite the boundary conditions on the surface of our imaginary particle from (\ref{eq:boundaries}) with each component separated, that is to say at $r=a$ if we denote by $a$ its radius:
+Now, we can rewrite the boundary conditions on the surface of our theorical particle from (\ref{eq:boundaries}) with each component separated, that is to say at $r=a$:
 \begin{equation}\label{eq:boundary_comp}
 \begin{aligned}
 E_{i\theta} + E_{s\theta} = E_{I\theta}\\
@@ -147,7 +147,7 @@ H_{i\theta} + H_{s\theta} = H_{I\theta}\\
 H_{i\phi} + H_{s\phi} = H_{I\phi}
 \end{aligned}
 \end{equation}
-where $E_{iX}$, for instance, denotes the $X$-component of $\textbf{E}_{i}$. Then, we apply the explicit expressions for the incident, scattering and internal field on these previous boundary conditions (\ref{eq:boundary_comp}) with, needless to say, the detailled expressions of the vector spherical harmonics $\textbf{M}_{X}$ and $\textbf{N}_{X}$. In this way, we obtain four linear equations revealing the four coefficients arbitrary pushed into $(\textbf{E}_{I}, \textbf{H}_{I})$ and $(\textbf{E}_{s}, \textbf{H}_{s})$:
+where $E_{iX}$, for instance, denotes the $X$-component of $\textbf{E}_{i}$. We obtain four linear equations revealing the four vector spherical harmonic associated factors from $(\textbf{E}_{i}, \textbf{H}_{i})$ also set into $(\textbf{E}_{I}, \textbf{H}_{I})$ and $(\textbf{E}_{s}, \textbf{H}_{s})$:
 \begin{equation}
 \begin{aligned}
 j_{n}(mx)c_{n} + h^{(1))}_{n}(x)b_{n} = j_{n}(x) \\
@@ -162,9 +162,9 @@ where the prime sign means derivation along the same argument between parenthesi
 x = ka = \frac{2\pi Na}{\lambda} \qquad m = \frac{N_{I}}{N}
 \end{aligned}
 \end{equation}
-where $N_{I}$ indicates the refractive index of the particle. In the same way, $N$ is owned by the medium. By the way, it could be intersting to notice that we also have $\rho(a)=x$. 
+By the way, note that we also have, by definition, $\rho(a)=x$.
 
-Then, thanks to a basic Gaussian elimination, we can exctract each coefficient. Surprisingly, with some approximation on the spherical Bessel functions depending on the frequency, it is possible to admit the equality between $a_{n}$ and $d_{n}$ then $b_{n}$ and $c_{n}$. Furthermore, these two factors could be simplified by introducing the \textit{Riccati-Bessel} functions:
+Then, thanks to a basic Gaussian elimination, we can exctract each coefficient. Surprisingly, as described in the next part \textit{Cross Sections}, our wished factors are only dependent on $a_{n}$ and $b_{n}$. Furthermore, these two factors could be simplified by introducing the \textit{Riccati-Bessel} functions:
 \begin{align}
 \psi_{n}(\rho)=\rho j_{n}(\rho) \qquad \xi_{n}(\rho)=\rho h^{(1)}_{n}(\rho)
 \end{align}
@@ -175,6 +175,7 @@ a_{n} = \frac{m\psi_{n}(mx)\psi^{'}_{n}(x)-\psi_{n}(x)\psi^{'}_{n}(mx)}{m\psi_{n
 b_{n} = \frac{\psi_{n}(mx)\psi^{'}_{n}(x)-m\psi_{n}(x)\psi^{'}_{n}(mx)}{\psi_{n}(mx)\xi^{'}_{n}(x)-m\xi_{n}(x)\psi^{'}_{n}(mx)}
 \end{aligned}
 \end{equation}
+Therefore, we can explicitly write the vector spherical harmonic expansions $(\textbf{E}_{s}, \textbf{H}_{s})$ in order to theoretically retrieve some measurable quantities.
 
 \subsection{Cross Sections}
 
@@ -185,49 +186,41 @@ From now on, we have enough theory to think about the experimental approach and 
     \caption{Coordinate System}
     \label{fig:system}
 \end{figure}
-As we can see, this reference frame is really common and our incomming plane wave is going through our particle along the z-axis. That said, our actual way to mesure the particle's size is to, roughly, retrieve the power emitted by it thanks to an optical microscope. Thereby, our goal is currently is to calculate this associated power, that is to say the net rate at which electromagnetic field crosses the surface A of an arbitrary sphere, which might be expressed as follow:
+As we can see, this reference frame is standard in most physical areas, and our incomming plane wave is going through our particle along the z-axis. That said, the aim of this project is to experimentally identify the nature of the particle resonant modes and compare with those produced by scattering calculations. Thereby, our goal is currently is to calculate this associated power, that is to say the net rate at which electromagnetic field crosses the surface A of an arbitrary sphere, which might be expressed as follow:
 \begin{align}\label{eq:power_def}
-W=\int_{A}^{}\textbf{S}\cdot \overrightarrow{e_{r}}dA
+W=\int_{A}^{}\textbf{S}\cdot \textbf{e}_{r}dA
 \end{align}
 where $\textbf{S}$ is the \textit{Pointing vector} defined as:
 \begin{align}
-\textbf{S} = \frac{1}{2}Re\left\{\textbf{E}^{*} \times \textbf{H}\right\}
+\textbf{S} = \frac{1}{2}\Re\left\{\textbf{E}^{*} \times \textbf{H}\right\}
 \end{align}
-Note that an arbitrary sign can be added to (\ref{eq:power_def}) in fonction of our physical assumptions. In this way, we can now compute this power for the scattered electromagnetic field $(\textbf{E}_{s}, \textbf{B}_{s})$ and we obtain:
-\begin{align}\label{eq:w_s}
-W_{s}=\frac{1}{2}Re\left\{ \int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (E_{s\theta}H^{*}_{s\phi} - E_{s\phi}H^{*}_{s\theta})r^{2}sin\theta d\theta d\phi\right\}
-\end{align}
-which might be easily calculated thanks to (\ref{eq:an_bn}) included into the expression of the scattered field and, after a bit of mathematical manipulations, we have:
-\begin{align}
-W_{s}=\frac{\pi\left| E_{0} \right|^{2}}{k\omega\mu}\sum_{n=1}^{\infty }(2n+1)Re\left\{ g_{n} \right\}(\left| a_{n} \right|^{2}+\left| b_{n} \right|^{2})
-\end{align}
-where $g_{n}=(\chi^{*}_{n}\psi^{'}_{n}-\psi^{*}_{n}\chi^{'}_{n})-i(\chi^{*}_{n}\chi^{'}_{n}+\psi^{*}_{n}\psi^{'}_{n})$. This last definition can be simplified by the identity $\chi_{n}\psi^{'}_{n}-\psi_{n}\chi^{'}_{n}=1$. Moreover this power could be \textit{normalized}, that is to say, divided by the intensity from the incident light. Thereby, we introduce the associated cross section:
+Note that an arbitrary sign can be added to (\ref{eq:power_def}) in fonction of our physical assumptions: if the Pointing vector goes out the sphere, we add a \textit{minus} sign; otherwise we let a \textit{plus} sign. In this way, we can now compute this power for the scattered electromagnetic field $(\textbf{E}_{s}, \textbf{H}_{s})$ which might be calculated thanks to (\ref{eq:an_bn}) included into the expression of the scattered field then, after a bit of mathematical manipulations, we have a literral expression for $W_{s}$. Moreover this power could be \textit{normalized}, that is to say, divided by the intensity from the incident light. Thereby, we introduce the cross section:
 \begin{align}\label{eq:csca}
 C_{sca}=\frac{W_{s}}{I_{i}}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)(\left| a_{n} \right|^{2}+\left| b_{n} \right|^{2})
 \end{align}
 
-In the same way, all of these previous step from (\ref{eq:w_s}) might be re-used for any other fields instead of the scattered field. Until now, only the light emitted by the particle was studied thanks to three fields: $(\textbf{E}_{i}, \textbf{H}_{i})$, $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$. However, it is possible to express a variable of extinction, opposed to the scattering \textit{power} $W_{s}$, due to the interaction between the electromagnetic plane wave and our particle:
+In the same way, all of these previous step from (\ref{eq:w_s}) might be re-used for any other fields instead of the field $(\textbf{E}_{s}, \textbf{H}_{s})$. Until now, only the light scattered by the particle was studied thanks to three fields: $(\textbf{E}_{i}, \textbf{H}_{i})$, $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$. However, it is possible to express a variable of extinction, opposed to the scattering \textit{power} $W_{s}$, due to the interaction between the electromagnetic plane wave and our particle:
 \begin{align}\label{eq:wext_ws_wa}
 W_{ext} = W_{s} + W_{a}
 \end{align}
-This additional term, combined with the new one $W_{a}$, should be easily understood through a \textit{power balance}, that is to say an energy balance replaced by the equivalent power. Indeed, if we denote $W_{a}$ the amount of power which was varying during the interaction ($W_{a} > 0$ means that power is absorbed within the particle whereas $W_{a} > 0$ means that power is being created within the particle), it might be possible to write the following:
+This additional term, combined with the \textit{total power} $W_{a}$, should be easily understood through a \textit{power balance}, that is to say an energy balance replaced by the equivalent power. Indeed, if we denote $W_{a}$ the amount of power which was varying during the interaction ($W_{a} > 0$ means that power is absorbed within the particle), it might be possible to write the following:
 \begin{align}
 W_{a} = W_{i} - W_{s} + W_{ext}
 \end{align}
-As our actual medium is nonabsorbing, $W_{i}$ vanishes identically and we retrieve the relation (\ref{eq:wext_ws_wa}). Now, the extinction \textit{power} might be evaluated in fonction of our previous vector spherical harmonic terms:
+As our actual medium is nonabsorbing, the \textit{incident power} $W_{i}$ vanishes identically and we retrieve the relation (\ref{eq:wext_ws_wa}). Now, the extinction \textit{power} might be evaluated in fonction of our previous vector spherical harmonic terms:
 \begin{equation}
 \begin{aligned}
-W_{s}=\frac{1}{2}\int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (&Re\{E_{i\phi}H^{*}_{s\theta} - E_{i\theta}H^{*}_{s\phi}\}\; +\\
-&Re\{E_{s\phi}H^{*}_{i\theta}) - E_{s\theta}H^{*}_{i\phi}\}) \\
-&r^{2}sin\theta d\theta d\phi
+W_{ext}=\frac{1}{2}\int_{\phi=0}^{2\pi}\int_{\theta=0}^{\pi} (&\Re\{E_{i\phi}H^{*}_{s\theta} - E_{i\theta}H^{*}_{s\phi}\}\; +\\
+&\Re\{E_{s\phi}H^{*}_{i\theta} - E_{s\theta}H^{*}_{i\phi}\}) \\
+&r^{2}\sin\theta d\theta d\phi
 \end{aligned}
 \end{equation}
-and, as stated above in (\ref{eq:csca}), we finally obtain the extinction cross section by proportionality:
+and, as stated above in (\ref{eq:csca}), we finally obtain the extinction cross section when dividing by the indicident light intensity:
 \begin{align}\label{eq:cext}
 C_{ext}=\frac{W_{ext}}{I_{i}}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)Re\left\{a_{n} + b_{n} \right\}
 \end{align}
 
-At last, we have calculated and theoretically established the expression of two general terms which we might be retrieved by experiments: $C_{sca}$ and $C_{ext}$. It is important to note that these cross section are, not only dependent on, but also strongly linked to our hypothesis, that is to say our input variables like the refractive index. Thereby, $C_{sca}$ and $C_{ext}$ are directly reliant on the size of our studied particle.
+At last, we have calculated and theoretically established the expression of two general terms which are closely related to the spectrum we measure experimentally: $C_{sca}$ and $C_{ext}$. It is important to note that these cross section are, not only dependent on, but also strongly linked to our starting assumptions, that is to say our input variables like the radius $a$ or the refractive index $N$. Thereby, $C_{sca}$ and $C_{ext}$ are directly reliant on the size of our studied particle.
 
 \section{Simulations}
 
@@ -235,7 +228,7 @@ At last, we have calculated and theoretically established the expression of two 
 
 First at all, our main issue to numerically compute the cross sections $C_{sca}$ and $C_{ext}$ is to calculate the associated scattering coefficients $a_{n}$ and $b_{n}$. Globally, these two numbers are obtained through Bessel functions as we can see from (\ref{eq:an_bn}) and our goal is to retrieve each value of them between a certain range of wavelength in order to obtain a kind of spectrum. However, due to the size of our nanoparticle close to the incident wavelength included in a visible range, the variable $\rho=kr$, as a dependency for the Bessel functions, is also restrained into a small range of value close to zero along the x-axis. In fact, in the context of a computer, these targeted values could be too sensitive to be calculated with a reasonably high precision. Thereby, we could introduce the \textit{logarithmic derivative}:
 \begin{align}
-D_{n}(\rho)=\frac{d}{d\rho}ln[\psi_{n}(\rho)]
+D_{n}(\rho)=\frac{d}{d\rho}\ln[\psi_{n}(\rho)]
 \end{align}
 Thanks to this additional definition, we are expanding the range of hit values and decreasing the sensitivity. In this way, we can rearrange the expressions of $a_{n}$ and $b_{n}$ from (\ref{eq:an_bn}):
 \begin{equation}
@@ -276,8 +269,8 @@ After some mathematics calculation, it is possible to demonstrate the following 
 where $z_{n}$ is either $j_{n}$ or $y_{n}$. Thanks to these previous equations (\ref{eq:rec_sph_bess}), and given the two first exact expression for the spherical Bessel functions, we can theoretically obtain all wished order $n$. So, \textit{by hand}, we have the following:
 \begin{equation}
 \begin{aligned}
-j_{0}(x)=\frac{sin(x)}{x} \qquad &j_{1}(x)=\frac{sin(x)}{x^{2}} - \frac{cos(x)}{x}\\
-y_{0}(x)=-\frac{cos(x)}{x} \qquad &y_{1}(x)=-\frac{cos(x)}{x^{2}}-\frac{sin(x)}{x}
+j_{0}(x)=\frac{\sin(x)}{x} \qquad &j_{1}(x)=\frac{\sin(x)}{x^{2}} - \frac{\cos(x)}{x}\\
+y_{0}(x)=-\frac{\cos(x)}{x} \qquad &y_{1}(x)=-\frac{\cos(x)}{x^{2}}-\frac{\sin(x)}{x}
 \end{aligned}
 \end{equation}
 with the associated figures:
@@ -308,7 +301,7 @@ that is called a \textit{downward recurrence} because of the decrement of $n$ fo
 \item[*]$j_{n}$, if $|x| < n$
 \end{itemize}
 \end{itemize}
-assuming that $Re\{x\} \in\mathbb{R}_{+}$. Now, we can think about the programming steps in order to compute our spherical Bessel functions of the first and second kind through an upward recurrency: we get $j_{0}$/$y_{0}$ and $j_{1}$/$y_{1}$ from a given $x$ then, thanks to (\ref{eq:sph_bess_up_rec}), we compute all required order $j_{n}$/$y_{n}$ with $n \geqslant 2$. However, a question remains in a downward reccurency: How to get starting Bessel function values for higher order $n=i$ and $n=i+1$?
+assuming that $\Re\{x\} \in\mathbb{R}_{+}$. Now, we can think about the programming steps in order to compute our spherical Bessel functions of the first and second kind through an upward recurrency: we get $j_{0}$/$y_{0}$ and $j_{1}$/$y_{1}$ from a given $x$ then, thanks to (\ref{eq:sph_bess_up_rec}), we compute all required order $j_{n}$/$y_{n}$ with $n \geqslant 2$. However, a question remains in a downward reccurency: How to get starting Bessel function values for higher order $n=i$ and $n=i+1$?
 
 Theoretically, it is well know that Bessel functions of the first kind $J_{n}$ satistfies the following relation:
 \begin{align}
@@ -329,7 +322,7 @@ j^{computed}_{0}(x) &= \alpha
 Now, we can \textit{normalize}:
 \begin{equation}\label{eq:j_final}
 \begin{aligned}
-j_{0}(x) &= \frac{sin(x)}{x} \qquad\textnormal{(by definition)}\\
+j_{0}(x) &= \frac{\sin(x)}{x} \qquad\textnormal{(by definition)}\\
 j^{final}_{0}(x) &= j^{computed}_{0}(x) \times \frac{j_{0}(x)}{\alpha} = j_{0}(x)\\
 j^{final}_{1}(x) &= j^{computed}_{1}(x) \times \frac{j_{0}(x)}{\alpha}\\
 &...\\
@@ -384,7 +377,7 @@ First at all, it could be interesting to visualize the different contributions o
 \begin{align}
 \sum_{n=1}^{\infty } f_{n}(a_{n}) + f_{n}(b_{n}) = \sum_{n=1}^{\infty } f_{n}(a_{n}) + \sum_{n=1}^{\infty } f_{n}(b_{n})
 \end{align}
-where $f_{n}(X) = \frac{2\pi}{k^{2}}(2n+1)Re\{X\}$ in the case of $C_{ext}$ (with a similar expression for $C_{sca}$). In this way, for an arbitray particle defined by a radius of $100e^{-9}$ meters, we obtain (\ref{fig:sca_coeff}) then (\ref{fig:ext_coeff}) for the scattering and extinction cross section respectively.
+where $f_{n}(X) = \frac{2\pi}{k^{2}}(2n+1)\Re\{X\}$ in the case of $C_{ext}$ (with a similar expression for $C_{sca}$). In this way, for an arbitray particle defined by a radius of $100e^{-9}$ meters, we obtain (\ref{fig:sca_coeff}) then (\ref{fig:ext_coeff}) for the scattering and extinction cross section respectively.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{sca_coeff.png}
@@ -397,7 +390,7 @@ where $f_{n}(X) = \frac{2\pi}{k^{2}}(2n+1)Re\{X\}$ in the case of $C_{ext}$ (wit
     \caption{$C_{ext}$ coefficient contributions}
     \label{fig:ext_coeff}
 \end{figure}
-These figures show that each local maximum is due to a heavy weighting from one or the other of the coefficients. More particularly, the global maximum called \textit{principal Mie's resonancy} seems to be be generated by the second coefficient $b_{n}$ whereas the first one, $a_{n}$ influences the second global maximum which is located on the left of the first maximum.
+These figures show that each local maximum is due to a heavy weighting from one or the other of the coefficients. More particularly, the global maximum called \textit{principal Mie's resonance} seems to be be generated by the second coefficient $b_{n}$ whereas the first one, $a_{n}$ influences the second global maximum which is located on the left of the first maximum.
 
 Secondly, as stated in the previous subsection, we have three $Input$ variables that we can potentially change. Note that the incident light's wavelength is fixed by the targeted range of value for the \textit{extended}-visible light and the refractive index of our particle, depending on $\lambda$, is, him too, fixed by the material studied: silicon. Thereby, our last \textit{free} parameter is the size or more precisely the radius. Therefore, when varying this $Input$ variable, we obtain (\ref{fig:sca_var}) and (\ref{fig:ext_var}) associated to $C_{sca}$ and $C_{ext}$ for three different sizes surrounding all possible particles encountered during the experiments.
 \begin{figure}[h]
@@ -412,7 +405,7 @@ Secondly, as stated in the previous subsection, we have three $Input$ variables 
     \caption{$C_{ext}$ for three different sizes}
     \label{fig:ext_var}
 \end{figure}
-As we can see, it is possible to consider a \textit{recursive} shape which is composed by the boundary of the first and second global maximum. In fact, the principal Mie's resonancy is moving left when the size decreases and reciprocally. Moreover the scale and the maximum y-value are also decreasing. However, it might be roughly possible to assess that, for our targeted range of values, this shape thus defined is moving left for smaller sizes then right for larger sizes.
+As we can see, it is possible to consider a \textit{recursive} shape which is composed by the boundary of the first and second global maximum. In fact, the principal Mie's resonance is moving left when the size decreases and reciprocally. Moreover the scale and the maximum y-value are also decreasing. However, it might be roughly possible to assess that, for our targeted range of values, this shape thus defined is moving left for smaller sizes then right for larger sizes.
 
 After all, if we reproduce our computations with, this time, the radius as a \textit{real} free parameter instead of an arbitrary fixed value, we obtain the following figures (\ref{fig:surface_sca}) and (\ref{fig:surface_ext}) for the scattering and extinction cross sections respectively. In this way, we can easily visualize our wished $Output$ results and compare later with the collected experimental data.
 \begin{figure}[h]
@@ -427,13 +420,13 @@ After all, if we reproduce our computations with, this time, the radius as a \te
     \caption{$C_{ext}$ depending on radius and wavelength}
     \label{fig:surface_ext}
 \end{figure}
-Now, it is obvious that, as a really first approximation in our range of values, each maximum and, more particularly, the two global maximum represented by the most intense yellow lines, could be calculated through a linear equation with a different coefficient each explaining, by the way, the compression of the defined shape for smaller radius. \textbf{Retrieve the linear equation for the principal Mie's resonancy and compare}
+Now, it is obvious that, as a really first approximation in our range of values, each maximum and, more particularly, the two global maximum represented by the most intense yellow lines, could be calculated through a linear equation with a different coefficient each explaining, by the way, the compression of the defined shape for smaller radius. \textbf{Retrieve the linear equation for the principal Mie's resonance and compare}
 
 \section{Experiments}
 
 \subsection{Base Description}
 
-First, let's describe the procedure to experimentaly test and compare our simulation part. In theory, our studied particle should have a spherical shape and, as stated in the previous section, the associated material should be \textit{silicon}. Thereby, we are supposed to create a sample composed of spherical nanoparticles of silicon with different sizes included between $100nm$ and $200nm$ of diameter. Moreover, in order to approve our theorical approach and all of the approximation employed until now, we have to retrieve experimentaly the \textit{defined shape} made up of the first and second principal Mie resonancies linked with an equivalent gradient. In fact, our different sized nanoparticles being randomly scattered on the sample, we have to collect the size of some nanoparticles coupled with both scattering and extinction cross section spectrums. In this way, we will be able to link $C_{sca}$ and $C_{ext}$ shapes according to the respective sizes to finally check if those actually fit the simulation. Therefore, the tools used to collect each spectrums associated with the size are the \textit{optical} and \textit{atomic force} microscopes respectively.
+First, let's describe the procedure to experimentally test and compare our simulation part. In theory, our studied particle should have a spherical shape and, as stated in the previous section, the associated material should be \textit{silicon}. Thereby, we are supposed to create a sample composed of spherical nanoparticles of silicon with different sizes included between $100nm$ and $200nm$ of diameter. Moreover, in order to approve our theorical approach and all of the approximation employed until now, we have to retrieve experimentally the \textit{defined shape} made up of the first and second principal Mie resonancies linked with an equivalent gradient. In fact, our different sized nanoparticles being randomly scattered on the sample, we have to collect the size of some nanoparticles coupled with both scattering and extinction cross section spectrums. In this way, we will be able to link $C_{sca}$ and $C_{ext}$ shapes according to the respective sizes to finally check if those actually fit the simulation. Therefore, the tools used to collect each spectrums associated with the size are the \textit{optical} and \textit{atomic force} microscopes respectively.
 
 \subsection{Sample Preparation}
 
@@ -455,7 +448,7 @@ Moreover, our goal being to put nanoparticles on this substrat, we have the foll
 \end{figure}
 From a technical point of view, the base glass substrat is too large to be placed on the different microscope. Thereby, this last one must be broke into several pieces, each with dimensions smaller than $2 \times 2 cm$.
 
-Secondly, we have to physically produce silicon nanoparticles with \textit{random} sizes included between $50 nm$ and $100 nm$ in radius. Hopefully, this step is realized thanks to another research team from the \textit{DTU} (see ...). Globally, they are created from $SiO$ lumps annealed at, approximately, $1500°C$ then etched to produce $Si$ nanoparticles in a solution.
+Secondly, we have to physically produce silicon nanoparticles with \textit{random} sizes included between $50 nm$ and $100 nm$ in radius. Hopefully, this step is realized thanks to another research team from the \textit{DTU} (see ...). Globally, they are created from $SiO$ lumps annealed at, approximately, $1500 \degree C$ then etched to produce $Si$ nanoparticles in a solution.
 
 Finally, these nanoparticles are placed on the glass substrat pieces thanks to a micropipette: we put a droplet of around $10$ microliter on each chip. Afterward, we must either dry in air, or blow dry to progressively remove water from the samples. In the end, our silicon nanoparticles are \textit{dropcasted}.
 
