@@ -79,14 +79,15 @@ import math
 
 def sj_downward_reccurence(z, nu):
     count = nu + 1
-    jn = [complex(0.0, 0.0)] * (count + 2);
-    jn[count + 1] = complex(0.0, 0.0)
-    jn[count] = complex(1.0, 0.0)
+    jn = [0.0] * (count + 2);
+    jn[count + 1] = 0.0
+    jn[count] = 1.0
     for i in range(count, 0, -1):
         jn[i - 1] = (2 * i + 1) / z * jn[i] - jn[i + 1]
-    del jn[count:]
+        if (i - 1) < 3 and z > 8 and z < 10:
+            print(z, " ", i - 1, " ", jn[i - 1])
     norm = math.sin(z) / z / jn[0]
-    for i in range(1, count):
+    for i in range(count):
         jn[i] *= norm;
     return jn
 
@@ -270,16 +271,28 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
 #plot_surface_sca_ext()
 #plot_coeff_sca_ext(100e-9)
-#plot_sca_ext(107e-9)
+#plot_sca_ext(65e-9)
 
-x = np.linspace(0, 30, 1000)
-sjn_x = []
+x = np.linspace(0.1, 30, 1000)
+sjn_0 = []
+sjn_1 = []
+sjn_2 = []
+for coord in x:
+    curr_sjn = sj_downward_reccurence(coord, 240)
+    sjn_0.append(curr_sjn[0])
+    sjn_1.append(curr_sjn[1])
+    sjn_2.append(curr_sjn[2])
 #syn_x = []
-for i in range(ORDER_MAX):
-    sjn_x.append(sj_downward_reccurence(x, i))
+#for i in range(ORDER_MAX):
+    #sjn_x.append(special.spherical_jn(i, x))
     #syn_x.append(special.spherical_yn(i, x))
-plt.plot(x, sjn_x[0], label="j0")
-plt.plot(x, sjn_x[1], label="j1")
+plt.plot(x, sjn_0, label="j0")
+plt.plot(x, sjn_1, label="j1")
+plt.plot(x, sjn_2, label="j2")
+plt.legend()
+plt.xlim(left=0.0, right=30.0)
+plt.ylim(bottom=-1.0, top=1.0)
+
 #plt.plot(x, syn_x[0], label="y0")
 #plt.plot(x, syn_x[1], label="y1")
 #plt.ylim(top=1.2, bottom=-1)
@@ -287,4 +300,4 @@ plt.plot(x, sjn_x[1], label="j1")
 #plt.xlim(left=0)
 #plt.grid()
 #plt.legend()
-#plt.show()
+plt.show()
