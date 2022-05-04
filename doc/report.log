@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  3 MAY 2022 17:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.4.5)  4 MAY 2022 14:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -298,10 +298,6 @@ Overfull \hbox (3.72212pt too wide) in paragraph at lines 324--326
 gh
  []
 
-
-LaTeX Warning: Reference `sph_bess_down_rec' on page 6 undefined on input line 
-327.
-
 <./../res/jn_bug.png, id=35, 462.528pt x 346.896pt>
 File: ./../res/jn_bug.png Graphic file (type png)
 <use ./../res/jn_bug.png>
@@ -311,13 +307,6 @@ Package pdftex.def Info: ./../res/jn_bug.png  used on input line 330.
 Overfull \hbox (4.99937pt too wide) in paragraph at lines 330--331
  [][] 
  []
-
-
-LaTeX Warning: Reference `sph_bess_down_rec' on page 6 undefined on input line 
-334.
-
-
-LaTeX Warning: Reference `eq:jn_bug' on page 6 undefined on input line 336.
 
 [6 <./../res/jn_bug.png>]
 <./../res/ri_const.png, id=43, 462.528pt x 346.896pt>
@@ -349,6 +338,12 @@ Package pdftex.def Info: ./../res/ri_var_complex.png  used on input line 367.
 Overfull \hbox (4.99937pt too wide) in paragraph at lines 367--368
  [][] 
  []
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 [7 <./../res/ri_const.png> <./../res/ri_var_real.png>]
 <./../res/sca_coeff.png, id=52, 462.528pt x 346.896pt>
@@ -403,9 +398,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[8 <./../res/ri_var_complex.png> <./../res/sca_coeff.png> <./../res/ext_coeff.p
-ng>]
-<./../res/surface_sca.png, id=62, 462.528pt x 346.896pt>
+<./../res/surface_sca.png, id=56, 462.528pt x 346.896pt>
 File: ./../res/surface_sca.png Graphic file (type png)
 <use ./../res/surface_sca.png>
 Package pdftex.def Info: ./../res/surface_sca.png  used on input line 415.
@@ -415,7 +408,7 @@ Overfull \hbox (4.99937pt too wide) in paragraph at lines 415--416
  [][] 
  []
 
-<./../res/surface_ext.png, id=63, 462.528pt x 346.896pt>
+<./../res/surface_ext.png, id=57, 462.528pt x 346.896pt>
 File: ./../res/surface_ext.png Graphic file (type png)
 <use ./../res/surface_ext.png>
 Package pdftex.def Info: ./../res/surface_ext.png  used on input line 421.
@@ -425,6 +418,8 @@ Overfull \hbox (4.99937pt too wide) in paragraph at lines 421--422
  [][] 
  []
 
+[8 <./../res/ri_var_complex.png> <./../res/sca_coeff.png> <./../res/ext_coeff.p
+ng>]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
@@ -472,6 +467,12 @@ File: ./../res/dark_field_ex.png Graphic file (type png)
 <use ./../res/dark_field_ex.png>
 Package pdftex.def Info: ./../res/dark_field_ex.png  used on input line 476.
 (pdftex.def)             Requested size: 202.34792pt x 177.06107pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 [10 <./../res/dn.png (PNG copy)> <./../res/substrat_layers.png> <./../res/brigh
 t_field_ex.png>]
 <./../res/slit_ex.png, id=80, 179.4705pt x 174.6525pt>
@@ -488,43 +489,42 @@ File: ./../res/background_ex.png Graphic file (type png)
 <use ./../res/background_ex.png>
 Package pdftex.def Info: ./../res/background_ex.png  used on input line 494.
 (pdftex.def)             Requested size: 227.64415pt x 101.17752pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 <./../res/reference_ex.png, id=82, 401.8212pt x 182.8431pt>
 File: ./../res/reference_ex.png Graphic file (type png)
 <use ./../res/reference_ex.png>
 Package pdftex.def Info: ./../res/reference_ex.png  used on input line 503.
 (pdftex.def)             Requested size: 227.64865pt x 101.1778pt.
-[11 <./../res/dark_field_working.png> <./../res/dark_field_ex.png> <./../res/sl
-it_ex.png> <./../res/background_ex.png> <./../res/reference_ex.png>]
-<./../res/raw_data_ex.png, id=90, 246.6816pt x 61.6704pt>
+<./../res/raw_data_ex.png, id=83, 246.6816pt x 61.6704pt>
 File: ./../res/raw_data_ex.png Graphic file (type png)
 <use ./../res/raw_data_ex.png>
 Package pdftex.def Info: ./../res/raw_data_ex.png  used on input line 512.
 (pdftex.def)             Requested size: 227.65369pt x 75.88704pt.
-<./../res/spectrum_wout_calc_ex.png, id=91, 404.712pt x 317.988pt>
+<./../res/spectrum_wout_calc_ex.png, id=84, 404.712pt x 317.988pt>
 File: ./../res/spectrum_wout_calc_ex.png Graphic file (type png)
 <use ./../res/spectrum_wout_calc_ex.png>
 Package pdftex.def Info: ./../res/spectrum_wout_calc_ex.png  used on input line
  519.
 (pdftex.def)             Requested size: 202.3555pt x 177.06282pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[11 <./../res/dark_field_working.png> <./../res/dark_field_ex.png> <./../res/sl
+it_ex.png> <./../res/background_ex.png> <./../res/reference_ex.png>]
 <./../res/spectrum_w_calc_ex.png, id=92, 407.6028pt x 317.2653pt>
 File: ./../res/spectrum_w_calc_ex.png Graphic file (type png)
 <use ./../res/spectrum_w_calc_ex.png>
 Package pdftex.def Info: ./../res/spectrum_w_calc_ex.png  used on input line 53
 0.
 (pdftex.def)             Requested size: 202.35175pt x 177.0719pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 <./../res/afm_working_principle.png, id=93, 2007.5pt x 2007.5pt>
 File: ./../res/afm_working_principle.png Graphic file (type png)
 <use ./../res/afm_working_principle.png>
 Package pdftex.def Info: ./../res/afm_working_principle.png  used on input line
  543.
 (pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 <./../res/afm_scan_dir_config.png, id=94, 2007.5pt x 2007.5pt>
 File: ./../res/afm_scan_dir_config.png Graphic file (type png)
 <use ./../res/afm_scan_dir_config.png>
@@ -537,40 +537,88 @@ File: ./../res/afm_scan_point_config.png Graphic file (type png)
 Package pdftex.def Info: ./../res/afm_scan_point_config.png  used on input line
  558.
 (pdftex.def)             Requested size: 202.32399pt x 202.32399pt.
-[12 <./../res/raw_data_ex.png> <./../res/spectrum_wout_calc_ex.png> <./../res/s
-pectrum_w_calc_ex.png>]
+ [12 <./../res/raw_data_ex.png> <./../res/spectrum_wout_calc_ex.png> <./../res/
+spectrum_w_calc_ex.png> <./../res/afm_working_principle.png>]
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<./../res/gwyddion_df_ex.png, id=102, 493.3632pt x 356.532pt>
+<./../res/gwyddion_df_ex.png, id=103, 493.3632pt x 356.532pt>
 File: ./../res/gwyddion_df_ex.png Graphic file (type png)
 <use ./../res/gwyddion_df_ex.png>
 Package pdftex.def Info: ./../res/gwyddion_df_ex.png  used on input line 567.
 (pdftex.def)             Requested size: 202.34798pt x 161.89044pt.
-<./../res/gwyddion_scan_ex.png, id=103, 712.6625pt x 423.5825pt>
+<./../res/gwyddion_scan_ex.png, id=104, 712.6625pt x 423.5825pt>
 File: ./../res/gwyddion_scan_ex.png Graphic file (type png)
 <use ./../res/gwyddion_scan_ex.png>
 Package pdftex.def Info: ./../res/gwyddion_scan_ex.png  used on input line 574.
 
 (pdftex.def)             Requested size: 202.34972pt x 161.88727pt.
-<./../res/gwyddion_mesure_ex.png, id=104, 542.025pt x 392.46625pt>
+<./../res/gwyddion_mesure_ex.png, id=105, 542.025pt x 392.46625pt>
 File: ./../res/gwyddion_mesure_ex.png Graphic file (type png)
 <use ./../res/gwyddion_mesure_ex.png>
 Package pdftex.def Info: ./../res/gwyddion_mesure_ex.png  used on input line 58
 1.
 (pdftex.def)             Requested size: 202.3491pt x 161.88832pt.
-[13 <./../res/afm_working_principle.png> <./../res/afm_scan_dir_config.png> <./
-../res/afm_scan_point_config.png> <./../res/gwyddion_df_ex.png>] [14 <./../res/
-gwyddion_scan_ex.png> <./../res/gwyddion_mesure_ex.png>] (./report.aux)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[13 <./../res/afm_scan_dir_config.png> <./../res/afm_scan_point_config.png> <./
+../res/gwyddion_df_ex.png>]
+<./../res/result_65nm.png, id=112, 395.3169pt x 303.534pt>
+File: ./../res/result_65nm.png Graphic file (type png)
+<use ./../res/result_65nm.png>
+Package pdftex.def Info: ./../res/result_65nm.png  used on input line 591.
+(pdftex.def)             Requested size: 202.35088pt x 161.88655pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/result_67nm.png, id=113, 393.8715pt x 303.534pt>
+File: ./../res/result_67nm.png Graphic file (type png)
+<use ./../res/result_67nm.png>
+Package pdftex.def Info: ./../res/result_67nm.png  used on input line 598.
+(pdftex.def)             Requested size: 202.35626pt x 161.88655pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/result_81nm.png, id=114, 393.8715pt x 303.534pt>
+File: ./../res/result_81nm.png Graphic file (type png)
+<use ./../res/result_81nm.png>
+Package pdftex.def Info: ./../res/result_81nm.png  used on input line 605.
+(pdftex.def)             Requested size: 202.35626pt x 161.88655pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/result_82nm.png, id=115, 393.8715pt x 303.534pt>
+File: ./../res/result_82nm.png Graphic file (type png)
+<use ./../res/result_82nm.png>
+Package pdftex.def Info: ./../res/result_82nm.png  used on input line 612.
+(pdftex.def)             Requested size: 202.35626pt x 161.88655pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<./../res/result_90nm.png, id=116, 393.8715pt x 303.534pt>
+File: ./../res/result_90nm.png Graphic file (type png)
+<use ./../res/result_90nm.png>
+Package pdftex.def Info: ./../res/result_90nm.png  used on input line 619.
+(pdftex.def)             Requested size: 202.35626pt x 161.88655pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[14 <./../res/gwyddion_scan_ex.png> <./../res/gwyddion_mesure_ex.png> <./../res
+/result_65nm.png> <./../res/result_67nm.png> <./../res/result_81nm.png>]
+[15
+
+ <./../res/result_82nm.png> <./../res/result_90nm.png>] (./report.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 3107 strings out of 483183
- 43324 string characters out of 5966293
- 289490 words of memory out of 5000000
- 18068 multiletter control sequences out of 15000+600000
+ 3140 strings out of 483183
+ 44104 string characters out of 5966293
+ 289540 words of memory out of 5000000
+ 18096 multiletter control sequences out of 15000+600000
  541501 words of font info for 59 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  30i,11n,33p,1737b,236s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -590,10 +638,10 @@ cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on report.pdf (14 pages, 8709512 bytes).
+Output written on report.pdf (15 pages, 8879758 bytes).
 PDF statistics:
- 172 PDF objects out of 1000 (max. 8388607)
- 86 compressed objects within 1 object stream
+ 185 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 141 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 166 words of extra memory for PDF output out of 10000 (max. 10000000)
 
