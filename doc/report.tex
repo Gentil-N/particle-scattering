@@ -48,7 +48,7 @@ In this way, it is possible to create a vector function $\textbf{M}$ depending o
 \begin{align}
 \textbf{M} = \nabla \times (\textbf{c}\psi)
 \end{align}
-where \textbf{M} directly satisfies the condition $\nabla \cdot \textbf{M} = 0$. If we replace the expression of \textbf{M} in the vector wave equation, and thanks to (\ref{eq:rot_rot_a}), we easily obtain:
+where \textbf{M} directly satisfies the condition $\nabla \cdot \textbf{M} = 0$. If we replace the expression of \textbf{M} in the vector wave equation we easily obtain:
 \begin{align}
 \nabla ^{2} \textbf{M} + k^{2}\textbf{M} = \nabla \times [\textbf{c}(\nabla ^{2} \psi + k^{2}\psi)]
 \end{align}
@@ -300,7 +300,7 @@ Theoretically, it is well know that Bessel functions of the first kind $J_{n}$ s
 \begin{align}
 \forall\,x\,|\,Re\{x\} \in\mathbb{R}_{+}, \lim_{n \to \infty } J_{n}(x)=0
 \end{align}
-Thereby a common approach, called the \textit{Miller} method, is to suppose that our targeted higher order $i$ is arbitrary equal to $1$ whereas the $i+1$ order is null. Afterward, we can easily pull down the order thanks to (\ref{eq:sph_bess_down_rec}). Once we obtain the first order $n=0$, because of the linearity of our recurrence relations, we \textit{normalize} this serie by the true value of $j_{0}(x)$. 
+Thereby a common approach, called the \textit{Miller} method, is to suppose that our targeted higher order $i$ is arbitrarily equal to $1$ whereas the $i+1$ order is null. Afterward, we can easily pull down the order thanks to (\ref{eq:sph_bess_down_rec}). Once we obtain the first order $n=0$, because of the linearity of our recurrence relations, we \textit{normalize} this serie by the true value of $j_{0}(x)$. 
 
 For example:
 \begin{equation}\label{eq:j_computed}
@@ -333,7 +333,7 @@ Unfortunately, a last issue still remain in our downward recurrency approach. So
 \end{figure}
 Note that zero values into $x = [0, 4]$ is due to the invalid state. This specific \textit{bugged} range is increasing if $n$ also increase: the \textit{real} dependency on $x$ of the downward reccurence relation (\ref{eq:sph_bess_down_rec}) is visible here.
 
-Therefore, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitray minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon and allow to compute for $i=100$ in our case. A second solution is to divide the downward recurence into multiple chunks. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit for $64-bit$ numbers) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). It is important to notice that $\{j^{computed}_{50}...j^{computed}_{100}\}$ is larger term by term from $\{j^{computed}_{0}...j^{computed}_{50}\}$ due to the $n$ dependency included into the recurence relation but much less sensitive to the overflowing effect. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$. This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain much more wished order without overflowing the computer results as viewed in (\ref{fig:jn_bug}).
+Therefore, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitrary minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon and allow to compute for $i=100$ in our case. A second solution is to divide the downward recurence into multiple chunks. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit for $64-bit$ numbers) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). It is important to notice that $\{j^{computed}_{50}...j^{computed}_{100}\}$ is larger term by term from $\{j^{computed}_{0}...j^{computed}_{50}\}$ due to the $n$ dependency included into the recurence relation but much less sensitive to the overflowing effect. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$. This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain much more wished order without overflowing the computer results as viewed in (\ref{fig:jn_bug}).
 
 \subsection{Input Variables}
 
@@ -379,7 +379,7 @@ First at all, it could be interesting to visualize the different contributions o
 \begin{align}
 \sum_{n=1}^{\infty } f_{n}(a_{n}) + f_{n}(b_{n}) = \sum_{n=1}^{\infty } f_{n}(a_{n}) + \sum_{n=1}^{\infty } f_{n}(b_{n})
 \end{align}
-where $f_{n}(X) = \frac{2\pi}{k^{2}}(2n+1)\Re\{X\}$ in the case of $C_{ext}$ (with a similar expression for $C_{sca}$). In this way, for an arbitray particle defined by a radius of $100e^{-9}$ meters, we obtain (\ref{fig:sca_coeff}) then (\ref{fig:ext_coeff}) for the scattering and extinction cross section respectively.
+where $f_{n}(X) = \frac{2\pi}{k^{2}}(2n+1)\Re\{X\}$ in the case of $C_{ext}$ (with a similar expression for $C_{sca}$). In this way, for an arbitrary particle defined by a radius of $100e^{-9}$ meters, we obtain (\ref{fig:sca_coeff}) then (\ref{fig:ext_coeff}) for the scattering and extinction cross section respectively.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{sca_coeff.png}
@@ -409,7 +409,7 @@ Secondly, as stated in the previous subsection, we have three $Input$ variables 
 \end{figure}
 As we can see, it is possible to consider a \textit{recursive} shape which is composed by the boundary of the first and second global maximum. In fact, the principal Mie's resonance is moving left when the size decreases and reciprocally. Moreover the scale and the maximum y-value are also decreasing. However, it might be roughly possible to assess that, for our targeted range of values, this shape thus defined is moving left for smaller sizes then right for larger sizes.
 
-After all, if we reproduce our computations with, this time, the radius as a \textit{real} free parameter instead of an arbitrary fixed value, we obtain the following figures (\ref{fig:surface_sca}) and (\ref{fig:surface_ext}) for the scattering and extinction cross sections respectively. In this way, we can easily visualize our wished $Output$ results and compare later with the collected experimental data.
+After all, if we reproduce our computations with, this time, the radius as a \textit{real} free parameter instead of an arbitrarily fixed value, we obtain the following figures (\ref{fig:surface_sca}) and (\ref{fig:surface_ext}) for the scattering and extinction cross sections respectively. In this way, we can easily visualize our wished $Output$ results and compare later with the collected experimental data.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{surface_sca.png}
@@ -428,7 +428,7 @@ Now, it is obvious that, as a really first approximation in our range of values,
 
 \subsection{Base Description}
 
-First, let's describe the procedure to experimentally test and compare our simulation part. In theory, our studied particle should have a spherical shape and, as stated in the previous section, the associated material should be \textit{silicon}. Thereby, we are supposed to create a sample composed of spherical nanoparticles of silicon with different sizes included between $100nm$ and $200nm$ of diameter. Moreover, in order to approve our theorical approach and all of the approximation employed until now, we have to retrieve experimentally the \textit{defined shape} made up of the first and second principal Mie resonancies linked with an equivalent gradient. In fact, our different sized nanoparticles being randomly scattered on the sample, we have to collect the size of some nanoparticles coupled with both scattering and extinction cross section spectrums. In this way, we will be able to link $C_{sca}$ and $C_{ext}$ shapes according to the respective sizes to finally check if those actually fit the simulation. Therefore, the tools used to collect each spectrums associated with the size are the \textit{optical} and \textit{atomic force} microscopes respectively.
+First, let's describe the procedure to experimentally test and compare our simulation part. In theory, our studied particle should have a spherical shape and, as stated in the previous section, the associated material should be \textit{silicon}. Thereby, we are supposed to create a sample composed of spherical nanoparticles of silicon with different sizes included between $100nm$ and $200nm$ of diameter. Moreover, in order to approve our theorical approach and all of the approximation employed until now, we have to retrieve experimentally the \textit{defined shape} made up of the first and second principal Mie resonances linked with an equivalent gradient. In fact, our different sized nanoparticles being randomly scattered on the sample, we have to collect the size of some nanoparticles coupled with both scattering and extinction cross section spectrums. In this way, we will be able to link $C_{sca}$ and $C_{ext}$ shapes according to the respective sizes to finally check if those actually fit the simulation. Therefore, the tools used to collect each spectrums associated with the size are the \textit{optical} and \textit{atomic force} microscopes respectively.
 
 \subsection{Sample Preparation}
 
@@ -561,7 +561,7 @@ Additionaly, as the tip is slightly oscillating around its balance position, it 
 \end{figure}
 This parameter, associated with the user-defined line's length, might increase or decrease the quality of the collected data. However, increasing the image resolution increases the scanning time by the same. As a rough idea, to scan a $200 \times 200 nm$ square with $100$ points/pixels takes around $10$ minutes whereas, for a $50 \times 50 nm$ area with $256$ points/pixels takes the same amount of time. Therefore, a precise distribution must be adopted between quality, surface and speed in order to collect enough data and retrieve the nanoparticle's size.
 
-In order to illustrate the whole procedure to retrieve the associated size of our studied particle, we will arbitrary choose a nanosphere of silicon as shown on figure (\ref{fig:gwyddion_df_ex}).
+In order to illustrate the whole procedure to retrieve the associated size of our studied particle, we will arbitrarily choose a nanosphere of silicon as shown on figure (\ref{fig:gwyddion_df_ex}).
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_df_ex.png}
@@ -586,39 +586,54 @@ The exctracted pattern was put on the arbitrary defined top of the particle, tha
 
 \section{Discussion}
 
+In the end, we are able to confront experiment with simulation results. As a reminder, the procedure is to arbitrarily target a nanoparticle with the optical microsscope thanks to numbers sorted into a matrix shape. After getting the associated spectrum, that is to say the scattering cross section depending on the wavelength, we retrieve the associated size through the AFM microscope. This previous diameter is therefore the input for our simulation. Afterward, we compare the experiment's spectrum with the simulated one.
+
+Thereby, we obtain the following results for a group of particles with their radius included between, roughly, $60$ and $90 nm$. Note that the experimental curve (purple/pink color) doesn't own the same y-axis than the three others: due to the relation (\ref{eq:final_spectrum}), unite is not relevant anyway. However, each experimental function has the same scale for all graphs in order to visualize the maximum value increasing while the particle is growing and reciprocally.
+
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{result_65nm.png}
-    \caption{Spectrum for 65nm (radius)}
+    \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_65nm.png}
+    \caption{Spectrum for $65 nm$ (radius)}
     \label{fig:result_65nm}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{result_67nm.png}
-    \caption{Spectrum for 67nm (radius)}
+    \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_67nm.png}
+    \caption{Spectrum for $67 nm$ (radius)}
     \label{fig:result_67nm}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{result_81nm.png}
-    \caption{Spectrum for 81nm (radius)}
+    \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_81nm.png}
+    \caption{Spectrum for $81 nm$ (radius)}
     \label{fig:result_81nm}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{result_82nm.png}
-    \caption{Spectrum for 82nm (radius)}
+    \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_82nm.png}
+    \caption{Spectrum for $82 nm$ (radius)}
     \label{fig:result_82nm}
 \end{figure}
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{result_90nm.png}
-    \caption{Spectrum for 95nm (radius)}
-    \label{fig:result_95nm}
+    \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_90nm.png}
+    \caption{Spectrum for $90 nm$ (radius)}
+    \label{fig:result_90nm}
 \end{figure}
+
+As we can see, expect for the last one, the two first Mie resonances for both simulated and experienced match the same wavelength positions at approximately $5 nm$ due to some \textit{human} errors in the retrieved size. However, the $90 nm$ nanosphere doesn't fit the simulated expectations. A reasonable explanation could be the following: we saw that this particle is relatively close (at $100 nm$) to the $81 nm$ then, due to the smaller size of this last one and some kind of \textit{influences}, the experimental curve is shifted to the left. In the same way, an additional resonance is appearing on the right for the $81 nm$ particle. Moreover, the proximity of the golden number and its different refractive index could affect the experimental spectrum.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.38\textwidth, height=0.30\textwidth]{curve_explanation.png}
+    \caption{Relative Positions for Explanation}
+    \label{fig:curve_explanation}
+\end{figure}
+
+To conclude, thanks to the Mie theory and more precisely, the development of the scattered light for nanoparticles, it is possible to measure, or at least estimate, the associated size of a given nanosphere of silicon by studiying the two principal Mie resonances, that is to say evaluate their respective locations and compare with simulations from arbitrary sizes in order to retrieve these maximum on same positions.
 
 \end{document}
