@@ -1,0 +1,17 @@
+[0] Config.pm:304> INFO - This is Biber 2.14 (beta)
+[3] Config.pm:307> INFO - Logfile is './report.blg'
+[288] biber:322> INFO - === tir maj 10, 2022, 13:09:01
+[347] Biber.pm:415> INFO - Reading './report.bcf'
+[557] Biber.pm:943> INFO - Found 4 citekeys in bib section 0
+[602] Biber.pm:4256> INFO - Processing section 0
+[603] Utils.pm:75> INFO - Globbing data source 'report.bib'
+[604] Utils.pm:91> INFO - Globbed data source 'report.bib' to report.bib
+[645] Biber.pm:4455> INFO - Looking for bibtex format file 'report.bib' for section 0
+[657] bibtex.pm:1653> INFO - LaTeX decoding ...
+[674] bibtex.pm:1471> INFO - Found BibTeX data source 'report.bib'
+[895] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[895] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[896] Biber.pm:4084> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
+[896] Biber.pm:4090> INFO - No sort tailoring available for locale 'en-US'
+[924] bbl.pm:652> INFO - Writing './report.bbl' with encoding 'UTF-8'
+[931] bbl.pm:755> INFO - Output to ./report.bbl

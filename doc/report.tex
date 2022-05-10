@@ -6,19 +6,51 @@
 \usepackage{amsfonts}
 \usepackage{indentfirst}
 \usepackage{gensymb}
+\usepackage{titling}
+\usepackage{blindtext}
 \usepackage[a4paper, total={7in, 10in}]{geometry}
+\usepackage[export]{adjustbox}
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+\addbibresource{report.bib}
 \graphicspath{ {./../res/} }
 \numberwithin{equation}{section}
 
 \title{Optical Mie resonances in high-refractive-index nanostructures}
-\author{Neven Gentil}
-\date{April 2022}
+\author{Neven Gentil Supervised by Søren Raza}
+\date{February to April 2022}
 
 \begin{document}
 
+\begin{titlingpage}
 \maketitle
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.5\textwidth, height=0.5\textwidth]{silicon_nanoparticles.png}
+
+    Set Of Silicon Nanoparticles
+\end{figure}
+\begin{abstract}
+We propose here to pick up the Mie theory on a arbitrary nanosphere and exctract the relevant cross sections. Applied to a silicon nanoparticle, we experimentally retrieve the same factors, depending on a visible range of wavelength. We finally compare them with simulated results produced from the theory and intend to give an explanation to the unmatched curves.
+\end{abstract}
+\begin{figure}[b]
+    \begin{minipage}{0.48\textwidth}
+        \includegraphics[width=0.4\textwidth, height=0.2\textwidth,left]{dtu_logo.png}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \includegraphics[width=0.5\textwidth, height=0.2\textwidth,right]{ut3_logo.png}
+    \end{minipage}
+\end{figure}
+\end{titlingpage}
 
 \twocolumn
+
+\section{Introduction}
+
+At the nanoscale, new properties occur between nanomaterials and the common visible lighting. Thereby, new technologies coupled with optical physics come to light with, for instance, shrinking light-emitting devices or color-changing surfaces. However, a precise study of scattering nanoparticles is necessary to well understand the associated phenomenons. Thereby, we propose to highlight optical Mie resonances in silion nanostructures. This type of nanoparticle is relevant in many scientific applications described before and their properties reveal the main theoretical as well as experimental basics of nano-optics.
 
 \section{Theory}
 
@@ -27,7 +59,7 @@ The aim of this section is to develop the theoretical framework for calculating 
 \subsection{Vector Spherical Harmonics}
 
 The general problem we are aiming to solve is composed of a spherical particle of radius $a$ in background refractive medium, which is impinged by a monochromatic plane wave. With a fixed refractive index $N$ for the nanosphere, respectively $N_{I}$ for the medium and other specifics parameters for electromagnetic materials like the permeability $\mu$, our objective is to, theoretically, compute the electromagnetic field inside and outside the particle, in order to find the expression of the scattered light.
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.4\textwidth]{reference_frame.png}
     \caption{Diagram Of The Problem}
@@ -50,7 +82,7 @@ where $\nabla ^{2}$ is the vector Laplace operator.
 
 An important thing to notice is that any vector field with zero divergence and satisfying the vector wave equation is a valid electric/magnetic field where we can obtain the corresponding magnetic/electric field by the curl (\ref{eq:rot_e})/(\ref{eq:rot_h}).
 
-In this way, it is possible to construct a vector function $\textbf{M}$ depending on a scalar function $\psi$ and an arbitrary constant vector $\textbf{c}$:
+It is possible to construct a vector function $\textbf{M}$ depending on a scalar function $\psi$ and an arbitrary constant vector $\textbf{c}$:
 \begin{align}
 \textbf{M} = \nabla \times (\textbf{c}\psi)
 \end{align}
@@ -64,7 +96,7 @@ To satisfy the vector wave equation, $\psi$ should also satisfy the equivalent s
 \end{align}
 where, this time, $\nabla ^{2}$ is the scalar Laplace operator. By the way, if we denote $\nabla \times \textbf{N} = k \textbf{M}$, we have the perpendicular vector field of the artificial $\textbf{M}$, also satisfying the vector wave equation. Finally, we created the vector harmonics $\textbf{M}$ and $\textbf{N}$ with the scalar generating function $\psi$ associated to our initial electromagnetic field.
 
-\subsection{Explicit Expansion Of Vector Spherical Harmonics}
+\subsection{Explicit Expansion of Vector Spherical Harmonics}
 
 The main idea to compute all solutions required is the following: given an incident electromagnetic field, we use the boundary conditions on the surface of our particle to get all fields resulting from interaction. Thereby, it could be interesting to use the spherical polar coordinates during the calculation and particularly to express the boundary conditions. That is why we have constructed the vector harmonics above. Indeed, if we replace the constant vector $\textbf{c}$ by the radial coordinate $\textbf{r}$, $\textbf{M}$ is always a solution of the vector wave equation but, this time, for the spherical polar coordinates linked to the particle. In this way, from (\ref{eq:psi_wave_eq}), we obtain:
 \begin{equation}\label{eq:wave_sph}
@@ -119,15 +151,14 @@ with here, for instance, the first coefficient. With the orthogonality of the si
 \begin{align}
 \textbf{E}_{i}=\sum_{n=1}^{\infty }B_{o1n}\textbf{M}^{(1)}_{o1n} + A_{e1n}\textbf{N}^{(1)}_{e1n}
 \end{align}
-Afterward, thanks to a set of properties from the associated Legendre functions, we deduce explicitly these two remaining factors $B_{o1n}$ and $A_{e1n}$ from (\ref{eq:bemn}) or the equivalent expression:
+Thanks to a set of properties from the associated Legendre functions, we deduce explicitly these two remaining factors $B_{o1n}$ and $A_{e1n}$ from (\ref{eq:bemn}) or the equivalent expression:
 \begin{align}
 \textbf{E}_{i}=E_{0}\sum_{n=1}^{\infty }i^{n}\frac{2n+1}{n(n+1)}(\textbf{M}^{(1)}_{o1n} - i\textbf{N}^{(1)}_{e1n})
 \end{align}
-%Obviously, it is possible to calculate the perpendicular magnetic field $H_{i}$ with the curl (\ref{eq:rot_e}).
 
 \subsection{Boundary Conditions}
 
-At this point, we have enough equation relative to the incident plane wave to apply the following boundary conditions:
+We have enough equation relative to the incident plane wave to apply the following boundary conditions:
 \begin{align}\label{eq:boundaries}
 (\textbf{E}_{i} + \textbf{E}_{s} - \textbf{E}_{I}) \times \textbf{e}_{r} &= 0\\
 (\textbf{H}_{i} + \textbf{H}_{s} - \textbf{H}_{I}) \times \textbf{e}_{r} &= 0
@@ -141,7 +172,7 @@ where $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$ 
 \end{align}
 Note that $^{(3)}$ means we use the spherical Bessel function of the third kind $h^{(1)}_{n}$ and $\textbf{H}_{X}$ has the same factors than $\textbf{E}_{X}$ due to the curl (\ref{eq:rot_e}). Moreover, $k_{I}$ and $\mu_{I}$ are respectively the wave vector and the permeability of the particle.
 
-Now, we can rewrite the boundary conditions on the surface of our theorical particle from (\ref{eq:boundaries}) with each component separated, that is to say at $r=a$:
+Now, we can rewrite the boundary conditions on the surface of our theoretical particle from (\ref{eq:boundaries}) with each component separated, that is to say at $r=a$:
 \begin{equation}\label{eq:boundary_comp}
 \begin{aligned}
 E_{i\theta} + E_{s\theta} = E_{I\theta}\\
@@ -189,7 +220,7 @@ where $\textbf{S}$ is the \textit{Pointing vector} defined as:
 \begin{align}
 \textbf{S} = \frac{1}{2}\Re\left\{\textbf{E}^{*} \times \textbf{H}\right\}
 \end{align}
-In this way, we can now compute this power for the scattered electromagnetic field $(\textbf{E}_{s}, \textbf{H}_{s})$ which might be calculated thanks to (\ref{eq:an_bn}) included into the expression of the scattered field then, after a bit of mathematical manipulations, we have a literral expression for $W_{s}$. Moreover this power could be \textit{normalized}, that is to say, divided by the intensity from the incident light. Thereby, we introduce the cross section:
+We can now compute this power for the scattered electromagnetic field $(\textbf{E}_{s}, \textbf{H}_{s})$ which might be calculated thanks to (\ref{eq:an_bn}) included into the expression of the scattered field then, after a bit of mathematical manipulations, we have a literral expression for $W_{s}$ (see \cite{craigdonald}). Moreover this power could be \textit{normalized}, that is to say, divided by the intensity from the incident light. Thereby, we introduce the cross section:
 \begin{align}\label{eq:csca}
 C_{sca}=\frac{W_{s}}{I_{i}}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)(\left| a_{n} \right|^{2}+\left| b_{n} \right|^{2})
 \end{align}
@@ -221,7 +252,7 @@ At last, we have calculated and theoretically established the expression of two 
 
 \subsection{Equations Adjustment}
 
-First at all, our main issue to numerically compute the cross sections $C_{sca}$ and $C_{ext}$ is to calculate the associated scattering coefficients $a_{n}$ and $b_{n}$. Globally, these two numbers are obtained through Bessel functions as we can see from (\ref{eq:an_bn}) and our goal is to retrieve each value of them between a certain range of wavelength in order to obtain the spectrum. However, due to the size of our nanoparticle close to the incident wavelength included in a visible range, the variable $\rho=kr$, as a dependency for the Bessel functions, is also restrained into a small range of value close to zero along the x-axis. In fact, in the context of a computer, these targeted values could be too sensitive to be calculated with a reasonably high precision. Thereby, we could introduce the \textit{logarithmic derivative}:
+Our main issue to numerically compute the cross sections $C_{sca}$ and $C_{ext}$ is to calculate the associated scattering coefficients $a_{n}$ and $b_{n}$. Globally, these two numbers are obtained through Bessel functions as we can see from (\ref{eq:an_bn}) and our goal is to retrieve each value of them between a certain range of wavelength in order to obtain the spectrum. However, due to the size of our nanoparticle close to the incident wavelength included in a visible range, the variable $\rho=kr$, as a dependency for the Bessel functions, is also restrained into a small range of value close to zero along the x-axis. In fact, in the context of a computer, these targeted values could be too sensitive to be calculated with a reasonably high precision. Thereby, we could introduce the \textit{logarithmic derivative}:
 \begin{align}
 D_{n}(\rho)=\frac{d}{d\rho}\ln[\psi_{n}(\rho)]
 \end{align}
@@ -320,15 +351,15 @@ j^{final}_{i}(x) &= j^{computed}_{i}(x) \times \frac{j_{0}(x)}{\alpha}\\
 where $j^{final}_{X}$ is the wished result. In fact, we just have \textit{normalized} our serie $j^{computed}_{X}$ by the initial factor $\frac{j_{0}(x)}{\alpha}$. It is important to notice that any serie constructed through this way always verifies the recurrence relation (\ref{eq:sph_bess_up_rec}) and each term is, by definition, a solution of the radial part (\ref{eq:radial_part}).
 
 Unfortunately, a last issue still remains in our downward recurrency approach. Something that is not obvious at the first glance, we see for a given $i$ and any $x$ (still with the condition $|x| < i$), due to the mathematical shape of our recurrence relation (\ref{eq:sph_bess_down_rec}), each value of a lower computed order is bigger than its previous higher order: $j^{computed}_{0} > j^{computed}_{1} > ... > j^{computed}_{i}$. So, if we target a really high order with, for instance, $i=10^{10}$, the first order will ineluctably get a really high value before the \textit{normalization}. Thereby, for a computer with \textit{physical} boundaries for its numbers, this previous result will give us an invalid value for an intermediate order and all order below will be saturated with the same invalid state. In this way, the \textit{normalization} step is impossible because $\alpha$ in (\ref{eq:j_final}) will own a \textit{NaN} value (that is a computer overflow indicator). Even if, for a first approximation, we use the ten first order for calculation, this phenomenon will be rapidly visible even for our range of value (from $n=50$) and it could be intersting to avoid this \textit{blocking} state showed on figure (\ref{fig:jn_bug}).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.5\textwidth]{jn_bug.png}
-    \caption{Downward recurence \textit{bug} for $n=60$}
+    \caption{Downward Recurence \textit{bug} For $n=60$}
     \label{fig:jn_bug}
 \end{figure}
 Note that zero values into $x = [0, 4]$ is due to the invalid state. This specific \textit{bugged} range is increasing if $n$ also increase: the \textit{real} dependency on $x$ of the downward reccurence relation (\ref{eq:sph_bess_down_rec}) is visible here.
 
-Therefore, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitrary minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon and allow to compute for $i=100$ in our case. A second solution is to divide the downward recurence into multiple chunks. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit for $64-bit$ numbers) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). It is important to notice that $\{j^{computed}_{50}...j^{computed}_{100}\}$ is larger term by term from $\{j^{computed}_{0}...j^{computed}_{50}\}$ due to the $n$ dependency included into the recurence relation but much less sensitive to the overflowing effect. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$. This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain much more wished order without overflowing the computer results as viewed on figure (\ref{fig:jn_bug}).
+Therefore, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitrary minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon and allow to compute for $i=100$ in our case. A second solution is proposed by \textit{Liang-Wu} in \cite{liangwu}. In a more simple way, the idea is to divide the downward recurence into multiple chunks. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit for $64-bit$ numbers) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). It is important to notice that $\{j^{computed}_{50}...j^{computed}_{100}\}$ is larger term by term from $\{j^{computed}_{0}...j^{computed}_{50}\}$ due to the $n$ dependency included into the recurence relation but much less sensitive to the overflowing effect. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$. This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain much more wished order without overflowing the computer results as viewed on figure (\ref{fig:jn_bug}).
 
 \subsection{Input Variables}
 
@@ -338,27 +369,27 @@ Output = Simulation(Input)
 \end{align}
 where $Output$ is our wished scattering and extinction cross sections. Given the relations (\ref{eq:csca}) and (\ref{eq:cext}) coupled with the expressions of $a_{n}$ and $b_{n}$ previously established, we are able to recognize these variables. Thereby, all inputs are included into (\ref{eq:def_x_m}) with refractive indices of the medium $N_{I}$ and the particle $N$, the particle's size $a$ then the wavelength $\lambda$.
 
-First at all, let's consider the $\lambda$ variable. The problem is the following: from our theory, we send an incident monochromatic light, that is to say $\lambda=constant$ in the visible range. However, in reality, the experimental tool produce multiple monochromatic lights in order to reach all values in the visible range and compute the associated cross sections. In fact, the wavelength $\lambda$ will vary for each computation and, by the way, is an $Input$ variable. Therefore, we have $x=x(\lambda)$ and more precisely $k=k(\lambda)$
+Let's consider the $\lambda$ variable. The problem is the following: from our theory, we send an incident monochromatic light, that is to say $\lambda=constant$ in the visible range. However, in reality, the experimental tool produce multiple monochromatic lights in order to reach all values in the visible range and compute the associated cross sections. In fact, the wavelength $\lambda$ will vary for each computation and, by the way, is an $Input$ variable. Therefore, we have $x=x(\lambda)$ and more precisely $k=k(\lambda)$
 
-Secondly, the particle's size $a$ represents the radius of this last one. For the purpose of this study, it is also an $Input$ variable.
+The particle's size $a$ represents the radius of this last one. For the purpose of this study, it is also an $Input$ variable.
 
-Then, the refractive index of the background, taking into account that the environment is homogenous, this last one is a constant value. Even more, if we consider that the medium is the ambiant air, it might be possible to approximate it as the void and finally set $N_{I}=1$. Moreover, we have now the following relation $m=N$.
+The refractive index of the background, taking into account that the environment is homogenous, this last one is a constant value. Even more, if we consider that the medium is the ambiant air, it might be possible to approximate it as the void and finally set $N_{I}=1$. Moreover, we have now the following relation $m=N$.
 
 The last variable to describe is the refractive index $N$ of our particle. At this point, we can introduce the targeted material, that is to say, the substance used into our spherical sample: silicon. As a first approximation, we can say that silicon has a constant refractive index commonly setted around $3.5$. Thereby, for $a=100$ nm and $\lambda=[206 nm, 826 nm]$ (visible range a bit extended in the \textit{UV} range), we obtain the following cross sections:
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_const.png}
     \caption{Extinction, scattering, and absorption cross section for a constant refractive index $N=3.5$. Note that the scattering and extinction cross sections are identical as there is no absorption.}
     \label{fig:ri_const}
 \end{figure}
 where $Sca$ is the scattering, $Ext$ the extinction and $Abs$ the absorbtion cross section linked with (\ref{eq:wext_ws_wa}): $C_{abs} = C_{ext} - C_{sca}$. We can see on figure (\ref{fig:ri_const}) that there is no absorbtion and the scattering cross section equals the extinction one. However, to properly describe physical states of matter, we have to consider that the refractive index is varying depending on the wavelength of the incident light, that is to say, $N=N(\lambda)$. In this way we obtain:
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_var_real.png}
     \caption{Extinction, scattering, and absorption cross section for wavelength-dependent and real-valued refractive index}
 \end{figure}
 where we use the real part of measured refractive indices from another scientific experiment (Aspnes and Studna, 1983). We easily see that the main maximums, called \textit{Mie resonances}, are shifted to the right because of the higher value of the refractive index $N>3.5$, but this approach globally keep the previous shape. It is always remarkable that $C_{sca}=C_{ext}$. That is due to the real expression of the refractive index. Indeed, the absorbtion behavior of our material is mathematicaly implemented through the imaginary part of $N$. In this way, we should have $N=N_{re}+iN_{im}$ Thereby, when we use a complex varying index, we obtain:
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_var_complex.png}
     \caption{Extinction, scattering, and absorption cross section for wavelength-dependent and complex refractive index}
@@ -369,104 +400,104 @@ Finally, our $Input$ variables are the following: $a$ (particle's size), $\lambd
 
 \subsection{Results}
 
-Finally, We are now in a position to compute our required $Output$ which are the scattering $C_{sca}$ and extinction $C_{ext}$ cross sections. As a reminder and as stated in the end of the \textit{theory} part, these last are relevant in the study of nanoparticles because cross sections are directly linked to the scattering measurements.
+We are now in a position to compute our required $Output$ which are the scattering $C_{sca}$ and extinction $C_{ext}$ cross sections. As a reminder and as stated in the end of the \textit{theory} part, these last are relevant in the study of nanoparticles because cross sections are directly linked to the scattering measurements.
 
 First at all, it could be interesting to visualize the different contributions of each terms in cross section expressions (\ref{eq:csca}) and (\ref{eq:cext}). Indeed, these two relations are primarly composed of an infinite sum which might be \textit{separated} in order to compute the associated $a_{n}$ and $b_{n}$ terms roughly as following:
 \begin{align}
 \sum_{n=1}^{\infty } f_{n}(a_{n}) + f_{n}(b_{n}) = \sum_{n=1}^{\infty } f_{n}(a_{n}) + \sum_{n=1}^{\infty } f_{n}(b_{n})
 \end{align}
 where $f_{n}(X) = \frac{2\pi}{k^{2}}(2n+1)\Re\{X\}$ in the case of $C_{ext}$ (with a similar expression for $C_{sca}$). In this way, for an arbitrary particle defined by a radius of $100$ nm meters, we obtain figures (\ref{fig:sca_coeff}) then (\ref{fig:ext_coeff}) for the scattering and extinction cross section respectively.
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{sca_coeff.png}
-    \caption{$C_{sca}$ coefficient contributions}
+    \caption{$C_{sca}$ Coefficient Contributions}
     \label{fig:sca_coeff}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ext_coeff.png}
-    \caption{$C_{ext}$ coefficient contributions}
+    \caption{$C_{ext}$ Coefficient Contributions}
     \label{fig:ext_coeff}
 \end{figure}
 These figures show that each local maximum is due to a heavy weighting from one or the other of the coefficients. More particularly, the global maximum called \textit{first magnetic dipole mode} seems to be be generated by the second coefficient $b_{n}$ whereas the first one, $a_{n}$ influences the second global maximum which is located on the left of the first maximum.
 
 Secondly, as stated in the previous subsection, we have three $Input$ variables that we can potentially change. Note that the incident light's wavelength is fixed by the targeted range of value for the \textit{extended}-visible light and the refractive index of our particle, depending on $\lambda$, is fixed by the material studied: silicon. Thereby, our last \textit{free} parameter is the size or more precisely the radius. Therefore, when varying this $Input$ variable, we obtain figures (\ref{fig:sca_var}) and (\ref{fig:ext_var}) associated to $C_{sca}$ and $C_{ext}$ for three different sizes surrounding all possible particles encountered during the experiments.
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{sca_var.png}
-    \caption{$C_{sca}$ for three different sizes}
+    \caption{$C_{sca}$ for three different Radius}
     \label{fig:sca_var}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ext_var.png}
-    \caption{$C_{ext}$ for three different sizes}
+    \caption{$C_{ext}$ For Three Different Radius}
     \label{fig:ext_var}
 \end{figure}
 As we can see, it is possible to consider a \textit{recursive} shape which is composed by the boundary of the first and second global maximum. In fact, the first magnetic dipole mode is moving to lower wavelengths when the size decreases and reciprocally. Moreover the scale and the maximum y-value are also decreasing. However, it might be roughly possible to assess that, for our targeted range of values, this shape thus defined is moving left for smaller sizes then right for larger sizes.
 
-After all, if we reproduce our computations with, this time, the radius as a \textit{real} free parameter instead of an arbitrarily fixed value, we obtain the following figures (\ref{fig:surface_sca}) and (\ref{fig:surface_ext}) for the scattering and extinction cross sections respectively. In this way, we can easily visualize our wished $Output$ results and compare later with the collected experimental data.
-\begin{figure}[h]
+If we reproduce our computations with, this time, the radius as a \textit{real} free parameter instead of an arbitrarily fixed value, we obtain the following figures (\ref{fig:surface_sca}) and (\ref{fig:surface_ext}) for the scattering and extinction cross sections respectively. In this way, we can easily visualize our wished $Output$ results and compare later with the collected experimental data.
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{surface_sca.png}
-    \caption{$C_{sca}$ depending on radius and wavelength}
+    \caption{$C_{sca}$ Depending On radius And Wavelength}
     \label{fig:surface_sca}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{surface_ext.png}
-    \caption{$C_{ext}$ depending on radius and wavelength}
+    \caption{$C_{ext}$ Depending On Radius And Wavelength}
     \label{fig:surface_ext}
 \end{figure}
-Now, it is obvious that, as a really first approximation in our range of values, each maximum and, more particularly, the two global maximum represented by the most intense yellow lines, could be calculated through a linear equation with a different coefficient each explaining, by the way, the compression of the defined shape for smaller radius. \textbf{Retrieve the linear equation for the principal Mie's resonance and compare}
+It is obvious that, as a really first approximation in our range of values, each maximum and, more particularly, the two global maximum represented by the most intense yellow lines, could be calculated through a linear equation with a different coefficient each explaining, by the way, the compression of the defined shape for smaller radius.
 
 \section{Experiments}
 
 \subsection{Base Description}
 
-First, let's describe the procedure to experimentally test and compare our simulation part. Technically, our studied particle should have a spherical shape and the associated material should be \textit{silicon}, as stated in the previous section. Thereby, we are supposed to create a sample composed of spherical nanoparticles of silicon with different sizes included between $100nm$ and $200nm$ of diameter. Moreover, in order to approve our theorical approach and the simulation part, we have to retrieve experimentally an \textit{equivalent shape} made up of the first magnetic and electric dipole modes. In fact, our different sized nanoparticles being randomly scattered on the sample, we have to collect the size of some nanoparticles coupled with the scattering cross section spectrum. In this way, we will be able to link the $C_{sca}$ shape, retrieved thanks to the \textit{optical} microscope, according to the respective sizes, collected through the \textit{atomic force} microscope, to finally check if it actually fit the simulation.
+First, let's describe the procedure to experimentally test and compare our simulation part. Technically, our studied particle should have a spherical shape and the associated material should be \textit{silicon}, as stated in the previous section. Thereby, we are supposed to create a sample composed of spherical nanoparticles of silicon with different sizes included between $100nm$ and $200nm$ of diameter. Moreover, in order to approve our theoretical approach and the simulation part, we have to retrieve experimentally an \textit{equivalent shape} made up of the first magnetic and electric dipole modes. In fact, our different sized nanoparticles being randomly scattered on the sample, we have to collect the size of some nanoparticles coupled with the scattering cross section spectrum. In this way, we will be able to link the $C_{sca}$ shape, retrieved thanks to the \textit{optical} microscope, according to the respective sizes, collected through the \textit{atomic force} microscope, to finally check if it actually fit the simulation.
 
 \subsection{Sample Preparation}
 
 Chronologically, the first experiment we have to realize is the preparation of the silicon nanoparticle sample.
 
 We have to find a proper support for our different particles. In this way, we use a glass substrate which is composed of a matrix where micrometric number elements are engraved on the top side, in order to see and locate the position of our experiment area on this sample during observation through optical or AFM microscopes. The substrate has the particularity to be transparent which allow the light to cross it and let numbers to be visible as shown on figure (\ref{fig:substrate}).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{glass_substrate.png}
-    \caption{glass substrate}
+    \caption{Glass Substrate}
     \label{fig:substrate}
 \end{figure}
 Moreover, our goal being to put nanoparticles on this substrate, we have the following layers described on figure (\ref{fig:substrate_layers}).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.35\textwidth, height=0.35\textwidth]{substrate_layers.png}
+    \includegraphics[width=0.47\textwidth, height=0.32\textwidth]{substrate_layers_v2.png}
     \caption{Substrate Layers (Not To Scale)}
     \label{fig:substrate_layers}
 \end{figure}
 
-Secondly, we have to physically produce silicon nanoparticles with \textit{random} sizes included between $50$ nm and $100$ nm in radius. Hopefully, this step is realized thanks to another research team from the \textit{Kobe University} in Japan. Globally, they are created from SiO lumps annealed at, approximately, $1500 \degree C$ then etched to produce $Si$ nanoparticles in a solution.
+Secondly, we have to physically produce silicon nanoparticles with \textit{random} sizes included between $50$ nm and $100$ nm in radius. Hopefully, this step is realized thanks to another research team from the \textit{Kobe University} in Japan. Globally, they are created from SiO lumps annealed at, approximately, $1500 \degree C$ then etched to produce $Si$ nanoparticles in a solution. (see \cite{hiroshitakumaminoru})
 
-Finally, these nanoparticles are placed on the glass substrate pieces thanks to a micropipette: we put a droplet of around $10$ microliter on each chip. Afterward, we must either dry in air, or blow dry to progressively remove water from the samples. In the end, our silicon nanoparticles are \textit{dropcasted}.
+These nanoparticles are placed on the glass substrate pieces thanks to a micropipette: we put a droplet of around $10$ microliter on each chip. Afterward, we must either dry in air, or blow dry to progressively remove water from the samples. In the end, our silicon nanoparticles are \textit{dropcasted}.
 
 \subsection{Optical Microscope}
 
 Now, our goal is to collect the spectrum from some interesting particles, preferably with a large distribution of size starting from $50$ nm to $100$ nm in radius. In order to select these wished particle and get the equivalent of scattering cross and extinction cross section, we have to use the \textit{optical} microscope. This tool is working like a \textit{basic} microscope, numerically connected to a computer where where recorded images might be seen through a normal screen, composed of $3$ different objectives and working with $2$ different modes of lighting: \textit{bright} and \textit{dark} field. The first one mode is a standard lighting: the ingoing light is emitted from the top part of the \textit{sample area} and the reflecting light is also collected from the top to be transfered to a detector and finally to the computer or directly to the \textit{user-eyes}.
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{bright_field_ex.png}
     \caption{Bright Field Example}
     \label{fig:bright_field_ex}
 \end{figure}
-Secondly, the \textit{dark field} is used to increase the contrast and avoid the reflected light to be directly collected. Indeed in our case, with the bright mode, all silicon nanoparticles have a narrower range of colors compared to the dark field mode. Thereby, the \textit{dark field} mode allow us to send an incident light and only catch the scattered light as shown on figure (\ref{fig:dark_field_working}). It means that only the scattering cross section should be reached for comparison with simulation results.
-\begin{figure}[h]
+The \textit{dark field} is used to increase the contrast and avoid the reflected light to be directly collected. Indeed in our case, with the bright mode, all silicon nanoparticles have a narrower range of colors compared to the dark field mode. Thereby, the \textit{dark field} mode allow us to send an incident light and only catch the scattered light as shown on figure (\ref{fig:dark_field_working}). It means that only the scattering cross section should be reached for comparison with simulation results.
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.37\textwidth]{dark_field_working.png}
-    \caption{Dark Field Working}
+    \caption{Working Principle Of Dark-Field Optical Spectroscopy}
     \label{fig:dark_field_working}
 \end{figure}
 As we can see, the incident direction is described as the edge of a cone and, due to a smaller angle, the scattered light is collected inside the same cone.
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{dark_field_ex.png}
     \caption{Dark Field Example}
@@ -475,7 +506,7 @@ As we can see, the incident direction is described as the edge of a cone and, du
 The figure (\ref{fig:dark_field_ex}) show an example of our actual sample viewed through the \textit{dark field} mode. Note that the we have a really high contrast and it possible to clearly recognize each color associated to a specific particle or another object.
 
 Then, to collect our wished spectrum, we have to reduce the detected light thanks to a slit. Thereby, only a few vertical area, with approximately $300$ nm of width, should be visible by the detector: the \textit{light noise} created by other particles, horizontally next to our studied nanosphere, is avoided. In fact, the computer software parse each horizontal lines in the \textit{extended-}visible range in order to collect the spectrum of this area: if two particles are on the same line, they will be treated as the same entity.
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{slit_ex.png}
     \caption{Example Of Slit Closed On Two Particles}
@@ -484,32 +515,31 @@ Then, to collect our wished spectrum, we have to reduce the detected light thank
 Therefore, that is why we put a narrow aperture to the detector, as shown one the previous figure (\ref{fig:slit_ex}). Also, the function of the spectrometer is to angularly split up the white light source, so that different wavelengths are collected by different pixels of the CCD camera in order to retieve the wished spectrum.
 
 The first step before actually start our experiment is to calibrate our microscope, that is to say, we have to get some initial data which will be important for computations of the experimental spectrums. In this way, without any incoming light, we save the background spectrum which represents the ambient noise involved by natural emitters like spot lights of the experimental room (which should, ideally, be turned off during the experiments to reduce the noise).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.45\textwidth, height=0.20\textwidth]{background_ex.png}
-    \caption{Example of Background}
+    \caption{Example Of Background}
     \label{fig:background_ex}
 \end{figure}
 We could say that the background data are collected on a really specific area because of the slit's thickness, but technically, the stored values are really close and only an average of the noise is relevant in that case.
 
-In the same way, the incoming light, either in dark or bright field, has a specific distribution \textbf{explain why}. Thereby, we put a \textit{reference} object as sample on the microscope's repository: a white material involves an exact collected distribution of the incident light. \textbf{More details. What does the white reference do and what is it made of?}
-\begin{figure}[h]
+The incoming light, either in dark or bright field, has a specific distribution because of the halogen light source from  \textit{Thorlabs} compagny. Thereby, we put a \textit{reference} object as sample on the microscope's repository: this white material is a diffuse scattering surface which, ideally, scatterers white light uniformly across wavelengths allowing us to retrieve the "Reference spectrum", which includes information about the light source, the optics of the microscope and the spectrometer, as well as the detection efficiency of the CCD camera collecting the light.
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.45\textwidth, height=0.20\textwidth]{reference_ex.png}
-    \caption{Example of Reference}
+    \caption{Example Of Reference}
     \label{fig:reference_ex}
 \end{figure}
-%Note that the area is, here too, really specific, but this homogenous reference object involves the same patch of light distribution whatever the targeted location.
 
 The next step is to get the actual spectrum of our wished nanoparticle. Obviously, because of the dimension of the detected area, we get more than one particle on each image. However, with a clever configuration, we obtain a similar figure from (\ref{fig:raw_data_ex}) after software computations and treatments.
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.45\textwidth, height=0.15\textwidth]{raw_data_ex.png}
     \caption{Raw Data Example}
     \label{fig:raw_data_ex}
 \end{figure}
 Now, if we extract the line corresponding to our studied particle, we obtain a weird spectrum, pretty close to the following (\ref{fig:spectrum_wout_calc_ex}).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{spectrum_wout_calc_ex.png}
     \caption{Spectrum From $91$ nm Particle Without (\ref{eq:final_spectrum}) Example}
@@ -520,29 +550,29 @@ This particular shape, very far from our wished simulation results for nanospher
 FinalSpectrum = \frac{RawSpectrum - Reference}{Background - Reference}
 \end{align}
 Note that $Background$ is not necessarly a \textit{per pixel} value but could be an average of all pixels stored in \textit{background} as stated previously. Thereby, we obtain the final spectrum, with for instance the figure (\ref{fig:spectrum_w_calc_ex}) from the particle in (\ref{fig:spectrum_wout_calc_ex}).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{spectrum_w_calc_ex.png}
     \caption{Spectrum From $91$ nm Particle With (\ref{eq:final_spectrum}) Example}
     \label{fig:spectrum_w_calc_ex}
 \end{figure}
-Therefore, this result is much more close to our simulation part with the two first magnetic and electric dipole modes then approximately the same shape shifted along the wavelength axis excepted for all values below, approximately, $450$ nm. This last issue is due to the precision of the microscope that is not guaranteed under the visible wavelengths. \textbf{This is not a clear explanation. The light source of the microscope has very low intensity below 400 nm. Similarly, the CCD detector of the spectrometer has low sensitivity below 400 nm.}
+Therefore, this result is much more close to our simulation part with the two first magnetic and electric dipole modes then approximately the same shape shifted along the wavelength axis excepted for all values below, approximately, $450$ nm. This last issue is due to the precision of the microscope that is not guaranteed under the visible wavelengths: the light source of the microscope has very low intensity below $400$ nm as well as the CCD detector of the spectrometer which has low sensitivity below $400$ nm and above $900$ nm.
 
 \subsection{Atomic Force Microscope}
 
 At this point of the experiment part, we have to couple the spectrum, previously retrieved thanks to the optical microscope, with the size of each studied particle. Thereby, we need another kind of tool in order to detect physically the wished size, that is to say, an instrument able to mesure the diameter, or at least to give an equivalent data, of the desired particle instead of collecting the scattered light intensity. In this way, the best suited tool for this task is the \textit{atomic force microscope}.
 
 The working principle of that kind of microscope is pretty simple. At our \textit{human} scale, the operating mode is roughly similar to the Braille system. Indeed, our sample being totally flat at a macroscopic point of view, the main idea is to drag a tip on the desired experimental surface. This tip is directly connected to a detector collecting the nanometric height variations along the advancement of the last one as shown on figure (\ref{fig:afm_working_principle}). In this way, if the tip runs into a nanoparticle, it could be possible to substract the maximum height to the base one, referencing the surface's sample which is the minimum in that case, in order to get the diameter of the particle (assuming that those are spherical).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.4\textwidth]{afm_working_principle.png}
     \caption{AFM Working Principle}
     \label{fig:afm_working_principle}
 \end{figure}
 
-Technically, even if in general an AFM can use different methods to scan the sample, in our case, the microscope use the \textit{Van der Waals} forces existing between the tip and the nanoparticles. These forces are responsible of the attraction between different molecules, for instance. Thereby, with no movement, the tip is in balance above the sample without touching it: this is a \textit{non-destructive} scanning tool. The height detector itself is composed of a laser reflecting on the end piece of the cantilever maintaining the tip. When we scan a sample, the tip attached to the cantilever and the laser are moving as a whole block and the tip oscillate around its balance position. In this way, if the tip moves up, compared to its small oscillations, because of a nanoparticle (or another kind of \textit{perturbartion}), the optical way runned by the light, and emitted from the laser, is shorter: we detect a height variation. Effectively, the same process happens when the tip moves down. Then, in order to scan a sample, the tip must move along an arbitrary line and, with a pre-defined length, must shift on the next line to reproduce this task until the quantity of line correspond to the length of these last: this procedure is called \textit{raster-scanning}. Afterward, we obtain a square shaped area of our sample. Moreover, as shown on figure (\ref{fig:afm_scan_dir_config}), multiple scanning modes are available like a double sens scan, that is to say, the tip re-run the scanned line instead of moving out it at the end point, or an horizontal/vertical direction scan, that is to say, the scanned line might be oriented North-South or East-West, and even a start/end point selector, among plenty of other configurations.
+Technically, even if in general an AFM can use different methods to scan the sample, in our case, the microscope use the \textit{Van der Waals} forces existing between the tip and the nanoparticles. These forces are responsible of the attraction between different molecules, for instance. Thereby, with no movement, the tip is in balance above the sample without touching it: this is a \textit{non-destructive} scanning tool. The height detector itself is composed of a laser reflecting on the end piece of the cantilever maintaining the tip. When we scan a sample, the tip attached to the cantilever and the laser are moving as a whole block and the tip oscillate around its balance position. In this way, if the tip moves up, compared to its small oscillations, because of a nanoparticle (or another kind of \textit{perturbartion}), the optical way runned by the light, and emitted from the laser, is shorter: we detect a height variation. Effectively, the same process happens when the tip moves down. Then, in order to scan a sample, the tip must move along an arbitrary line and, with a pre-defined length, must shift on the next line to reproduce this task until the quantity of line correspond to the length of these last: this procedure is called \textit{raster-scanning}. Afterward, we obtain a square shaped area of our sample. Moreover, multiple scanning modes are available like a double sens scan, that is to say, the tip re-run the scanned line instead of moving out it at the end point, or an horizontal/vertical direction scan, that is to say, the scanned line might be oriented North-South or East-West, and even a start/end point selector, among plenty of other configurations.
 Additionaly, as the tip is slightly oscillating around its balance position, it is possible to choose the amount of scanned \textit{points} as shown on figure (\ref{fig:afm_scan_point_config}), that is to say, the number of periods made compared to the advancement of the system (tip, cantilever and laser) corresponding to the amount of generating pixels for a line. 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.40\textwidth]{afm_scan_point_config.png}
     \caption{AFM Point Configurations}
@@ -551,21 +581,21 @@ Additionaly, as the tip is slightly oscillating around its balance position, it 
 This parameter, associated with the user-defined line's length, might increase or decrease the quality of the collected data. However, increasing the image resolution increases the scanning time by the same. As a rough idea, to scan a $200 \times 200$ nm square with $100$ points/pixels takes around $10$ minutes whereas, for a $50 \times 50$ nm area with $256$ points/pixels takes the same amount of time. Therefore, a precise distribution must be adopted between quality, surface and speed in order to collect enough data and retrieve the nanoparticle's size.
 
 In order to illustrate the whole procedure to retrieve the associated size of our studied particle, we will arbitrarily choose a nanosphere of silicon as shown on figure (\ref{fig:gwyddion_df_ex}).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_df_ex.png}
     \caption{Example Particle's Image (Dark Field)}
     \label{fig:gwyddion_df_ex}
 \end{figure}
-At first glance, knowing from \textbf{(ref for Søren paper)} that a blue scattered light is equivalent to the \textit{smallest} size ($\sim 50$ nm) whereas a red color means the \textit{biggest} one ($\sim 100$ nm), we can easily say that through the yellow-orange color emitted by this particle, we approximate $80$ nm of radius. However, we need more precision to check our simulation. Thereby, we use the AFM microscope and execute a scan of the targeted area. Collecting the final data with enough \textit{quality/pixels} to analyse, requires multiple scan in \textit{low quality} and \textit{large dimension} to locate the right particle. Finally, we obtain the following image (\ref{fig:gwyddion_scan_ex}), through the \textit{Gwyddion} software specialized in AFM data analysis, with a resolution of $256$ \textit{pixels/points} for the line's width.
-\begin{figure}[h]
+At first glance, knowing from \cite{arseniyandreymarkyuriboris} that a blue scattered light is equivalent to the \textit{smallest} size ($\sim 50$ nm) whereas a red color means the \textit{biggest} one ($\sim 100$ nm), we can easily say that through the yellow-orange color emitted by this particle, we approximate $80$ nm of radius. However, we need more precision to check our simulation. Thereby, we use the AFM microscope and execute a scan of the targeted area. Collecting the final data with enough \textit{quality/pixels} to analyse, requires multiple scan in \textit{low quality} and \textit{large dimension} to locate the right particle. Finally, we obtain the following image (\ref{fig:gwyddion_scan_ex}), through the \textit{Gwyddion} software specialized in AFM data analysis, with a resolution of $256$ \textit{pixels/points} for the line's width.
+\begin{figure}[h!]
     \centering
-    \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_scan_ex.png}
+    \includegraphics[width=0.40\textwidth, height=0.30\textwidth]{gwyddion_scan_ex.png}
     \caption{Example Particle's Scan}
     \label{fig:gwyddion_scan_ex}
 \end{figure}
 Note that the scan procedure, started from the bottom side, was aborted when the particle has entirely been scanned: that is why we observe a rectangular area instead of a squared one. Now, it is much more easier to visualize and get the proper data. As we can see, the shape of our particle is close to a disc although some residual silicon \textit{waste} on the North-East side. However this image don't reveal the exact diameter, even if we assume a spherical particle, because of the random pertubration on the edge due to the oscillations of the tip when encountering a particle. In this way, the height, being graduated thanks to a grey-scale put on the right, will give us the maximum of the scan. It is already possible to do a hypothesis and approximate the diameter as included between $160$ nm and $190$ nm. Then, we use a tool from the software, exctracting precisely the height scanned along a specific line as shown on figure (\ref{fig:gwyddion_mesure_ex}).
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.32\textwidth]{gwyddion_mesure_ex.png}
     \caption{Example Particle's Measurements}
@@ -573,56 +603,64 @@ Note that the scan procedure, started from the bottom side, was aborted when the
 \end{figure}
 The exctracted pattern was put on the arbitrary defined top of the particle, that is to say the most white part, producing an horizontal and vertical line in black and red respectively. Therefore, we can differentiate the height between the \textit{flat} area and the maximum in order to retrieve the diameter which is, in this case, $176.7$ nm giving approximately $88$ nm in radius and confirm our first hypothesis.
 
-\section{Discussion}
+\section{Comparison Between Experiments And Theory}
 
 In the end, we are able to confront experiment with simulation results. As a reminder, the procedure is to arbitrarily target a nanoparticle with the optical microsscope thanks to numbers sorted into a matrix shape. After getting the associated spectrum, that is to say the scattering cross section depending on the wavelength, we retrieve the associated size through the AFM microscope. This previous diameter is therefore the input for our simulation. Afterward, we compare the experiment's spectrum with the simulated one.
 
-Thereby, we obtain the following results for a group of particles with their radius included between, roughly, $60$ and $90$ nm. Note that the experimental curve (purple/pink color) doesn't own the same y-axis than the three others: due to the relation (\ref{eq:final_spectrum}), unite is not relevant anyway. However, each experimental function has the same scale for all graphs in order to visualize the maximum value increasing while the particle is growing and reciprocally.
+We obtain the following results for a group of particles with their radius included between, roughly, $60$ and $90$ nm. Note that the experimental curve (purple/pink color) doesn't own the same y-axis than the three others: due to the relation (\ref{eq:final_spectrum}), unite is not relevant anyway. However, each experimental function has the same scale for all graphs in order to visualize the maximum value increasing while the particle is growing and reciprocally.
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_65nm.png}
-    \caption{Spectrum for $65$ nm (radius)}
+    \caption{Spectrum For $65$ nm (Radius)}
     \label{fig:result_65nm}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_67nm.png}
-    \caption{Spectrum for $67$ nm (radius)}
+    \caption{Spectrum For $67$ nm (Radius)}
     \label{fig:result_67nm}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_81nm.png}
-    \caption{Spectrum for $81$ nm (radius)}
+    \caption{Spectrum For $81$ nm (Radius)}
     \label{fig:result_81nm}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_82nm.png}
-    \caption{Spectrum for $82$ nm (radius)}
+    \caption{Spectrum For $82$ nm (Radius)}
     \label{fig:result_82nm}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.38\textwidth, height=0.28\textwidth]{result_90nm.png}
-    \caption{Spectrum for $90$ nm (radius)}
+    \caption{Spectrum For $90$ nm (Radius)}
     \label{fig:result_90nm}
 \end{figure}
 
-As we can see, expect for the last one, the two first Mie resonances for both simulated and experienced match the same wavelength positions at approximately $5$ nm due to some \textit{human} errors in the retrieved size. However, the $90$ nm nanosphere doesn't fit the simulated expectations. A reasonable explanation could be the following: we saw that this particle is relatively close (at $100$ nm) to the $81$ nm then, due to the smaller size of this last one and some kind of \textit{influences}, the experimental curve is shifted to the left. In the same way, an additional resonance is appearing on the right for the $81$ nm particle. Moreover, the proximity of the golden number and its different refractive index could affect the experimental spectrum.
+As we can see, expect for the last one, the two first Mie resonances for both simulated and experienced match the same wavelength positions at approximately $5$ nm due to some \textit{human} errors in the retrieved size. However, the $90$ nm nanosphere doesn't fit the simulated expectations. A reasonable explanation could be the following: we saw that this particle is relatively close (at $100$ nm) to the $81$ nm then, due to the smaller size of this last one and some kind of \textit{influences}, the experimental curve is shifted to the left. In the same way, an additional resonance is appearing on the right for the $81$ nm particle. Moreover, the proximity of the gold marker and its different refractive index could affect the experimental spectrum.
 
-\begin{figure}[h]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=0.38\textwidth, height=0.30\textwidth]{curve_explanation.png}
-    \caption{Relative Positions for Explanation}
+    \caption{Relative Positions For Explanation}
     \label{fig:curve_explanation}
 \end{figure}
 
+\section{Conclusion}
+
 To conclude, thanks to the Mie theory and more precisely, the development of the scattered light for nanoparticles, it is possible to measure, or at least estimate, the associated size of a given nanosphere of silicon by studiying the two principal Mie resonances, that is to say evaluate their respective locations and compare with simulations from arbitrary sizes in order to retrieve these maximum on same positions.
+
+\section{Acknowledgement}
+
+A big thank you to Søren for his patience and his kindness as well as the \textit{Nanomade-Team} including Kirstine, Artyom, Avishek and Mudabar.
+
+\printbibliography
 
 \end{document}

@@ -1,0 +1,155 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{ynt/global//global/global}
+    \entry{craigdonald}{book}{}
+      \name{author}{2}{}{%
+        {{hash=a3cfa65ab661caf7d08f45b29f55386a}{%
+           family={Craig},
+           familyi={C\bibinitperiod},
+           given={F.\bibnamedelimi Bohren},
+           giveni={F\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=32bd44a7e49493f14a67df025267aa4b}{%
+           family={Donald},
+           familyi={D\bibinitperiod},
+           given={R.\bibnamedelimi Huffman},
+           giveni={R\bibinitperiod\bibinitdelim H\bibinitperiod}}}%
+      }
+      \strng{namehash}{78f87db31d1eb494e9e3b2a37677c010}
+      \strng{fullhash}{78f87db31d1eb494e9e3b2a37677c010}
+      \strng{bibnamehash}{78f87db31d1eb494e9e3b2a37677c010}
+      \strng{authorbibnamehash}{78f87db31d1eb494e9e3b2a37677c010}
+      \strng{authornamehash}{78f87db31d1eb494e9e3b2a37677c010}
+      \strng{authorfullhash}{78f87db31d1eb494e9e3b2a37677c010}
+      \field{labelalpha}{CD83}
+      \field{sortinit}{1}
+      \field{sortinithash}{50c6687d7fc80f50136d75228e3c59ba}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Absorption and Scattering of Light by Small Particles}
+      \field{year}{1983}
+      \keyw{physics}
+    \endentry
+    \entry{liangwu}{article}{}
+      \name{author}{1}{}{%
+        {{hash=d28cd152124b9519a1df01f898f985ac}{%
+           family={Liang-Wu},
+           familyi={L\bibinithyphendelim W\bibinitperiod},
+           given={Cai},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{d28cd152124b9519a1df01f898f985ac}
+      \strng{fullhash}{d28cd152124b9519a1df01f898f985ac}
+      \strng{bibnamehash}{d28cd152124b9519a1df01f898f985ac}
+      \strng{authorbibnamehash}{d28cd152124b9519a1df01f898f985ac}
+      \strng{authornamehash}{d28cd152124b9519a1df01f898f985ac}
+      \strng{authorfullhash}{d28cd152124b9519a1df01f898f985ac}
+      \field{labelalpha}{Lia10}
+      \field{sortinit}{2}
+      \field{sortinithash}{ed39bb39cf854d5250e95b1c1f94f4ed}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Elsevier, Computer Physics Communications}
+      \field{title}{On the computation of spherical Bessel functions of complex arguments}
+      \field{year}{2010}
+      \keyw{mathematics}
+    \endentry
+    \entry{arseniyandreymarkyuriboris}{article}{}
+      \name{author}{5}{}{%
+        {{hash=e33b8572c60d98032591e1bb4a5d58b5}{%
+           family={Arseniy},
+           familyi={A\bibinitperiod},
+           given={I.\bibnamedelimi Kuznetsov},
+           giveni={I\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=35e33dafb9b6dfa9a98187d3fe5003f5}{%
+           family={Andrey},
+           familyi={A\bibinitperiod},
+           given={E.\bibnamedelimi Miroshnichenko},
+           giveni={E\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
+        {{hash=f3d9e293833e1325b1bc02c566d217f1}{%
+           family={Mark},
+           familyi={M\bibinitperiod},
+           given={L.\bibnamedelimi Brongersma},
+           giveni={L\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+        {{hash=5a14547b6ba0ff08bee766f5a372ea44}{%
+           family={Yuri},
+           familyi={Y\bibinitperiod},
+           given={S.\bibnamedelimi Kivshar},
+           giveni={S\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+        {{hash=021011ea05b4055e934a965f77326e97}{%
+           family={Boris},
+           familyi={B\bibinitperiod},
+           given={Luk’yanchuk},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{d8d1ffd7afb3ffee5cfcac7ba6f676a5}
+      \strng{fullhash}{fd5a64e450d3d55ac4bfdd5fab58ac55}
+      \strng{bibnamehash}{d8d1ffd7afb3ffee5cfcac7ba6f676a5}
+      \strng{authorbibnamehash}{d8d1ffd7afb3ffee5cfcac7ba6f676a5}
+      \strng{authornamehash}{d8d1ffd7afb3ffee5cfcac7ba6f676a5}
+      \strng{authorfullhash}{fd5a64e450d3d55ac4bfdd5fab58ac55}
+      \field{labelalpha}{Ars+16}
+      \field{sortinit}{2}
+      \field{sortinithash}{ed39bb39cf854d5250e95b1c1f94f4ed}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{American Association for the Advancement of Science, Science}
+      \field{title}{Optically resonant dielectric nanostructures}
+      \field{year}{2016}
+      \keyw{physics}
+    \endentry
+    \entry{hiroshitakumaminoru}{article}{}
+      \name{author}{3}{}{%
+        {{hash=280b390589867aa0ebf48fa734348ef8}{%
+           family={Hiroshi},
+           familyi={H\bibinitperiod},
+           given={Sugimoto},
+           giveni={S\bibinitperiod}}}%
+        {{hash=2d305f449fca4f99c328af33bf8b012a}{%
+           family={Takuma},
+           familyi={T\bibinitperiod},
+           given={Okazaki},
+           giveni={O\bibinitperiod}}}%
+        {{hash=fcab461bb8a01bc537a8b21ec9cda1d3}{%
+           family={Minoru},
+           familyi={M\bibinitperiod},
+           given={Fujii},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{5cbbcb78d1c0a0d33bc07f54b3fcccd8}
+      \strng{fullhash}{5cbbcb78d1c0a0d33bc07f54b3fcccd8}
+      \strng{bibnamehash}{5cbbcb78d1c0a0d33bc07f54b3fcccd8}
+      \strng{authorbibnamehash}{5cbbcb78d1c0a0d33bc07f54b3fcccd8}
+      \strng{authornamehash}{5cbbcb78d1c0a0d33bc07f54b3fcccd8}
+      \strng{authorfullhash}{5cbbcb78d1c0a0d33bc07f54b3fcccd8}
+      \field{labelalpha}{HTM20}
+      \field{sortinit}{2}
+      \field{sortinithash}{ed39bb39cf854d5250e95b1c1f94f4ed}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{WILEY-VCH Verlag GmbH and Co. KGaA, Advanced Optical Materials}
+      \field{title}{Mie Resonator Color Inks of Monodispersed and Perfectly Spherical Crystalline Silicon Nanoparticles}
+      \field{year}{2020}
+      \keyw{physics}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
