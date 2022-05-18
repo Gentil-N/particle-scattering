@@ -226,7 +226,7 @@ We can now compute this power for the scattered electromagnetic field $(\textbf{
 C_{sca}=\frac{W_{s}}{I_{i}}=\frac{2\pi}{k^{2}}\sum_{n=1}^{\infty }(2n+1)(\left| a_{n} \right|^{2}+\left| b_{n} \right|^{2})
 \end{align}
 
-In the same way, all of these previous step from used to calculate $W_{s}$ might be re-used for any other fields instead of the field $(\textbf{E}_{s}, \textbf{H}_{s})$. Until now, only the light scattered by the particle was studied thanks to three fields: $(\textbf{E}_{i}, \textbf{H}_{i})$, $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$. However, it is possible to express a variable of extinction, opposed to the scattering \textit{power} $W_{s}$, due to the interaction between the electromagnetic plane wave and our particle:
+In the same way, all of these previous step used to calculate $W_{s}$ might be re-used for any other fields instead of the field $(\textbf{E}_{s}, \textbf{H}_{s})$. Until now, only the light scattered by the particle was studied thanks to three fields: $(\textbf{E}_{i}, \textbf{H}_{i})$, $(\textbf{E}_{s}, \textbf{H}_{s})$ and $(\textbf{E}_{I}, \textbf{H}_{I})$. However, it is possible to express a variable of extinction, opposed to the scattering \textit{power} $W_{s}$, due to the interaction between the electromagnetic plane wave and our particle:
 \begin{align}\label{eq:wext_ws_wa}
 W_{ext} = W_{s} + W_{a}
 \end{align}
@@ -311,7 +311,7 @@ z_{n-1}(x) &= \frac{2n+1}{x}z_{n}(x) - z_{n+1}(x)
 \end{align}
 that is called a \textit{downward recurrence} because of the decrement of $n$ for each calculated value. Despite these two recursive ways are strictly equivalent from a mathematical point of view, there is a not negligible difference between them. Indeed, taking into account boundaries of coding number (currently 64 bit for a common \textit{float}) and the behavior of spherical Bessel functions, it is possible, but tough, to demonstrate either the stability or the unstability for the first and second kind calculated through downward or upward recurrence. Otherwise, by a \textit{hand} way, we can easily retrieve these theoritical results by comparing our calculations with exact curves already tabulated:
 \begin{itemize}
-\item Stable by \textbf{upward} recurrency: 
+\item Stable by \textbf{upward} recurrence: 
 \begin{itemize}
 \item[*]$y_{n}, \forall x$
 \item[*]$j_{n}$, if $|x| \geqslant n$
@@ -505,7 +505,7 @@ As we can see, the incident direction is described as the edge of a cone and, du
     \caption{Dark Field Example}
     \label{fig:dark_field_ex}
 \end{figure}
-The figure (\ref{fig:dark_field_ex}) show an example of our actual sample viewed through the \textit{dark field} mode. Note that the we have a really high contrast and it possible to clearly recognize each color associated to a specific particle or another object.
+The figure (\ref{fig:dark_field_ex}) show an example of our actual sample viewed through the \textit{dark field} mode. Note that we have a really high contrast and it is possible to clearly recognize each color associated to a specific particle or another object.
 
 Then, to collect our wished spectrum, we have to reduce the detected light thanks to a slit. Thereby, only a few vertical area, with approximately $300$ nm of width, should be visible by the detector: the \textit{light noise} created by other particles, horizontally next to our studied nanosphere, is avoided. In fact, the computer software parse each horizontal lines in the \textit{extended-}visible range in order to collect the spectrum of this area: if two particles are on the same line, they will be treated as the same entity.
 \begin{figure}[h!]
