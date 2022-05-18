@@ -30,6 +30,7 @@ sorting=ynt
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.5\textwidth]{silicon_nanoparticles.png}
+    \label{fig:silicon_nanoparticles}
 
     Set Of Silicon Nanoparticles
 \end{figure}
@@ -113,7 +114,7 @@ The solution to (\ref{eq:wave_sph}) can be obtained by using separation of the v
 \end{align}
 Upon substituting (\ref{eq:psi_r_t_p}) into (\ref{eq:wave_sph}), we obtain three different equations, depending respectively on $r$, $\theta$ and $\phi$ which can be solved separately.
 
-This kind of generating function $\psi$ satisfying the scalar wave equation (\ref{eq:psi_wave_eq}) is expressed in an \textit{even} ($psi_e$) and \textit{odd} ($psi_o$) function as follows:
+This kind of generating function $\psi$ satisfying the scalar wave equation (\ref{eq:psi_wave_eq}) is expressed in an \textit{even} ($\psi_e$) and \textit{odd} ($\psi_o$) function as follows:
 \begin{align}
 \psi_{emn}&=\cos(m\phi)P_{n}^{m}(\cos\theta)z_{n}(kr)\\
 \psi_{omn}&=\sin(m\phi)P_{n}^{m}(\cos\theta)z_{n}(kr)
@@ -143,7 +144,7 @@ At this point of the theory, it is still possible to restrain our hypothesis and
 +A_{emn}\textbf{N}_{emn}+A_{omn}\textbf{N}_{omn}
 \end{aligned}
 \end{equation}
-where $B_{X}$ and $A_{X}$ are vector spherical harmonic associated factors. Thanks to the orthogonality of all the vector spherical harmonics which can be demonstrated through the properties of the functions $\cos(m\phi)$, $\sin(m\phi)$, and $P_{n}^{m}(\cos\theta)$ as well as the linear summation (\ref{eq:ei_harmo}), we explicitly have the associated factors as follow:
+where $B_{X}$ and $A_{X}$ are vector spherical harmonic associated factors. Thanks to the orthogonality of all the vector spherical harmonics which can be demonstrated through the properties of the functions $\cos(m\phi)$, $\sin(m\phi)$, and $P_{n}^{m}(\cos\theta)$ as well as the linear summation (\ref{eq:ei_harmo}), we explicitly have the associated factors as follows:
 \begin{align}\label{eq:bemn}
 \textbf{B}_{emn}=\frac{\int_{0}^{2\pi}\int_{0}^{\pi}\textbf{E}_{i}\cdot \textbf{M}_{emn}\sin\theta d\theta d\phi}{\int_{0}^{2\pi}\int_{0}^{\pi}|\textbf{M}_{emn}|^{2}\sin\theta d\theta d\phi}
 \end{align}
@@ -212,7 +213,7 @@ Therefore, we can explicitly write the vector spherical harmonic expansions $(\t
 
 \subsection{Cross Sections}
 
-From now on, we have enough theory to think about the experimental approach and fit all our requirements. As we can see on figure (\ref{fig:system}), this reference frame is standard in most physical areas, and our incomming plane wave is propagating along the z-axis. Thereby, our goal is currently is to calculate the net rate at which electromagnetic field crosses the surface A of an arbitrary sphere, which might be expressed as follow:
+From now on, we have enough theory to think about the experimental approach and fit all our requirements. As we can see on figure (\ref{fig:system}), this reference frame is standard in most physical areas, and our incomming plane wave is propagating along the z-axis. Thereby, our goal is currently to calculate the net rate at which electromagnetic field crosses the surface A of an arbitrary sphere, which might be expressed as follows:
 \begin{align}\label{eq:power_def}
 W=\int_{A}^{}\textbf{S}\cdot \textbf{e}_{r}dA
 \end{align}
@@ -308,23 +309,23 @@ we should be able to compute the next order $n=2$ for a given $x$ either real or
 \begin{align}\label{eq:sph_bess_down_rec}
 z_{n-1}(x) &= \frac{2n+1}{x}z_{n}(x) - z_{n+1}(x)
 \end{align}
-that is called a \textit{downward recurrence} because of the decrement of $n$ for each calculated value. Despite these two recursive ways are strictly equivalent from a mathematical point of view, there is a not negligible difference between them. Indeed, taking into account boundaries of coding number (currently 64 bit for a common \textit{float}) and the behavior of spherical Bessel functions, it is possible, but tough, to demonstrate either the stability or the unstability for the first and second kind calculated through downward or upward recurence. Otherwise, by a \textit{hand} way, we can easily retrieve these theoritical results by comparing our calculations with exact curves already tabulated:
+that is called a \textit{downward recurrence} because of the decrement of $n$ for each calculated value. Despite these two recursive ways are strictly equivalent from a mathematical point of view, there is a not negligible difference between them. Indeed, taking into account boundaries of coding number (currently 64 bit for a common \textit{float}) and the behavior of spherical Bessel functions, it is possible, but tough, to demonstrate either the stability or the unstability for the first and second kind calculated through downward or upward recurrence. Otherwise, by a \textit{hand} way, we can easily retrieve these theoritical results by comparing our calculations with exact curves already tabulated:
 \begin{itemize}
 \item Stable by \textbf{upward} recurrency: 
 \begin{itemize}
 \item[*]$y_{n}, \forall x$
 \item[*]$j_{n}$, if $|x| \geqslant n$
 \end{itemize}
-\item Stable by \textbf{downward} recurence:
+\item Stable by \textbf{downward} recurrence:
 \begin{itemize}
 \item[*]$j_{n}$, if $|x| < n$
 \end{itemize}
 \end{itemize}
-assuming that $\Re\{x\} \in\mathbb{R}_{+}$. Now, we can think about the programming steps in order to compute our spherical Bessel functions of the first and second kind through an upward recurrency: we get $j_{0}$/$y_{0}$ and $j_{1}$/$y_{1}$ from a given $x$ then, thanks to (\ref{eq:sph_bess_up_rec}), we compute all required order $j_{n}$/$y_{n}$ with $n \geqslant 2$. However, a question remains in a downward recurence: How to get starting Bessel function values for higher order $n=i$ and $n=i+1$?
+assuming that $\Re\{x\} \in\mathbb{R}_{+}$. Now, we can think about the programming steps in order to compute our spherical Bessel functions of the first and second kind through an upward recurrency: we get $j_{0}$/$y_{0}$ and $j_{1}$/$y_{1}$ from a given $x$ then, thanks to (\ref{eq:sph_bess_up_rec}), we compute all required order $j_{n}$/$y_{n}$ with $n \geqslant 2$. However, a question remains in a downward recurrence: How to get starting Bessel function values for higher order $n=i$ and $n=i+1$.
 
 Theoretically, it is well know that Bessel functions of the first kind $J_{n}$ satistfies the following relation:
 \begin{align}
-\forall\,x\,|\,Re\{x\} \in\mathbb{R}_{+}, \lim_{n \to \infty } J_{n}(x)=0
+\forall\,x\,|\,\Re\{x\} \in\mathbb{R}_{+}, \lim_{n \to \infty } J_{n}(x)=0
 \end{align}
 Thereby a common approach, called the \textit{Miller} method, is to suppose that our targeted higher order $i$ is arbitrarily equal to $1$ whereas the $i+1$ order is null. Afterward, we can easily pull down the order thanks to (\ref{eq:sph_bess_down_rec}). Once we obtain the first order $n=0$, because of the linearity of our recurrence relations, we \textit{normalize} this serie by the true value of $j_{0}(x)$. 
 
@@ -354,12 +355,12 @@ Unfortunately, a last issue still remains in our downward recurrency approach. S
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.5\textwidth]{jn_bug.png}
-    \caption{Downward Recurence \textit{bug} For $n=60$}
+    \caption{Downward Recurrence \textit{bug} For $n=60$}
     \label{fig:jn_bug}
 \end{figure}
 Note that zero values into $x = [0, 4]$ is due to the invalid state. This specific \textit{bugged} range is increasing if $n$ also increase: the \textit{real} dependency on $x$ of the downward reccurence relation (\ref{eq:sph_bess_down_rec}) is visible here.
 
-Therefore, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitrary minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon and allow to compute for $i=100$ in our case. A second solution is proposed by \textit{Liang-Wu} in \cite{liangwu}. In a more simple way, the idea is to divide the downward recurence into multiple chunks. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit for $64-bit$ numbers) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). It is important to notice that $\{j^{computed}_{50}...j^{computed}_{100}\}$ is larger term by term from $\{j^{computed}_{0}...j^{computed}_{50}\}$ due to the $n$ dependency included into the recurence relation but much less sensitive to the overflowing effect. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$. This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain much more wished order without overflowing the computer results as viewed on figure (\ref{fig:jn_bug}).
+Therefore, the first solution proposed in many other articles treating the \textit{Mie Theorie}, or more generally the computation of Bessel functions, is to set an arbitrary minimal value for $i$, that is to say $10^{-10}$ instead of $1$. However, this method will only postpone the phenomenon and allow to compute for $i=100$ in our case. A second solution is proposed by \textit{Liang-Wu} in \cite{liangwu}. In a more simple way, the idea is to divide the downward recurrence into multiple chunks. In fact, if we want $i=1000$ as a final order, we can calculate $j^{computed}_{X}$ from $n=0$ to $n=50$ (stability limit for $64-bit$ numbers) and apply a normalization as previously stated for this first chunk. Secondly, we compute a second chunk starting from $n=50$ to $n=100$ (actually, the computation begins with $n=100$ because of the downward behavior). It is important to notice that $\{j^{computed}_{50}...j^{computed}_{100}\}$ is larger term by term from $\{j^{computed}_{0}...j^{computed}_{50}\}$ due to the $n$ dependency included into the recurrence relation but much less sensitive to the overflowing effect. For the second chunk, we can normalize it by $j^{computed}_{50}$ from the first chunk, itself normalized by the exact $j_{0}(x)$. This method is chain-shaped and we recursively advance, chunk by chunk to finally obtain much more wished order without overflowing the computer results as viewed on figure (\ref{fig:jn_bug}).
 
 \subsection{Input Variables}
 
@@ -388,11 +389,12 @@ where $Sca$ is the scattering, $Ext$ the extinction and $Abs$ the absorbtion cro
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_var_real.png}
     \caption{Extinction, scattering, and absorption cross section for wavelength-dependent and real-valued refractive index}
 \end{figure}
-where we use the real part of measured refractive indices from another scientific experiment (Aspnes and Studna, 1983). We easily see that the main maximums, called \textit{Mie resonances}, are shifted to the right because of the higher value of the refractive index $N>3.5$, but this approach globally keep the previous shape. It is always remarkable that $C_{sca}=C_{ext}$. That is due to the real expression of the refractive index. Indeed, the absorbtion behavior of our material is mathematicaly implemented through the imaginary part of $N$. In this way, we should have $N=N_{re}+iN_{im}$ Thereby, when we use a complex varying index, we obtain:
+where we use the real part of measured refractive indices from another scientific experiment (Aspnes and Studna, 1983). We easily see that the main maximums, called \textit{Mie resonances}, are shifted to the right because of the higher value of the refractive index $N>3.5$, but this approach globally keep the previous shape. It is always remarkable that $C_{sca}=C_{ext}$. That is due to the real expression of the refractive index. Indeed, the absorbtion behavior of our material is mathematicaly implemented through the imaginary part of $N$. In this way, we should have $N=N_{re}+iN_{im}$ Thereby, when we use a complex varying index, we obtain (\ref{fig:ri_var_complex}).
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{ri_var_complex.png}
     \caption{Extinction, scattering, and absorption cross section for wavelength-dependent and complex refractive index}
+    \label{fig:ri_var_complex}
 \end{figure}
 Now, in addition to the previous shape then according to each Mie's resonance peak, we have a maximum of absorption describing the capacity of our particle to redistribute the energy of the incident light into another form, like a thermal energy. It is important to notice that the varying imaginary part can slightly change the position of the peak if it is high enough.
 
@@ -425,7 +427,7 @@ Secondly, as stated in the previous subsection, we have three $Input$ variables 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{sca_var.png}
-    \caption{$C_{sca}$ for three different Radius}
+    \caption{$C_{sca}$ For Three Different Radius}
     \label{fig:sca_var}
 \end{figure}
 \begin{figure}[h!]
@@ -440,7 +442,7 @@ If we reproduce our computations with, this time, the radius as a \textit{real} 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.5\textwidth, height=0.4\textwidth]{surface_sca.png}
-    \caption{$C_{sca}$ Depending On radius And Wavelength}
+    \caption{$C_{sca}$ Depending On Radius And Wavelength}
     \label{fig:surface_sca}
 \end{figure}
 \begin{figure}[h!]
@@ -482,7 +484,7 @@ These nanoparticles are placed on the glass substrate pieces thanks to a micropi
 
 \subsection{Optical Microscope}
 
-Now, our goal is to collect the spectrum from some interesting particles, preferably with a large distribution of size starting from $50$ nm to $100$ nm in radius. In order to select these wished particle and get the equivalent of scattering cross and extinction cross section, we have to use the \textit{optical} microscope. This tool is working like a \textit{basic} microscope, numerically connected to a computer where where recorded images might be seen through a normal screen, composed of $3$ different objectives and working with $2$ different modes of lighting: \textit{bright} and \textit{dark} field. The first one mode is a standard lighting: the ingoing light is emitted from the top part of the \textit{sample area} and the reflecting light is also collected from the top to be transfered to a detector and finally to the computer or directly to the \textit{user-eyes}.
+Now, our goal is to collect the spectrum from some interesting particles, preferably with a large distribution of size starting from $50$ nm to $100$ nm in radius. In order to select these wished particle and get the equivalent of scattering cross and extinction cross section, we have to use the \textit{optical} microscope. This tool is working like a \textit{basic} microscope, numerically connected to a computer where recorded images might be seen through a normal screen, composed of $3$ different objectives and working with $2$ different modes of lighting: \textit{bright} and \textit{dark} field. The first one mode is a standard lighting: the ingoing light is emitted from the top part of the \textit{sample area} and the reflecting light is also collected from the top to be transfered to a detector and finally to the computer or directly to the \textit{user-eyes}.
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.4\textwidth, height=0.35\textwidth]{bright_field_ex.png}
@@ -605,9 +607,9 @@ The exctracted pattern was put on the arbitrary defined top of the particle, tha
 
 \section{Comparison Between Experiments And Theory}
 
-In the end, we are able to confront experiment with simulation results. As a reminder, the procedure is to arbitrarily target a nanoparticle with the optical microsscope thanks to numbers sorted into a matrix shape. After getting the associated spectrum, that is to say the scattering cross section depending on the wavelength, we retrieve the associated size through the AFM microscope. This previous diameter is therefore the input for our simulation. Afterward, we compare the experiment's spectrum with the simulated one.
+In the end, we are able to confront experiment with simulation results. As a reminder, the procedure is to arbitrarily target a nanoparticle with the optical microscope thanks to numbers sorted into a matrix shape. After getting the associated spectrum, that is to say the scattering cross section depending on the wavelength, we retrieve the associated size through the AFM microscope. This previous diameter is therefore the input for our simulation. Afterward, we compare the experiment's spectrum with the simulated one.
 
-We obtain the following results for a group of particles with their radius included between, roughly, $60$ and $90$ nm. Note that the experimental curve (purple/pink color) doesn't own the same y-axis than the three others: due to the relation (\ref{eq:final_spectrum}), unite is not relevant anyway. However, each experimental function has the same scale for all graphs in order to visualize the maximum value increasing while the particle is growing and reciprocally.
+We obtain the following results for a group of particles with their radius included between, roughly, $60$ and $90$ nm. Note that the experimental curve (purple/pink color) doesn't own the same y-axis than the three others: due to the relation (\ref{eq:final_spectrum}), unit is not relevant anyway. However, each experimental function has the same scale for all graphs in order to visualize the maximum value increasing while the particle is growing and reciprocally.
 
 \begin{figure}[h!]
     \centering
