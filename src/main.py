@@ -270,28 +270,28 @@ REF_INDICES_RAW = load_ref_index("./res/refractive-index-silicon.csv")
 WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
 #plot_surface_sca_ext()
-#plot_coeff_sca_ext(100e-9)
+plot_coeff_sca_ext(100e-9)
 #plot_sca_ext(65e-9)
 
-x = np.linspace(0.1, 30, 1000)
-sjn_0 = []
-sjn_1 = []
-sjn_2 = []
-for coord in x:
-    curr_sjn = sj_downward_reccurence(coord, 240)
-    sjn_0.append(curr_sjn[0])
-    sjn_1.append(curr_sjn[1])
-    sjn_2.append(curr_sjn[2])
+#x = np.linspace(0.1, 30, 1000)
+#sjn_0 = []
+#sjn_1 = []
+#sjn_2 = []
+#for coord in x:
+#    curr_sjn = sj_downward_reccurence(coord, 240)
+#    sjn_0.append(curr_sjn[0])
+#    sjn_1.append(curr_sjn[1])
+#    sjn_2.append(curr_sjn[2])
 #syn_x = []
 #for i in range(ORDER_MAX):
     #sjn_x.append(special.spherical_jn(i, x))
     #syn_x.append(special.spherical_yn(i, x))
-plt.plot(x, sjn_0, label="j0")
-plt.plot(x, sjn_1, label="j1")
-plt.plot(x, sjn_2, label="j2")
-plt.legend()
-plt.xlim(left=0.0, right=30.0)
-plt.ylim(bottom=-1.0, top=1.0)
+#plt.plot(x, sjn_0, label="j0")
+#plt.plot(x, sjn_1, label="j1")
+#plt.plot(x, sjn_2, label="j2")
+#plt.legend()
+#plt.xlim(left=0.0, right=30.0)
+#plt.ylim(bottom=-1.0, top=1.0)
 
 #plt.plot(x, syn_x[0], label="y0")
 #plt.plot(x, syn_x[1], label="y1")
@@ -300,4 +300,4 @@ plt.ylim(bottom=-1.0, top=1.0)
 #plt.xlim(left=0)
 #plt.grid()
 #plt.legend()
-plt.show()
+#plt.show()
