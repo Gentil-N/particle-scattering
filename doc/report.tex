@@ -549,7 +549,7 @@ Now, if we extract the line corresponding to our studied particle, we obtain a w
 \end{figure}
 This particular shape, very far from our wished simulation results for nanosphere of silicon, is due to the additional \textit{background} and \textit{reference} data. In fact, we have to apply this formula for each pixel.
 \begin{align}\label{eq:final_spectrum}
-FinalSpectrum = \frac{RawSpectrum - Reference}{Background - Reference}
+FinalSpectrum = \frac{RawSpectrum - Background}{Reference - Background}
 \end{align}
 Note that $Background$ is not necessarly a \textit{per pixel} value but could be an average of all pixels stored in \textit{background} as stated previously. Thereby, we obtain the final spectrum, with for instance the figure (\ref{fig:spectrum_w_calc_ex}) from the particle in (\ref{fig:spectrum_wout_calc_ex}).
 \begin{figure}[h!]
