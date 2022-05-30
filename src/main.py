@@ -1,4 +1,5 @@
 from scipy import special
+from scipy import integrate
 from matplotlib import pyplot as plt
 from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
@@ -76,29 +77,36 @@ import math
 #        a = sj_array_single(z[i], n + 1)
 #        res[i] = a[n]
 #    return res
-
-def sj_downward_reccurence(z, nu):
-    count = nu + 1
-    jn = [0.0] * (count + 2);
-    jn[count + 1] = 0.0
-    jn[count] = 1.0
-    for i in range(count, 0, -1):
-        jn[i - 1] = (2 * i + 1) / z * jn[i] - jn[i + 1]
-        if (i - 1) < 3 and z > 8 and z < 10:
-            print(z, " ", i - 1, " ", jn[i - 1])
-    norm = math.sin(z) / z / jn[0]
-    for i in range(count):
-        jn[i] *= norm;
-    return jn
+#
+#def sj_downward_reccurence(z, nu):
+#    count = nu + 1
+#    jn = [0.0] * (count + 2);
+#    jn[count + 1] = 0.0
+#    jn[count] = 1.0
+#    for i in range(count, 0, -1):
+#        jn[i - 1] = (2 * i + 1) / z * jn[i] - jn[i + 1]
+#        if (i - 1) < 3 and z > 8 and z < 10:
+#            print(z, " ", i - 1, " ", jn[i - 1])
+#    norm = math.sin(z) / z / jn[0]
+#    for i in range(count):
+#        jn[i] *= norm;
+#    return jn
 
 ORDER = 3
-ORDER_MAX = ORDER + 1
+ORDER_LEN = ORDER + 1
 
 def psi_array(sjn, z):
     return sjn * z
 
 def xi_array(sjn, syn, z):
     return z * (sjn + complex(0, 1) * syn)
+
+def xi_der_array(xin, z):
+    xin_der = [complex(0.0)] * len(xin)
+    for i in range(1, len(xin_der) - 1):
+        xin_der[i] = xin[i - 1] - i * xin[i] / z
+    return xin_der
+    
 
 def d_array(psin, z):
     dn = [complex(0.0, 0.0)] * len(psin)
@@ -111,6 +119,16 @@ def d_array(psin, z):
         ndivz = i / z
         dn[i - 1] = ndivz - 1 / (dn[i] + ndivz)
     return dn
+
+def pi_tau_array(n_len, theta):
+    assert n_len >= 3
+    mu = math.cos(theta)
+    pi_tau_n = [(0.0, 0.0)] * n_len
+    pi_tau_n[0] = (0.0, 0.0)
+    pi_tau_n[1] = (1.0, mu * 1.0 - 2 * 0.0)
+    for i in range(2, len(pi_tau_n)):
+        pi_tau_n[i] = ((2 * i - 1) / (i - 1) * mu * pi_tau_n[i - 1][0] - i / (i - 1) * pi_tau_n[i - 2][0], i * mu * pi_tau_n[i][0] - (i + 1) * pi_tau_n[i - 1][0])
+    return pi_tau_n
 
 def a_array(m, psin, xin, dn, z):
     an = [complex(0.0, 0.0)] * len(psin)
@@ -126,6 +144,9 @@ def b_array(m, psin, xin, dn, z):
         bn[i] = (coeff_bi * psin[i] - psin[i - 1]) / (coeff_bi * xin[i] - xin[i - 1])
     return bn
 
+def en(n):
+    return complex(0.0, 1.0)**n * (2 * n + 1) / (n * (n+ 1))
+
 def load_ref_index(filename):
     ref_file = open(filename, 'r')
     lines = ref_file.readlines()
@@ -138,7 +159,7 @@ def load_ref_index(filename):
 
 def get_ref_index(data, wavelength):
     for i in range(len(data) - 1):
-        if data[i][0] < wavelength and data[i + 1][0] > wavelength:
+        if data[i][0] <= wavelength and data[i + 1][0] >= wavelength:
             alpha_re = (data[i + 1][1] - data[i][1]) / (data[i + 1][0] - data[i][0])
             gamma_re = data[i][1] - alpha_re * data[i][0]
             ref_re = alpha_re * wavelength + gamma_re
@@ -146,59 +167,151 @@ def get_ref_index(data, wavelength):
             gamma_im = data[i][2] - alpha_im * data[i][0]
             ref_im = alpha_im * wavelength + gamma_im
             return complex(ref_re, ref_im)
-    return complex(data[-1][1], data[-1][2])
+    return complex(data[0][1], data[0][2])
+
+#def theta_func_first(an, bn, xin, xin_der, theta):
+#    pi_tau_n = pi_tau_array(len(an), theta)
+#    sum_first = 0
+#    sum_second = 0
+#    for i in range(1, len(an)):
+#        sum_first += en(i) * (complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][1] - bn[i] * xin[i] * pi_tau_n[i][0])
+#        sum_second += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][0] - an[i] * xin[i] * pi_tau_n[i][1])
+#    return (sum_first * sum_second.conjugate()).real * math.sin(theta)
+#
+#def theta_func_second(an, bn, xin, xin_der, theta):
+#    pi_tau_n = pi_tau_array(len(an), theta)
+#    sum_first = 0
+#    sum_second = 0
+#    for i in range(1, len(an)):
+#        sum_first += en(i) * (bn[i] * xin[i] * pi_tau_n[i][1] - complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][0])
+#        sum_second += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][1] - an[i] * xin[i] * pi_tau_n[i][0])
+#    return (sum_first * sum_second.conjugate()).real * math.sin(theta)
+
+def theta_func(an, bn, xin, xin_der, theta):
+    pi_tau_n = pi_tau_array(len(an), theta)
+    sum_first = 0
+    sum_second = 0
+    sum_third = 0
+    sum_fourth = 0
+    for i in range(1, len(an)):
+        sum_first += en(i) * (complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][1] - bn[i] * xin[i] * pi_tau_n[i][0])
+        sum_second += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][0] - an[i] * xin[i] * pi_tau_n[i][1])
+        sum_third += en(i) * (bn[i] * xin[i] * pi_tau_n[i][1] - complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][0])
+        sum_fourth += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][1] - an[i] * xin[i] * pi_tau_n[i][0])
+    return (sum_first * sum_second.conjugate()).real * math.sin(theta) - (sum_third * sum_fourth.conjugate()).real * math.sin(theta)
+
+def trapz(func, inf, sup, div):
+    step = (sup - inf) / div
+    res = 0
+    for i in range(div):
+        a = i * step + inf
+        b = a + step
+        res += (func(a) + func(b)) * (step) / 2
+    return res
+
+def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, theta_sup, ref_indices_raw, wavelengths, particle_size):
+    medium_n = 1.0
+    upper_x = 2 * math.pi * medium_n * particle_size
+    res = np.zeros(len(wavelengths), dtype=float)
+    res_an = np.zeros(len(wavelengths), dtype=float)
+    res_bn = np.zeros(len(wavelengths), dtype=float)
+    for j in range(len(wavelengths)):
+        print(wavelengths[j])
+        x = upper_x / wavelengths[j]
+        m = get_ref_index(ref_indices_raw, wavelengths[j]) / medium_n
+        mx = m * x
+    
+        sjn_x = []
+        syn_x = []
+        psin_x = []
+        xin_x = []
+        xin_der_x = []
+        sjn_mx = []
+        psin_mx = []
+        dn_mx = []
+        for i in range(ORDER_LEN):
+            sjn_x.append(special.spherical_jn(i, x))
+            syn_x.append(special.spherical_yn(i, x))
+            psin_x.append(psi_array(sjn_x[i], x))
+            xin_x.append(xi_array(sjn_x[i], syn_x[i], x))
+
+            sjn_mx.append(special.spherical_jn(i, mx))
+            psin_mx.append(psi_array(sjn_mx[i], mx))
+
+        xin_der_x = xi_der_array(xin_x, x)
+        dn_mx = d_array(psin_mx, mx)
+        an = a_array(m, psin_x, xin_x, dn_mx, x)
+        bn = b_array(m, psin_x, xin_x, dn_mx, x)
+
+        #phi_mul = wavelengths[j]**2 / (4 * math.pi**2 * 3*10e8 * 4 * math.pi * 10e-7)
+        #integ_phi_first = phi_mul * trapz(lambda phi: math.cos(phi)**2, phi_inf, phi_sup, 100)
+        #integ_phi_second = phi_mul * trapz(lambda phi: math.sin(phi)**2, phi_inf, phi_sup, 100)
+        mul = 0.5 * wavelengths[j]**2 / (4 * math.pi**2 * 3 * 10e8 * 4 * math.pi * 10e-7) / (particle_size**2 * math.pi)
+        #integ_theta_first = trapz(lambda theta: theta_func_first(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
+        #integ_theta_second = trapz(lambda theta: theta_func_second(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
+        integ_theta = trapz(lambda theta: theta_func(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
+
+        res[j] = mul * (integ_theta)
+        #mul = wavelengths[j]**2 / (2 * math.pi) / (particle_size**2 * math.pi)
+        #res_an[j] = mul * (3 * an[1].real**2 + an[1].imag**2 + 5 * an[2].real**2 + an[2].imag**2 + 7 * an[3].real**2 + an[3].imag**2)
+        #res_bn[j] = mul * (3 * bn[1].real**2 + bn[1].imag**2 + 5 * bn[2].real**2 + bn[2].imag**2 + 7 * bn[3].real**2 + bn[3].imag**2)
+
+    return (res, res_an, res_bn)
 
 def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
     medium_n = 1.0
     upper_x = 2 * math.pi * medium_n * particle_size
-    x = upper_x / wavelengths
-    m = np.zeros(len(wavelengths), dtype=complex)
-    mx = np.zeros(len(wavelengths), dtype=complex)
-    for i in range(len(wavelengths)):
-        m[i] = get_ref_index(ref_indices_raw, wavelengths[i]) / medium_n
-        mx[i] = m[i] * x[i]
+    res_csa = np.zeros(len(wavelengths), dtype=float)
+    res_ext = np.zeros(len(wavelengths), dtype=float)
+    res_csa_an = np.zeros(len(wavelengths), dtype=float)
+    res_csa_bn = np.zeros(len(wavelengths), dtype=float)
+    res_ext_an = np.zeros(len(wavelengths), dtype=float)
+    res_ext_bn = np.zeros(len(wavelengths), dtype=float)
+    for j in range(len(wavelengths)):
+        x = upper_x / wavelengths[j]
+        m = get_ref_index(ref_indices_raw, wavelengths[j]) / medium_n
+        mx = m * x
 
-    sjn_x = []
-    syn_x = []
-    psin_x = []
-    xin_x = []
-    sjn_mx = []
-    psin_mx = []
-    dn_mx = []
-    for i in range(ORDER_MAX):
-        sjn_x.append(special.spherical_jn(i, x))
-        syn_x.append(special.spherical_yn(i, x))
-        psin_x.append(psi_array(sjn_x[i], x))
-        xin_x.append(xi_array(sjn_x[i], syn_x[i], x))
+        sjn_x = []
+        syn_x = []
+        psin_x = []
+        xin_x = []
+        sjn_mx = []
+        psin_mx = []
+        dn_mx = []
+        for i in range(ORDER_LEN):
+            sjn_x.append(special.spherical_jn(i, x))
+            syn_x.append(special.spherical_yn(i, x))
+            psin_x.append(psi_array(sjn_x[i], x))
+            xin_x.append(xi_array(sjn_x[i], syn_x[i], x))
 
-        sjn_mx.append(special.spherical_jn(i, mx))
-        psin_mx.append(psi_array(sjn_mx[i], mx))
+            sjn_mx.append(special.spherical_jn(i, mx))
+            psin_mx.append(psi_array(sjn_mx[i], mx))
 
-    dn_mx = d_array(psin_mx, mx)
-    an = a_array(m, psin_x, xin_x, dn_mx, x)
-    bn = b_array(m, psin_x, xin_x, dn_mx, x)
-    mul = (wavelengths / medium_n)**2 / (2 * math.pi) / (particle_size**2 * math.pi)
+        dn_mx = d_array(psin_mx, mx)
+        an = a_array(m, psin_x, xin_x, dn_mx, x)
+        bn = b_array(m, psin_x, xin_x, dn_mx, x)
+        mul = (wavelengths[j] / medium_n)**2 / (2 * math.pi) / (particle_size**2 * math.pi)
 
-    part_res_csa = [0] * ORDER_MAX
-    part_res_ext = [0] * ORDER_MAX
-    part_res_csa_an = [0] * ORDER_MAX
-    part_res_csa_bn = [0] * ORDER_MAX
-    part_res_ext_an = [0] * ORDER_MAX
-    part_res_ext_bn = [0] * ORDER_MAX
-    for i in range(1, ORDER_MAX):
-        part_res_csa_an[i] = (2 * i + 1) * (an[i].real**2 + an[i].imag**2)
-        part_res_csa_bn[i] = (2 * i + 1) * (bn[i].real**2 + bn[i].imag**2)
-        part_res_ext_an[i] = (2 * i + 1) * an[i].real
-        part_res_ext_bn[i] = (2 * i + 1) * bn[i].real
-        part_res_csa[i] = part_res_csa_an[i] + part_res_csa_bn[i]
-        part_res_ext[i] = part_res_ext_an[i] + part_res_ext_bn[i]
-    res_csa_an = mul * sum(part_res_csa_an)
-    res_csa_bn = mul * sum(part_res_csa_bn)
-    res_ext_an = mul * sum(part_res_ext_an)
-    res_ext_bn = mul * sum(part_res_ext_bn)
-    res_csa = mul * sum(part_res_csa)
-    res_ext = mul * sum(part_res_ext)
-
+        part_res_csa = [0] * ORDER_LEN
+        part_res_ext = [0] * ORDER_LEN
+        part_res_csa_an = [0] * ORDER_LEN
+        part_res_csa_bn = [0] * ORDER_LEN
+        part_res_ext_an = [0] * ORDER_LEN
+        part_res_ext_bn = [0] * ORDER_LEN
+        for i in range(1, ORDER_LEN):
+            part_res_csa_an[i] = (2 * i + 1) * (an[i].real**2 + an[i].imag**2)
+            part_res_csa_bn[i] = (2 * i + 1) * (bn[i].real**2 + bn[i].imag**2)
+            part_res_ext_an[i] = (2 * i + 1) * an[i].real
+            part_res_ext_bn[i] = (2 * i + 1) * bn[i].real
+            part_res_csa[i] = part_res_csa_an[i] + part_res_csa_bn[i]
+            part_res_ext[i] = part_res_ext_an[i] + part_res_ext_bn[i]
+        res_csa_an[j] = mul * sum(part_res_csa_an)
+        res_csa_bn[j] = mul * sum(part_res_csa_bn)
+        res_ext_an[j] = mul * sum(part_res_ext_an)
+        res_ext_bn[j] = mul * sum(part_res_ext_bn)
+        res_csa[j] = mul * sum(part_res_csa)
+        res_ext[j] = mul * sum(part_res_ext)
     return (res_csa, res_ext, res_csa_an, res_csa_bn, res_ext_an, res_ext_bn)
 
 def plot_surface_sca_ext():
@@ -236,15 +349,15 @@ def plot_coeff_sca_ext(particle_size):
     #axs.plot(WAVELENGTHS, res[1])
     ax0.set_title("Scattering Cross Section with Coeff")
     ax0.plot(WAVELENGTHS, res[0], label="Sca Total")
-    ax0.plot(WAVELENGTHS, res[2], label="\'an\'")
-    ax0.plot(WAVELENGTHS, res[3], label="\'bn\'")
+    ax0.plot(WAVELENGTHS, res[2], label="\'an\'", color='red')
+    ax0.plot(WAVELENGTHS, res[3], label="\'bn\'", color='green')
     ax0.set(xlabel="wavelength")
     ax0.legend()
     ax0.grid()
     ax1.set_title("Extinction Cross Section with coeff")
     ax1.plot(WAVELENGTHS, res[1], label="Ext Total")
-    ax1.plot(WAVELENGTHS, res[4], label="\'an\'")
-    ax1.plot(WAVELENGTHS, res[5], label="\'bn\'")
+    ax1.plot(WAVELENGTHS, res[4], label="\'an\'", color='red')
+    ax1.plot(WAVELENGTHS, res[5], label="\'bn\'", color='green')
     ax1.set(xlabel="wavelength")
     ax1.legend()
     ax1.grid()
@@ -258,10 +371,35 @@ def plot_sca_ext(particle_size):
     ax0.plot(WAVELENGTHS, res[0], label="Sca")
     ax0.plot(WAVELENGTHS, res[1], label="Ext")
     ax0.plot(WAVELENGTHS, res[1] - res[0], label="Abs")
+    ax0.set(xlabel="wavelength")
     ax0.legend()
     ax0.grid()
     plt.show()
 
+def plot_ref_indices():
+    fig0 = plt.figure(num=0)
+    ax0 = fig0.subplots(nrows=1, ncols=1)
+    ref_real = []
+    ref_imag = []
+    for wavelength in WAVELENGTHS:
+        ref_real.append(get_ref_index(REF_INDICES_RAW, wavelength).real)
+        ref_imag.append(get_ref_index(REF_INDICES_RAW, wavelength).imag)
+    ax0.set_title("Refractive Indices")
+    ax0.plot(WAVELENGTHS, ref_real, color='cyan')
+    ax0.plot(WAVELENGTHS, ref_imag, color='#EBC23A')
+    ax0.grid()
+    plt.show()
+
+def plot_integ_sca(particle_size):
+    res = compute_integrated_scattering_cross_section(0, 2 * math.pi, 0, math.pi, REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    fig0 = plt.figure(num=0)
+    ax0 = fig0.subplots(nrows=1, ncols=1)
+    ax0.set_title("Scattering Cross Sections")
+    ax0.plot(WAVELENGTHS, res[0], label="Sca")
+    ax0.set(xlabel="wavelength")
+    ax0.legend()
+    ax0.grid()
+    plt.show()
 
 ####################### MAIN #######################
 
@@ -270,8 +408,10 @@ REF_INDICES_RAW = load_ref_index("./res/refractive-index-silicon.csv")
 WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
 #plot_surface_sca_ext()
-plot_coeff_sca_ext(100e-9)
-#plot_sca_ext(65e-9)
+#plot_coeff_sca_ext(80e-9)
+#plot_sca_ext(90e-9)
+#plot_ref_indices()
+plot_integ_sca(90e-9)
 
 #x = np.linspace(0.1, 30, 1000)
 #sjn_0 = []

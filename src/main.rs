@@ -992,7 +992,7 @@ fn integ_whole_particle(
     mul * integ * 350.0
 }
 
-
+/*
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(1000);
@@ -1063,9 +1063,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}
+}*/
 
-/*
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut c_sca: Vec<(f64, f64)> = Vec::with_capacity(500);
@@ -1100,4 +1100,4 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     Ok(())
-}*/
+}
