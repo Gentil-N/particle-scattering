@@ -5,6 +5,7 @@ from matplotlib.cm import ScalarMappable
 from matplotlib.colors import Normalize
 import numpy as np
 import math
+import cmath
 
 #def sy_array_single(z, n):
 #    y0 = -math.cos(z) / z
@@ -92,6 +93,62 @@ import math
 #        jn[i] *= norm;
 #    return jn
 
+def sy_array(z, n):
+    y0 = -cmath.cos(z) / z;
+    if n == 0:
+        return [y0]
+    y1 = -cmath.cos(z) / (z * z) - cmath.sin(z) / z
+    if n == 1:
+        return [y0, y1]
+    yn = [complex(0.0, 0.0)] * (n + 1)
+    yn[0] = y0
+    yn[1] = y1
+    for i in range(2, n + 1):
+        yn[i] = (2 * i + 1) / z * yn[i - 1] - yn[i - 2]
+    return yn
+
+def sj_upward_reccurence(z, n):
+    count = n + 1
+    jn = [complex(0.0, 0.0)] * count
+    jn[0] = cmath.sin(z) / z
+    jn[1] = cmath.sin(z) / (z**2) - cmath.cos(z) / z
+    for i in range(1, count - 1):
+        jn[i + 1] = (2 * i + 1) / z * jn[i] - jn[i - 1]
+    return jn
+
+def sj_downward_reccurence(z, nl, nu):
+    count = nu - nl + 1
+    jn = [complex(0.0, 0.0)] * (count + 2)
+    jn[count + 1] = complex(0.0, 0.0)
+    jn[count] = complex(1.0, 0.0)
+    for i in range(count, 0, -1):
+        jn[i - 1] = (2 * i + 1) / z * jn[i] - jn[i + 1]
+    jn = jn[:count]
+    return jn
+
+def sj_array(z, n):
+    if abs(z) > n / 2.0:
+        return sj_upward_reccurence(z, n)
+    else:
+        PACK = 50
+        num_big_loop = int(n / PACK)
+        jn_all = []
+        for i in range(0,num_big_loop):
+            jn_all.append(sj_downward_reccurence(z, i * PACK, (i + 1) * PACK))
+        rest = n % PACK
+        if rest != 0:
+            jn_all.append(sj_downward_reccurence(z, n - rest, n))
+
+        jn = []
+        norm = cmath.sin(z) / z / jn_all[0][0]
+        for i in range(len(jn_all[0])):
+            jn.append(jn_all[0][i] * norm)
+        for i in range(1,len(jn_all)):
+            norm = jn[-1] / jn_all[i][0]
+            for k in range(1, len(jn_all[i])):
+                jn.append(jn_all[i][k] * norm)
+        return jn
+
 ORDER = 3
 ORDER_LEN = ORDER + 1
 
@@ -103,7 +160,7 @@ def xi_array(sjn, syn, z):
 
 def xi_der_array(xin, z):
     xin_der = [complex(0.0)] * len(xin)
-    for i in range(1, len(xin_der) - 1):
+    for i in range(1, len(xin_der)):
         xin_der[i] = xin[i - 1] - i * xin[i] / z
     return xin_der
     
@@ -127,7 +184,8 @@ def pi_tau_array(n_len, theta):
     pi_tau_n[0] = (0.0, 0.0)
     pi_tau_n[1] = (1.0, mu * 1.0 - 2 * 0.0)
     for i in range(2, len(pi_tau_n)):
-        pi_tau_n[i] = ((2 * i - 1) / (i - 1) * mu * pi_tau_n[i - 1][0] - i / (i - 1) * pi_tau_n[i - 2][0], i * mu * pi_tau_n[i][0] - (i + 1) * pi_tau_n[i - 1][0])
+        curr_pi = (2 * i - 1) / (i - 1) * mu * pi_tau_n[i - 1][0] - i / (i - 1) * pi_tau_n[i - 2][0]
+        pi_tau_n[i] = (curr_pi, i * mu * curr_pi - (i + 1) * pi_tau_n[i - 1][0])
     return pi_tau_n
 
 def a_array(m, psin, xin, dn, z):
@@ -169,23 +227,23 @@ def get_ref_index(data, wavelength):
             return complex(ref_re, ref_im)
     return complex(data[0][1], data[0][2])
 
-#def theta_func_first(an, bn, xin, xin_der, theta):
-#    pi_tau_n = pi_tau_array(len(an), theta)
-#    sum_first = 0
-#    sum_second = 0
-#    for i in range(1, len(an)):
-#        sum_first += en(i) * (complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][1] - bn[i] * xin[i] * pi_tau_n[i][0])
-#        sum_second += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][0] - an[i] * xin[i] * pi_tau_n[i][1])
-#    return (sum_first * sum_second.conjugate()).real * math.sin(theta)
-#
-#def theta_func_second(an, bn, xin, xin_der, theta):
-#    pi_tau_n = pi_tau_array(len(an), theta)
-#    sum_first = 0
-#    sum_second = 0
-#    for i in range(1, len(an)):
-#        sum_first += en(i) * (bn[i] * xin[i] * pi_tau_n[i][1] - complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][0])
-#        sum_second += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][1] - an[i] * xin[i] * pi_tau_n[i][0])
-#    return (sum_first * sum_second.conjugate()).real * math.sin(theta)
+def theta_func_first(an, bn, xin, xin_der, theta):
+    pi_tau_n = pi_tau_array(len(an), theta)
+    sum_first = 0
+    sum_second = 0
+    for i in range(1, len(an)):
+        sum_first += en(i) * (complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][1] - bn[i] * xin[i] * pi_tau_n[i][0])
+        sum_second += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][0] - an[i] * xin[i] * pi_tau_n[i][1])
+    return (sum_first * sum_second.conjugate()).real * math.sin(theta)
+
+def theta_func_second(an, bn, xin, xin_der, theta):
+    pi_tau_n = pi_tau_array(len(an), theta)
+    sum_first = 0
+    sum_second = 0
+    for i in range(1, len(an)):
+        sum_first += en(i) * (bn[i] * xin[i] * pi_tau_n[i][1] - complex(0.0, 1.0) * an[i] * xin_der[i] * pi_tau_n[i][0])
+        sum_second += en(i) * (complex(0.0, 1.0) * bn[i] * xin_der[i] * pi_tau_n[i][1] - an[i] * xin[i] * pi_tau_n[i][0])
+    return (sum_first * sum_second.conjugate()).real * math.sin(theta)
 
 def theta_func(an, bn, xin, xin_der, theta):
     pi_tau_n = pi_tau_array(len(an), theta)
@@ -206,7 +264,7 @@ def trapz(func, inf, sup, div):
     for i in range(div):
         a = i * step + inf
         b = a + step
-        res += (func(a) + func(b)) * (step) / 2
+        res += (func(a) + func(b)) * (step) # ÷ 2
     return res
 
 def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, theta_sup, ref_indices_raw, wavelengths, particle_size):
@@ -244,14 +302,14 @@ def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, the
         bn = b_array(m, psin_x, xin_x, dn_mx, x)
 
         #phi_mul = wavelengths[j]**2 / (4 * math.pi**2 * 3*10e8 * 4 * math.pi * 10e-7)
-        #integ_phi_first = phi_mul * trapz(lambda phi: math.cos(phi)**2, phi_inf, phi_sup, 100)
-        #integ_phi_second = phi_mul * trapz(lambda phi: math.sin(phi)**2, phi_inf, phi_sup, 100)
+        integ_phi_first = trapz(lambda phi: math.cos(phi)**2, phi_inf, phi_sup, 100)
+        integ_phi_second = trapz(lambda phi: math.sin(phi)**2, phi_inf, phi_sup, 100)
         mul = 0.5 * wavelengths[j]**2 / (4 * math.pi**2 * 3 * 10e8 * 4 * math.pi * 10e-7) / (particle_size**2 * math.pi)
-        #integ_theta_first = trapz(lambda theta: theta_func_first(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
-        #integ_theta_second = trapz(lambda theta: theta_func_second(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
-        integ_theta = trapz(lambda theta: theta_func(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
+        integ_theta_first = trapz(lambda theta: theta_func_first(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
+        integ_theta_second = trapz(lambda theta: theta_func_second(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
+        #integ_theta = trapz(lambda theta: theta_func(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
 
-        res[j] = mul * (integ_theta)
+        res[j] = (integ_phi_first * integ_theta_first - integ_phi_second * integ_theta_second) * mul
         #mul = wavelengths[j]**2 / (2 * math.pi) / (particle_size**2 * math.pi)
         #res_an[j] = mul * (3 * an[1].real**2 + an[1].imag**2 + 5 * an[2].real**2 + an[2].imag**2 + 7 * an[3].real**2 + an[3].imag**2)
         #res_bn[j] = mul * (3 * bn[1].real**2 + bn[1].imag**2 + 5 * bn[2].real**2 + bn[2].imag**2 + 7 * bn[3].real**2 + bn[3].imag**2)
@@ -412,6 +470,30 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plot_sca_ext(90e-9)
 #plot_ref_indices()
 plot_integ_sca(90e-9)
+
+#x = np.linspace(0, 2 * math.pi, 100)
+#pi2 = []
+#pi3 = []
+#pi4 = []
+#tau1 = []
+#tau2 = []
+#tau3 = []
+#for coord in x:
+#    pitau = pi_tau_array(10, coord)
+#    pi2.append(pitau[2][0])
+#    pi3.append(pitau[3][0])
+#    pi4.append(pitau[4][0])
+#    tau1.append(pitau[1][1])
+#    tau2.append(pitau[2][1])
+#    tau3.append(pitau[3][1])
+#plt.plot(x, pi2, label="pi2")
+#plt.plot(x, pi3, label="pi3")
+#plt.plot(x, pi4, label="pi4")
+#plt.plot(x, tau1, label="tau1")
+#plt.plot(x, tau2, label="tau2")
+#plt.plot(x, tau3, label="tau3")
+#plt.legend()
+#plt.show()
 
 #x = np.linspace(0.1, 30, 1000)
 #sjn_0 = []
