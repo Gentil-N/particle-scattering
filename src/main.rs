@@ -975,7 +975,7 @@ fn integ_whole_particle(
         / (8.0 * PI * C * medium_mu * std::f64::consts::PI * particle_size.powi(2));
     let x = 2.0 * PI * medium_n * particle_size / wavelength;
     let m = ref_index / medium_n;
-    let step = PI / div as f64;
+    let step = PI / 2.0 / div as f64;
 
     let mut data = Vec::<(f64, f64)>::with_capacity(div + 1);
     for i in 0..=div {
@@ -1082,7 +1082,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     for i in 0..=499 {
         let current_wavelength = wavelength_boundaries.0 + step * (i + 1) as f64;
         let ref_index = get_ref_index(&ref_indices, current_wavelength * 1e6);
-        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 90e-9, 1.0, max_n, 500);
+        let c_csa_local = integ_whole_particle(current_wavelength, medium_n, MU_0, ref_index, 60e-9, 1.0, max_n, 500);
         println!("{} /// {}", i, c_csa_local);
         c_sca.push((current_wavelength, c_csa_local));
     }

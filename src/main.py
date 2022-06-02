@@ -264,15 +264,13 @@ def trapz(func, inf, sup, div):
     for i in range(div):
         a = i * step + inf
         b = a + step
-        res += (func(a) + func(b)) * (step) # ÷ 2
+        res += (func(a) + func(b)) * (step) / 2
     return res
 
 def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, theta_sup, ref_indices_raw, wavelengths, particle_size):
     medium_n = 1.0
     upper_x = 2 * math.pi * medium_n * particle_size
     res = np.zeros(len(wavelengths), dtype=float)
-    res_an = np.zeros(len(wavelengths), dtype=float)
-    res_bn = np.zeros(len(wavelengths), dtype=float)
     for j in range(len(wavelengths)):
         print(wavelengths[j])
         x = upper_x / wavelengths[j]
@@ -304,7 +302,7 @@ def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, the
         #phi_mul = wavelengths[j]**2 / (4 * math.pi**2 * 3*10e8 * 4 * math.pi * 10e-7)
         integ_phi_first = trapz(lambda phi: math.cos(phi)**2, phi_inf, phi_sup, 100)
         integ_phi_second = trapz(lambda phi: math.sin(phi)**2, phi_inf, phi_sup, 100)
-        mul = 0.5 * wavelengths[j]**2 / (4 * math.pi**2 * 3 * 10e8 * 4 * math.pi * 10e-7) / (particle_size**2 * math.pi)
+        mul = 0.5 * wavelengths[j]**2 * 0.318 / (2 * math.pi) / (particle_size**2 * math.pi)
         integ_theta_first = trapz(lambda theta: theta_func_first(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
         integ_theta_second = trapz(lambda theta: theta_func_second(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
         #integ_theta = trapz(lambda theta: theta_func(an, bn, xin_x, xin_der_x, theta), theta_inf, theta_sup, 100)
@@ -314,7 +312,7 @@ def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, the
         #res_an[j] = mul * (3 * an[1].real**2 + an[1].imag**2 + 5 * an[2].real**2 + an[2].imag**2 + 7 * an[3].real**2 + an[3].imag**2)
         #res_bn[j] = mul * (3 * bn[1].real**2 + bn[1].imag**2 + 5 * bn[2].real**2 + bn[2].imag**2 + 7 * bn[3].real**2 + bn[3].imag**2)
 
-    return (res, res_an, res_bn)
+    return res
 
 def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
     medium_n = 1.0
@@ -449,11 +447,15 @@ def plot_ref_indices():
     plt.show()
 
 def plot_integ_sca(particle_size):
-    res = compute_integrated_scattering_cross_section(0, 2 * math.pi, 0, math.pi, REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    res0 = compute_integrated_scattering_cross_section(0, 2 * math.pi, 0, math.pi / 2, REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    #res1 = compute_integrated_scattering_cross_section(0, 2 * math.pi, 0, math.pi * 0.57, REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    #res_exact = compute_cross_sections(REF_INDICES_RAW, WAVELENGTHS, particle_size)
     fig0 = plt.figure(num=0)
     ax0 = fig0.subplots(nrows=1, ncols=1)
     ax0.set_title("Scattering Cross Sections")
-    ax0.plot(WAVELENGTHS, res[0], label="Sca")
+    ax0.plot(WAVELENGTHS, res0, label="Integrated")
+    #ax0.plot(WAVELENGTHS, res1, label="Integrated")
+    #ax0.plot(WAVELENGTHS, res_exact[0], label="Exact")
     ax0.set(xlabel="wavelength")
     ax0.legend()
     ax0.grid()
@@ -469,7 +471,7 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plot_coeff_sca_ext(80e-9)
 #plot_sca_ext(90e-9)
 #plot_ref_indices()
-plot_integ_sca(90e-9)
+plot_integ_sca(60e-9)
 
 #x = np.linspace(0, 2 * math.pi, 100)
 #pi2 = []
