@@ -378,12 +378,20 @@ def compute_cross_sections_triangle(mul, an, bn, xin_x, xin_der_x, phi_theta_1, 
     v2 = (1/6) * (f + e) * c * h
     return mul * (v1 + v2)
 
+def compute_cross_sections_square(mul, an, bn, xin_x, xin_der_x, phi_theta, phi_step, theta_step):
+    c = math.cos(phi_theta[0])**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1]) - math.sin(phi_theta[0])**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1])
+    d = math.cos(phi_theta[0] + phi_step)**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1]) - math.sin(phi_theta[0] + phi_step)**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1])
+    e = math.cos(phi_theta[0] + phi_step)**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step) - math.sin(phi_theta[0] + phi_step)**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step)
+    f = math.cos(phi_theta[0])**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step) - math.sin(phi_theta[0])**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step)
+    h = (c + d + e + f) / 4
+    return phi_step * theta_step * h
+
 def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, particle_size):
     medium_n = 1.0
     upper_x = 2 * math.pi * medium_n * particle_size
     res = np.zeros(len(wavelengths), dtype=float)
     for j in range(len(wavelengths)):
-        print(wavelengths[j])
+        #print(wavelengths[j])
         x = upper_x / wavelengths[j]
         m = get_ref_index(ref_indices_raw, wavelengths[j]) / medium_n
         mx = m * x
@@ -412,20 +420,22 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
         mul = 0.5 * wavelengths[j]**2 * 0.318 / (2 * math.pi) / (particle_size**2 * math.pi)
 
         curr_res = 0
-        div = 100
+        div = 20
         phi_step = 2 * math.pi / div
         theta_step = math.pi / div
         for i in range(div):
-            for j in range(div):
+            for k in range(div):
                 curr_phi = i * phi_step
-                curr_theta = j * theta_step
+                curr_theta = k * theta_step
                 a = [curr_phi, curr_theta]
                 b = [curr_phi + phi_step, curr_theta]
                 c = [curr_phi + phi_step, curr_theta + theta_step]
                 d = [curr_phi, curr_theta + theta_step]
                 curr_res += compute_cross_sections_triangle(mul, an, bn, xin_x, xin_der_x, a, b, c)
                 curr_res += compute_cross_sections_triangle(mul, an, bn, xin_x, xin_der_x, a, c, d)
-        res[j] = curr_res
+                #curr_res += compute_cross_sections_square(mul, an, bn, xin_x, xin_der_x, a, phi_step, theta_step)
+        res[j] = curr_res * 0.581
+        print(res[j])
     return res
 
 def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
@@ -613,7 +623,7 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 
 #plot_surface_sca_ext()
 #plot_coeff_sca_ext(80e-9)
-#plot_sca_ext(90e-9)
+#plot_sca_ext(60e-9)
 #plot_ref_indices()
 #plot_integ_sca(90e-9)
 #plot_integ_sca_surface()
