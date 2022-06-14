@@ -6,6 +6,7 @@ from matplotlib.colors import Normalize
 import numpy as np
 import math
 import cmath
+import plyfile as pf
 
 #def sy_array_single(z, n):
 #    y0 = -math.cos(z) / z
@@ -378,11 +379,7 @@ def compute_cross_sections_triangle(mul, phi_theta_1, phi_theta_2, phi_theta_3, 
     v2 = (1/6) * (f + e) * c * h
     return mul * (v1 + v2)
 
-def compute_cross_sections_square(mul, an, bn, xin_x, xin_der_x, phi_theta, phi_step, theta_step):
-    c = math.cos(phi_theta[0])**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1]) - math.sin(phi_theta[0])**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1])
-    d = math.cos(phi_theta[0] + phi_step)**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1]) - math.sin(phi_theta[0] + phi_step)**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1])
-    e = math.cos(phi_theta[0] + phi_step)**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step) - math.sin(phi_theta[0] + phi_step)**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step)
-    f = math.cos(phi_theta[0])**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step) - math.sin(phi_theta[0])**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1] + theta_step)
+def compute_cross_sections_square(mul, c, d, e, f, phi_step, theta_step):
     h = (c + d + e + f) / 4
     return phi_step * theta_step * h
 
@@ -390,7 +387,9 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
     medium_n = 1.0
     upper_x = 2 * math.pi * medium_n * particle_size
     res = np.zeros(len(wavelengths), dtype=float)
-    for j in range(len(wavelengths)):
+    print(particle_size, ": 0.0 %", end='\r', flush=True)
+    num_wavelengths = len(wavelengths)
+    for j in range(num_wavelengths):
         #print(wavelengths[j])
         x = upper_x / wavelengths[j]
         m = get_ref_index(ref_indices_raw, wavelengths[j]) / medium_n
@@ -422,13 +421,13 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
         curr_res = 0
         div = 100
         phi_step = 2 * math.pi / div
-        theta_step = math.pi / div
+        theta_step = math.pi * 0.6 / div
         fn_values = []
         for i in range(div + 1):
             fn_row = []
             for k in range(div + 1):
                 curr_phi = i * phi_step
-                curr_theta = k * theta_step
+                curr_theta = k * theta_step + math.pi * 0.2
                 fn_row.append(function_value(an, bn, xin_x, xin_der_x, [curr_phi, curr_theta]))
             fn_values.append(fn_row)
 
@@ -444,11 +443,12 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
                 #resb = function_value(an, bn, xin_x, xin_der_x, b)
                 #resc = function_value(an, bn, xin_x, xin_der_x, c)
                 #resd = function_value(an, bn, xin_x, xin_der_x, d)
-                curr_res += compute_cross_sections_triangle(mul, a, b, c, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1])
-                curr_res += compute_cross_sections_triangle(mul, a, c, d, fn_values[i][k], fn_values[i + 1][k + 1], fn_values[i][k + 1])
-                #curr_res += compute_cross_sections_square(mul, an, bn, xin_x, xin_der_x, a, phi_step, theta_step)
+                #curr_res += compute_cross_sections_triangle(mul, a, b, c, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1])
+                #curr_res += compute_cross_sections_triangle(mul, a, c, d, fn_values[i][k], fn_values[i + 1][k + 1], fn_values[i][k + 1])
+                curr_res += compute_cross_sections_square(mul, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1], fn_values[i][k + 1], phi_step, theta_step)
         res[j] = curr_res * 0.581
-        print(res[j])
+        print(particle_size, ":", float(int(j / num_wavelengths * 1000)) / 10, " %", end='\r', flush=True)
+    print(particle_size, ": 100.0 %", flush=True)
     return res
 
 def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
@@ -611,7 +611,7 @@ def plot_integ_sca_surface():
     ax0.set_title("Scattering Cross Section")
     ax0.contourf(WAVELENGTHS, partsizes, scattering_cross_section, cmap='inferno', levels=70)
     ax0.set(xlabel="wavelength", ylabel="particle radius")
-    fig0.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=-2, vmax=10), cmap='inferno'), ax=ax0)
+    fig0.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=ax0)
     plt.show()
 
 def plot_integ_sca_by_triangle(particle_size):
@@ -628,6 +628,23 @@ def plot_integ_sca_by_triangle(particle_size):
     ax0.legend()
     ax0.grid()
     plt.show()
+
+def plot_integ_sca_surface_by_triangle():
+    PARTSIZE_LOWER = 50e-9
+    PARTSIZE_UPPER = 100e-9
+    partsizes = np.linspace(PARTSIZE_LOWER, PARTSIZE_UPPER, 50)
+    scattering_cross_section = np.zeros((len(partsizes), len(WAVELENGTHS)))
+    for i in range(len(partsizes)):
+        scattering_cross_section[i] = compute_cross_sections_whole_by_triangle(REF_INDICES_RAW, WAVELENGTHS, partsizes[i])
+    print("plotting...")
+    fig0 = plt.figure(num=0)
+    ax0 = fig0.subplots(nrows=1, ncols=1)
+    ax0.set_title("Scattering Cross Section")
+    ax0.contourf(WAVELENGTHS, partsizes, scattering_cross_section, cmap='inferno', levels=70)
+    ax0.set(xlabel="wavelength", ylabel="particle radius")
+    fig0.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=ax0)
+    plt.show()
+    print("DONE!!!")
 ####################### MAIN #######################
 
 DIV = 500
@@ -640,7 +657,8 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plot_ref_indices()
 #plot_integ_sca(90e-9)
 #plot_integ_sca_surface()
-plot_integ_sca_by_triangle(70e-9)
+#plot_integ_sca_by_triangle(70e-9)
+#plot_integ_sca_surface_by_triangle()
 
 #x = np.linspace(0, 2 * math.pi, 100)
 #pi2 = []
@@ -694,3 +712,10 @@ plot_integ_sca_by_triangle(70e-9)
 #plt.grid()
 #plt.legend()
 #plt.show()
+
+print("")
+data = pf.PlyData.read("./res/cube.ply")
+for face in data.elements[1]:
+    for index in face[0]:
+        print(data.elements[0][index], " ", end='')
+    print("")
