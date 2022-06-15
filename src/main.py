@@ -318,6 +318,9 @@ def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, the
 def distance(point1, point2):
     return math.sqrt((point1[0] - point2[0])**2 + (point1[1] - point2[1])**2)
 
+def clamp(val, mmin, mmax):
+    return max(min(val, mmax), mmin)
+
 def function_value(an, bn, xin_x, xin_der_x, phi_theta):
     return math.cos(phi_theta[0])**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1]) - math.sin(phi_theta[0])**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1])
 
@@ -374,7 +377,9 @@ def compute_cross_sections_triangle(mul, phi_theta_1, phi_theta_2, phi_theta_3, 
             c = distance(phi_theta_3, phi_theta_2)
     #print(a, " ", b, " ", c)
     #print((a**2 + c**2 - b**2) / (2 * a * c))
-    h = a * math.sin(math.acos(max(min((a**2 + c**2 - b**2) / (2 * a * c), 1), -1)))
+    if a == 0 or c == 0:
+        return 0
+    h = a * math.sin(math.acos(clamp((a**2 + c**2 - b**2) / (2 * a * c), -1, 1)))
     v1 = 0.5 * c * h * d
     v2 = (1/6) * (f + e) * c * h
     return mul * (v1 + v2)
@@ -419,7 +424,7 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
         mul = 0.5 * wavelengths[j]**2 * 0.318 / (2 * math.pi) / (particle_size**2 * math.pi)
 
         curr_res = 0
-        div = 100
+        div = 20
         phi_step = 2 * math.pi / div
         theta_step = math.pi * 0.6 / div
         fn_values = []
@@ -443,9 +448,9 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
                 #resb = function_value(an, bn, xin_x, xin_der_x, b)
                 #resc = function_value(an, bn, xin_x, xin_der_x, c)
                 #resd = function_value(an, bn, xin_x, xin_der_x, d)
-                #curr_res += compute_cross_sections_triangle(mul, a, b, c, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1])
-                #curr_res += compute_cross_sections_triangle(mul, a, c, d, fn_values[i][k], fn_values[i + 1][k + 1], fn_values[i][k + 1])
-                curr_res += compute_cross_sections_square(mul, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1], fn_values[i][k + 1], phi_step, theta_step)
+                curr_res += compute_cross_sections_triangle(mul, a, b, c, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1])
+                curr_res += compute_cross_sections_triangle(mul, a, c, d, fn_values[i][k], fn_values[i + 1][k + 1], fn_values[i][k + 1])
+                #curr_res += compute_cross_sections_square(mul, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1], fn_values[i][k + 1], phi_step, theta_step)
         res[j] = curr_res * 0.581
         print(particle_size, ":", float(int(j / num_wavelengths * 1000)) / 10, " %", end='\r', flush=True)
     print(particle_size, ": 100.0 %", flush=True)
@@ -506,6 +511,114 @@ def compute_cross_sections(ref_indices_raw, wavelengths, particle_size):
         res_csa[j] = mul * sum(part_res_csa)
         res_ext[j] = mul * sum(part_res_ext)
     return (res_csa, res_ext, res_csa_an, res_csa_bn, res_ext_an, res_ext_bn)
+
+def transform_cartesian_to_spherical_angles(x, y, z):
+    r = math.sqrt(x**2 + y**2 + z**2)
+    cos_theta = z / r
+    theta = math.acos(cos_theta)
+    sin_theta = math.sqrt(1 - cos_theta**2)
+    if sin_theta == 0:
+        return (0.0, theta)
+    phi = math.acos(clamp(x / (r * math.sqrt(1 - cos_theta**2)), -1, 1))
+    return (phi, theta)
+
+def is_white(r, g, b):
+    return (r == 255 and g == 255 and b == 255)
+
+def triangle_has_no_white(vert_0, vert_1, vert_2):
+    if not(is_white(vert_0[3], vert_0[4], vert_0[5])) and not(is_white(vert_1[3], vert_1[4], vert_1[5])) and not(is_white(vert_2[3],vert_2[4], vert_2[5])):
+        return True
+    return False
+
+def load_selected_triangle(filename):
+    data = pf.PlyData.read(filename)
+    point_coords = []
+    for vertex in data.elements[0]:
+        if not(is_white(vertex[3], vertex[4], vertex[5])):
+            point_coords.append(transform_cartesian_to_spherical_angles(vertex[0], vertex[1], vertex[2]))
+        else:
+            point_coords.append((7.7, 7.7))
+    indices = []
+    print(len(data.elements[1]))
+    for face in data.elements[1]:
+        if len(face[0]) == 3:
+            vert_0 = data.elements[0][face[0][0]]
+            vert_1 = data.elements[0][face[0][1]]
+            vert_2 = data.elements[0][face[0][2]]
+            if triangle_has_no_white(vert_0, vert_1, vert_2):
+                print("haha")
+                indices.append(face[0][0])
+                indices.append(face[0][1])
+                indices.append(face[0][2])
+        elif len(face[0]) == 4:
+            vert_0 = data.elements[0][face[0][0]]
+            vert_1 = data.elements[0][face[0][1]]
+            vert_2 = data.elements[0][face[0][2]]
+            vert_3 = data.elements[0][face[0][3]]
+            if triangle_has_no_white(vert_0, vert_1, vert_2):
+                indices.append(face[0][0])
+                indices.append(face[0][1])
+                indices.append(face[0][2])
+            if triangle_has_no_white(vert_2, vert_3, vert_0):
+                indices.append(face[0][2])
+                indices.append(face[0][3])
+                indices.append(face[0][0])
+    #check pk il n'y a pas 20 faces dans les indices !!!
+    for i in range(0, int(len(indices) / 3), 3):
+        print(point_coords[indices[i]], " ", point_coords[indices[i + 1]], " ", point_coords[indices[i + 2]])
+    return (point_coords, indices)
+
+def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_size, point_coords, indices):
+    medium_n = 1.0
+    upper_x = 2 * math.pi * medium_n * particle_size
+    res = np.zeros(len(wavelengths), dtype=float)
+    print(particle_size, ": 0.0 %", end='\r', flush=True)
+    num_wavelengths = len(wavelengths)
+    for j in range(num_wavelengths):
+        #print(wavelengths[j])
+        x = upper_x / wavelengths[j]
+        m = get_ref_index(ref_indices_raw, wavelengths[j]) / medium_n
+        mx = m * x
+    
+        sjn_x = []
+        syn_x = []
+        psin_x = []
+        xin_x = []
+        xin_der_x = []
+        sjn_mx = []
+        psin_mx = []
+        dn_mx = []
+        for i in range(ORDER_LEN):
+            sjn_x.append(special.spherical_jn(i, x))
+            syn_x.append(special.spherical_yn(i, x))
+            psin_x.append(psi_array(sjn_x[i], x))
+            xin_x.append(xi_array(sjn_x[i], syn_x[i], x))
+
+            sjn_mx.append(special.spherical_jn(i, mx))
+            psin_mx.append(psi_array(sjn_mx[i], mx))
+
+        xin_der_x = xi_der_array(xin_x, x)
+        dn_mx = d_array(psin_mx, mx)
+        an = a_array(m, psin_x, xin_x, dn_mx, x)
+        bn = b_array(m, psin_x, xin_x, dn_mx, x)
+        mul = 0.5 * wavelengths[j]**2 * 0.318 / (2 * math.pi) / (particle_size**2 * math.pi)
+
+        curr_res = 0
+        fn_values = []
+        for coord in point_coords:
+            fn_values.append(function_value(an, bn, xin_x, xin_der_x, coord))
+
+        for i in range(0, int(len(indices) / 3), 3):
+            a = point_coords[indices[i]]
+            b = point_coords[indices[i + 1]]
+            c = point_coords[indices[i + 2]]
+            curr_res += compute_cross_sections_triangle(mul, a, b, c, fn_values[indices[i]], fn_values[indices[i + 1]], fn_values[indices[i + 2]])
+
+        res[j] = curr_res
+        print(particle_size, ":", float(int(j / num_wavelengths * 1000)) / 10, " %", end='\r', flush=True)
+
+    print(particle_size, ": 100.0 %", flush=True)
+    return res
 
 def plot_surface_sca_ext():
     PARTSIZE_LOWER = 50e-9
@@ -629,6 +742,22 @@ def plot_integ_sca_by_triangle(particle_size):
     ax0.grid()
     plt.show()
 
+def plot_integ_sca_by_triangle_file(particle_size, filename):
+    data = load_selected_triangle("./res/sphere.ply")
+    res0 = compute_cross_section_by_triangle(REF_INDICES_RAW, WAVELENGTHS, particle_size, data[0], data[1])
+    #res1 = compute_integrated_scattering_cross_section(0, 2 * math.pi, 0, math.pi * 0.57, REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    #res_exact = compute_cross_sections(REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    fig0 = plt.figure(num=0)
+    ax0 = fig0.subplots(nrows=1, ncols=1)
+    ax0.set_title("Scattering Cross Sections")
+    ax0.plot(WAVELENGTHS, res0, label="Integrated")
+    #ax0.plot(WAVELENGTHS, res1, label="Integrated")
+    #ax0.plot(WAVELENGTHS, res_exact[0], label="Exact")
+    ax0.set(xlabel="wavelength")
+    ax0.legend()
+    ax0.grid()
+    plt.show()
+
 def plot_integ_sca_surface_by_triangle():
     PARTSIZE_LOWER = 50e-9
     PARTSIZE_UPPER = 100e-9
@@ -636,6 +765,24 @@ def plot_integ_sca_surface_by_triangle():
     scattering_cross_section = np.zeros((len(partsizes), len(WAVELENGTHS)))
     for i in range(len(partsizes)):
         scattering_cross_section[i] = compute_cross_sections_whole_by_triangle(REF_INDICES_RAW, WAVELENGTHS, partsizes[i])
+    print("plotting...")
+    fig0 = plt.figure(num=0)
+    ax0 = fig0.subplots(nrows=1, ncols=1)
+    ax0.set_title("Scattering Cross Section")
+    ax0.contourf(WAVELENGTHS, partsizes, scattering_cross_section, cmap='inferno', levels=70)
+    ax0.set(xlabel="wavelength", ylabel="particle radius")
+    fig0.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=ax0)
+    plt.show()
+    print("DONE!!!")
+
+def plot_integ_sca_surface_by_triangle():
+    PARTSIZE_LOWER = 50e-9
+    PARTSIZE_UPPER = 100e-9
+    partsizes = np.linspace(PARTSIZE_LOWER, PARTSIZE_UPPER, 50)
+    scattering_cross_section = np.zeros((len(partsizes), len(WAVELENGTHS)))
+    data = load_selected_triangle("./res/sphere.ply")
+    for i in range(len(partsizes)):
+        scattering_cross_section[i] = compute_cross_section_by_triangle(REF_INDICES_RAW, WAVELENGTHS, particle_size, data[0], data[1])
     print("plotting...")
     fig0 = plt.figure(num=0)
     ax0 = fig0.subplots(nrows=1, ncols=1)
@@ -657,8 +804,9 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plot_ref_indices()
 #plot_integ_sca(90e-9)
 #plot_integ_sca_surface()
-#plot_integ_sca_by_triangle(70e-9)
+#plot_integ_sca_by_triangle(80e-9)
 #plot_integ_sca_surface_by_triangle()
+plot_integ_sca_by_triangle_file(80e-9, "./res/sphere.ply")
 
 #x = np.linspace(0, 2 * math.pi, 100)
 #pi2 = []
@@ -712,10 +860,3 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plt.grid()
 #plt.legend()
 #plt.show()
-
-print("")
-data = pf.PlyData.read("./res/cube.ply")
-for face in data.elements[1]:
-    for index in face[0]:
-        print(data.elements[0][index], " ", end='')
-    print("")
