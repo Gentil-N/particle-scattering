@@ -7,6 +7,7 @@ import numpy as np
 import math
 import cmath
 import plyfile as pf
+from collada import *
 
 #def sy_array_single(z, n):
 #    y0 = -math.cos(z) / z
@@ -267,6 +268,27 @@ def trapz(func, inf, sup, div):
         b = a + step
         res += (func(a) + func(b)) * (step) / 2
     return res
+
+def export_collada(point_coords, indices, filename):
+    mesh = Collada()
+    vertices = []
+    for coord in point_coords:
+        vertices.append(coord[0])
+        vertices.append(coord[1])
+        vertices.append(0.0)
+    vert_src = source.FloatSource("cubeverts-array", np.array(vertices), ('X', 'Y', 'Z'))
+    geom = geometry.Geometry(mesh, "geometry0", "mycube", [vert_src])
+    input_list = source.InputList()
+    input_list.addInput(0, 'VERTEX', "#cubeverts-array")
+    triset = geom.createTriangleSet(np.array(indices), input_list, "materialref")
+    geom.primitives.append(triset)
+    mesh.geometries.append(geom)
+    geomnode = scene.GeometryNode(geom)
+    node = scene.Node("node0", children=[geomnode])
+    myscene = scene.Scene("myscene", [node])
+    mesh.scenes.append(myscene)
+    mesh.scene = myscene
+    mesh.write(filename)
 
 def compute_integrated_scattering_cross_section(phi_inf, phi_sup, theta_inf, theta_sup, ref_indices_raw, wavelengths, particle_size):
     medium_n = 1.0
@@ -633,6 +655,7 @@ def load_selected_triangle(filename):
                 indices.append(face[0][0])
     print(len(point_coords))
     print(len(indices))
+    export_collada(point_coords, indices, "./results/test.dae")
     return (point_coords, indices)
 
 def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_size, point_coords, indices):
@@ -877,9 +900,9 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plot_ref_indices()
 #plot_integ_sca(90e-9)
 #plot_integ_sca_surface()
-plot_integ_sca_by_triangle(80e-9)
+#plot_integ_sca_by_triangle(80e-9)
 #plot_integ_sca_surface_by_triangle()
-#plot_integ_sca_by_triangle_file(80e-9, "./res/sphere.ply")
+plot_integ_sca_by_triangle_file(80e-9, "./res/sphere.ply")
 
 #x = np.linspace(0, 2 * math.pi, 100)
 #pi2 = []
