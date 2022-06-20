@@ -353,6 +353,7 @@ def compute_cross_sections_triangle(mul, phi_theta_1, phi_theta_2, phi_theta_3, 
     d = 0
     e = 0
     f = 0
+    #print(phi_theta_1, " ", phi_theta_2, " ", phi_theta_3)
     if res1 < res2:
         if res3 < res1:
             d = res3
@@ -396,13 +397,14 @@ def compute_cross_sections_triangle(mul, phi_theta_1, phi_theta_2, phi_theta_3, 
             f = res1
             a = distance(phi_theta_2, phi_theta_3)
             b = distance(phi_theta_2, phi_theta_1)
-            c = distance(phi_theta_3, phi_theta_2)
+            c = distance(phi_theta_3, phi_theta_1)
     if a == 0 or c == 0:
         return (0, 0)
+    #print(a, " ", b, " ", c)
     h = a * math.sin(math.acos(clamp((a**2 + c**2 - b**2) / (2 * a * c), -1, 1)))
     v1 = 0.5 * c * h * d
     v2 = (1/6) * (f + e) * c * h
-    return (mul * (v1 + v2), 0.5 * c * h)
+    return mul * (v1 + v2)
 
 def compute_cross_sections_triangle_simple(mul, phi_theta_1, phi_theta_2, phi_theta_3, res1, res2, res3):
     a = 0
@@ -470,7 +472,6 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
     res = np.zeros(len(wavelengths), dtype=float)
     print(particle_size, ": 0.0 %", end='\r', flush=True)
     num_wavelengths = len(wavelengths)
-    area = 0
     for j in range(num_wavelengths):
         #print(wavelengths[j])
         x = upper_x / wavelengths[j]
@@ -501,7 +502,7 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
         mul = 0.5 * wavelengths[j]**2 * 0.318 / (2 * math.pi) / (particle_size**2 * math.pi)
 
         curr_res = 0
-        div = 50
+        div = 20
         phi_step = 2 * math.pi / div
         theta_step = math.pi / div
         fn_values = []
@@ -513,7 +514,6 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
                 fn_row.append(function_value(an, bn, xin_x, xin_der_x, [curr_phi, curr_theta]))
             fn_values.append(fn_row)
 
-        area = 0
         for i in range(div):
             for k in range(div):
                 curr_phi = i * phi_step
@@ -527,16 +527,13 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
                 #resc = function_value(an, bn, xin_x, xin_der_x, c)
                 #resd = function_value(an, bn, xin_x, xin_der_x, d)
                 comp = compute_cross_sections_triangle(mul, a, b, c, abs(fn_values[i][k]), abs(fn_values[i + 1][k]), abs(fn_values[i + 1][k + 1]))
-                curr_res += comp[0]
-                area += comp[1]
+                curr_res += comp
                 comp = compute_cross_sections_triangle(mul, a, c, d, abs(fn_values[i][k]), abs(fn_values[i + 1][k + 1]), abs(fn_values[i][k + 1]))
-                curr_res += comp[0]
-                area += comp[1]
+                curr_res += comp
                 #curr_res += compute_cross_sections_square(mul, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1], fn_values[i][k + 1], phi_step, theta_step)
         res[j] = curr_res #* 0.581
         print(particle_size, ":", float(int(j / num_wavelengths * 1000)) / 10, " %", end='\r', flush=True)
     print(particle_size, ": 100.0 %", flush=True)
-    print(area)
     # area ne correspond pas du tout ! Theorie : 19.74, WholeTri : 21., SphereTri : 42.
     return res
 
@@ -636,26 +633,26 @@ def load_selected_triangle(filename):
             vert_0 = data.elements[0][face[0][0]]
             vert_1 = data.elements[0][face[0][1]]
             vert_2 = data.elements[0][face[0][2]]
-            if triangle_has_no_white(vert_0, vert_1, vert_2):
-                indices.append(face[0][0])
-                indices.append(face[0][1])
-                indices.append(face[0][2])
+            #if triangle_has_no_white(vert_0, vert_1, vert_2):
+            indices.append(face[0][0])
+            indices.append(face[0][1])
+            indices.append(face[0][2])
         elif len(face[0]) == 4:
             vert_0 = data.elements[0][face[0][0]]
             vert_1 = data.elements[0][face[0][1]]
             vert_2 = data.elements[0][face[0][2]]
             vert_3 = data.elements[0][face[0][3]]
-            if triangle_has_no_white(vert_0, vert_1, vert_2):
-                indices.append(face[0][0])
-                indices.append(face[0][1])
-                indices.append(face[0][2])
-            if triangle_has_no_white(vert_2, vert_3, vert_0):
-                indices.append(face[0][2])
-                indices.append(face[0][3])
-                indices.append(face[0][0])
+            #if triangle_has_no_white(vert_0, vert_1, vert_2):
+            indices.append(face[0][0])
+            indices.append(face[0][1])
+            indices.append(face[0][2])
+            #if triangle_has_no_white(vert_2, vert_3, vert_0):
+            indices.append(face[0][2])
+            indices.append(face[0][3])
+            indices.append(face[0][0])
     print(len(point_coords))
     print(len(indices))
-    export_collada(point_coords, indices, "./results/test.dae")
+    export_collada(point_coords, indices, "./results/test2.dae")
     return (point_coords, indices)
 
 def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_size, point_coords, indices):
@@ -664,7 +661,6 @@ def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_siz
     res = np.zeros(len(wavelengths), dtype=float)
     print(particle_size, ": 0.0 %", end='\r', flush=True)
     num_wavelengths = len(wavelengths)
-    area = 0
     for j in range(num_wavelengths):
         #print(wavelengths[j])
         x = upper_x / wavelengths[j]
@@ -695,7 +691,6 @@ def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_siz
         mul = 0.5 * wavelengths[j]**2 * 0.318 / (2 * math.pi) / (particle_size**2 * math.pi)
 
         curr_res = 0
-        area = 0
         fn_values = []
         for coord in point_coords:
             fn_values.append(function_value(an, bn, xin_x, xin_der_x, coord))
@@ -705,15 +700,11 @@ def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_siz
             b = point_coords[indices[i + 1]]
             c = point_coords[indices[i + 2]]
             comp = compute_cross_sections_triangle(mul, a, b, c, abs(fn_values[indices[i]]), abs(fn_values[indices[i + 1]]), abs(fn_values[indices[i + 2]]))
-            curr_res += comp[0]
-            area += comp[1]
-        print("\n", area)
-        exit()
+            curr_res += comp
 
         res[j] = curr_res
         print(particle_size, ":", float(int(j / num_wavelengths * 1000)) / 10, " %", end='\r', flush=True)
     print(particle_size, ": 100.0 %", flush=True)
-    print(area)
     return res
 
 def plot_surface_sca_ext():
