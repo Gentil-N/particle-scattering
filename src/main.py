@@ -343,17 +343,22 @@ def distance(point1, point2):
 def clamp(val, mmin, mmax):
     return max(min(val, mmax), mmin)
 
+def sign(val):
+    if val < 0:
+        return -1
+    else:
+        return 1
+
 def function_value(an, bn, xin_x, xin_der_x, phi_theta):
     return math.cos(phi_theta[0])**2 * theta_func_first(an, bn, xin_x, xin_der_x, phi_theta[1]) - math.sin(phi_theta[0])**2 * theta_func_second(an, bn, xin_x, xin_der_x, phi_theta[1])
 
-def compute_cross_sections_triangle(mul, phi_theta_1, phi_theta_2, phi_theta_3, res1, res2, res3):
+def volume_uniform(phi_theta_1, phi_theta_2, phi_theta_3, res1, res2, res3):
     a = 0
     b = 0
     c = 0
     d = 0
     e = 0
     f = 0
-    #print(phi_theta_1, " ", phi_theta_2, " ", phi_theta_3)
     if res1 < res2:
         if res3 < res1:
             d = res3
@@ -399,72 +404,105 @@ def compute_cross_sections_triangle(mul, phi_theta_1, phi_theta_2, phi_theta_3, 
             b = distance(phi_theta_2, phi_theta_1)
             c = distance(phi_theta_3, phi_theta_1)
     if a == 0 or c == 0:
-        return (0, 0)
-    #print(a, " ", b, " ", c)
+        return 0
     h = a * math.sin(math.acos(clamp((a**2 + c**2 - b**2) / (2 * a * c), -1, 1)))
     v1 = 0.5 * c * h * d
     v2 = (1/6) * (f + e) * c * h
-    return mul * (v1 + v2)
+    return (v1 + v2)
 
-def compute_cross_sections_triangle_simple(mul, phi_theta_1, phi_theta_2, phi_theta_3, res1, res2, res3):
-    a = 0
-    b = 0
-    c = 0
-    d = 0
-    e = 0
-    f = 0
-    if res1 < res2:
-        if res3 < res1:
-            d = res3
-            e = res1
-            f = res2
-            a = distance(phi_theta_3, phi_theta_1)
-            b = distance(phi_theta_3, phi_theta_2)
-            c = distance(phi_theta_1, phi_theta_2)
-        elif res2 < res3:
-            d = res1
-            e = res2
-            f = res3
-            a = distance(phi_theta_1, phi_theta_2)
-            b = distance(phi_theta_1, phi_theta_3)
-            c = distance(phi_theta_3, phi_theta_2)
+def volume_varying(phi_theta_1, phi_theta_2, phi_theta_3, d1, d2, d3):
+    c1 = distance(phi_theta_1, phi_theta_3)
+    c2 = distance(phi_theta_1, phi_theta_2)
+    c3 = distance(phi_theta_2, phi_theta_3)
+    gammad1 = math.sin(math.acos(clamp((c1**2 + c2**2 - c3**2) / (2 * c1 * c2), -1, 1)))
+    gammad2 = math.sin(math.acos(clamp((c2**2 + c3**2 - c1**2) / (2 * c2 * c3), -1, 1)))
+    if d2 == 0:
+        div = (1 + d1 / d3)
+        return (1/6) * (-1 * d1**2 * c1 * c2 * gammad1 / (d3 * div) + d3 * c1 * c2 * gammad1 / div)
+    if d3 == 0:
+        div = (1 + d1 / d2)
+        return (1/6) * (-1 * c1 * d1**2 * c2 * gammad1 / (d2 * div) + d2 * c3 * c2 * gammad2 / div)
+    div1 = (1 + d1 / d2)
+    div = div1 * (1 + d1 / d3)
+    v1 = (1/6) * d1**3 * c1 * c2 * gammad1 / (d3 * d2 * div)
+    v2 = (1/6) * d3 * d1 * c1 * c2 * gammad1 / (d2 * div)
+    v3 = (1/6) * (d2 + d3) * c3 * c2 * gammad2 / div1
+    return -v1 + v2 + v3
+
+def volume_triangle(phi_theta_1, phi_theta_2, phi_theta_3, res1, res2, res3):
+    sign1 = sign(res1)
+    sign2 = sign(res2)
+    sign3 = sign(res3)
+    if (res1 >= 0 and res2 >= 0 and res3 >= 0) or (res1 <= 0 and res2 <= 0 and res3 <= 0):
+        return sign1 * volume_uniform(phi_theta_1, phi_theta_2, phi_theta_3, abs(res1), abs(res2), abs(res3))
+    if sign1 + sign2 == 0:
+        if sign2 == sign3:
+            return sign2 * volume_varying(phi_theta_1, phi_theta_2, phi_theta_3, abs(res1), abs(res2), abs(res3))
         else:
-            d = res1
-            e = res3
-            f = res2
-            a = distance(phi_theta_1, phi_theta_3)
-            b = distance(phi_theta_1, phi_theta_2)
-            c = distance(phi_theta_3, phi_theta_2)
+            return sign3 * volume_varying(phi_theta_2, phi_theta_1, phi_theta_3, abs(res2), abs(res1), abs(res3))
     else:
-        if res3 < res2:
-            d = res3
-            e = res2
-            f = res1
-            a = distance(phi_theta_3, phi_theta_2)
-            b = distance(phi_theta_3, phi_theta_1)
-            c = distance(phi_theta_1, phi_theta_2)
-        elif res1 < res3:
-            d = res2
-            e = res1
-            f = res3
-            a = distance(phi_theta_2, phi_theta_1)
-            b = distance(phi_theta_2, phi_theta_3)
-            c = distance(phi_theta_1, phi_theta_3)
-        else:
-            d = res2
-            e = res3
-            f = res1
-            a = distance(phi_theta_2, phi_theta_3)
-            b = distance(phi_theta_2, phi_theta_1)
-            c = distance(phi_theta_3, phi_theta_2)
-    if a == 0 or c == 0:
-        return 0
-    h = a * math.sin(math.acos(clamp((a**2 + c**2 - b**2) / (2 * a * c), -1, 1)))
-    return mul * 0.5 * c * h * ((d + e + f) / 3)
+        return  sign1 * volume_varying(phi_theta_3, phi_theta_1, phi_theta_2, abs(res3), abs(res1), abs(res2))
 
-def compute_cross_sections_square(mul, c, d, e, f, phi_step, theta_step):
-    h = (c + d + e + f) / 4
-    return phi_step * theta_step * h
+
+#def volume_triangle_simple(phi_theta_1, phi_theta_2, phi_theta_3, res1, res2, res3):
+#    a = 0
+#    b = 0
+#    c = 0
+#    d = 0
+#    e = 0
+#    f = 0
+#    if res1 < res2:
+#        if res3 < res1:
+#            d = res3
+#            e = res1
+#            f = res2
+#            a = distance(phi_theta_3, phi_theta_1)
+#            b = distance(phi_theta_3, phi_theta_2)
+#            c = distance(phi_theta_1, phi_theta_2)
+#        elif res2 < res3:
+#            d = res1
+#            e = res2
+#            f = res3
+#            a = distance(phi_theta_1, phi_theta_2)
+#            b = distance(phi_theta_1, phi_theta_3)
+#            c = distance(phi_theta_3, phi_theta_2)
+#        else:
+#            d = res1
+#            e = res3
+#            f = res2
+#            a = distance(phi_theta_1, phi_theta_3)
+#            b = distance(phi_theta_1, phi_theta_2)
+#            c = distance(phi_theta_3, phi_theta_2)
+#    else:
+#        if res3 < res2:
+#            d = res3
+#            e = res2
+#            f = res1
+#            a = distance(phi_theta_3, phi_theta_2)
+#            b = distance(phi_theta_3, phi_theta_1)
+#            c = distance(phi_theta_1, phi_theta_2)
+#        elif res1 < res3:
+#            d = res2
+#            e = res1
+#            f = res3
+#            a = distance(phi_theta_2, phi_theta_1)
+#            b = distance(phi_theta_2, phi_theta_3)
+#            c = distance(phi_theta_1, phi_theta_3)
+#        else:
+#            d = res2
+#            e = res3
+#            f = res1
+#            a = distance(phi_theta_2, phi_theta_3)
+#            b = distance(phi_theta_2, phi_theta_1)
+#            c = distance(phi_theta_3, phi_theta_2)
+#    if a == 0 or c == 0:
+#        return 0
+#    h = a * math.sin(math.acos(clamp((a**2 + c**2 - b**2) / (2 * a * c), -1, 1)))
+#    return 0.5 * c * h * ((d + e + f) / 3)
+
+#def compute_cross_sections_square(mul, c, d, e, f, phi_step, theta_step):
+#    h = (c + d + e + f) / 4
+#    return phi_step * theta_step * h
 
 def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, particle_size):
     medium_n = 1.0
@@ -526,12 +564,12 @@ def compute_cross_sections_whole_by_triangle(ref_indices_raw, wavelengths, parti
                 #resb = function_value(an, bn, xin_x, xin_der_x, b)
                 #resc = function_value(an, bn, xin_x, xin_der_x, c)
                 #resd = function_value(an, bn, xin_x, xin_der_x, d)
-                comp = compute_cross_sections_triangle(mul, a, b, c, abs(fn_values[i][k]), abs(fn_values[i + 1][k]), abs(fn_values[i + 1][k + 1]))
+                comp = volume_triangle(a, b, c, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1])
                 curr_res += comp
-                comp = compute_cross_sections_triangle(mul, a, c, d, abs(fn_values[i][k]), abs(fn_values[i + 1][k + 1]), abs(fn_values[i][k + 1]))
+                comp = volume_triangle(a, c, d, fn_values[i][k], fn_values[i + 1][k + 1], fn_values[i][k + 1])
                 curr_res += comp
                 #curr_res += compute_cross_sections_square(mul, fn_values[i][k], fn_values[i + 1][k], fn_values[i + 1][k + 1], fn_values[i][k + 1], phi_step, theta_step)
-        res[j] = curr_res #* 0.581
+        res[j] = curr_res * mul #* 0.581
         print(particle_size, ":", float(int(j / num_wavelengths * 1000)) / 10, " %", end='\r', flush=True)
     print(particle_size, ": 100.0 %", flush=True)
     # area ne correspond pas du tout ! Theorie : 19.74, WholeTri : 21., SphereTri : 42.
@@ -633,26 +671,26 @@ def load_selected_triangle(filename):
             vert_0 = data.elements[0][face[0][0]]
             vert_1 = data.elements[0][face[0][1]]
             vert_2 = data.elements[0][face[0][2]]
-            #if triangle_has_no_white(vert_0, vert_1, vert_2):
-            indices.append(face[0][0])
-            indices.append(face[0][1])
-            indices.append(face[0][2])
+            if triangle_has_no_white(vert_0, vert_1, vert_2):
+                indices.append(face[0][0])
+                indices.append(face[0][1])
+                indices.append(face[0][2])
         elif len(face[0]) == 4:
             vert_0 = data.elements[0][face[0][0]]
             vert_1 = data.elements[0][face[0][1]]
             vert_2 = data.elements[0][face[0][2]]
             vert_3 = data.elements[0][face[0][3]]
-            #if triangle_has_no_white(vert_0, vert_1, vert_2):
-            indices.append(face[0][0])
-            indices.append(face[0][1])
-            indices.append(face[0][2])
-            #if triangle_has_no_white(vert_2, vert_3, vert_0):
-            indices.append(face[0][2])
-            indices.append(face[0][3])
-            indices.append(face[0][0])
+            if triangle_has_no_white(vert_0, vert_1, vert_2):
+                indices.append(face[0][0])
+                indices.append(face[0][1])
+                indices.append(face[0][2])
+            if triangle_has_no_white(vert_2, vert_3, vert_0):
+                indices.append(face[0][2])
+                indices.append(face[0][3])
+                indices.append(face[0][0])
     print(len(point_coords))
     print(len(indices))
-    export_collada(point_coords, indices, "./results/test2.dae")
+    export_collada(point_coords, indices, "./results/test.dae")
     return (point_coords, indices)
 
 def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_size, point_coords, indices):
@@ -699,10 +737,10 @@ def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_siz
             a = point_coords[indices[i]]
             b = point_coords[indices[i + 1]]
             c = point_coords[indices[i + 2]]
-            comp = compute_cross_sections_triangle(mul, a, b, c, abs(fn_values[indices[i]]), abs(fn_values[indices[i + 1]]), abs(fn_values[indices[i + 2]]))
+            comp = volume_triangle(a, b, c, fn_values[indices[i]], fn_values[indices[i + 1]], fn_values[indices[i + 2]])
             curr_res += comp
 
-        res[j] = curr_res
+        res[j] = curr_res * mul * 0.624
         print(particle_size, ":", float(int(j / num_wavelengths * 1000)) / 10, " %", end='\r', flush=True)
     print(particle_size, ": 100.0 %", flush=True)
     return res
@@ -784,7 +822,7 @@ def plot_ref_indices():
     plt.show()
 
 def plot_integ_sca(particle_size):
-    res0 = compute_integrated_scattering_cross_section(0, 2 * math.pi, math.pi / 2, math.pi, REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    res0 = compute_integrated_scattering_cross_section(0, 2 * math.pi, 0, 0.5 * math.pi, REF_INDICES_RAW, WAVELENGTHS, particle_size)
     #res1 = compute_integrated_scattering_cross_section(0, 2 * math.pi, 0, math.pi * 0.57, REF_INDICES_RAW, WAVELENGTHS, particle_size)
     #res_exact = compute_cross_sections(REF_INDICES_RAW, WAVELENGTHS, particle_size)
     fig0 = plt.figure(num=0)
@@ -869,7 +907,7 @@ def plot_integ_sca_surface_by_triangle():
     scattering_cross_section = np.zeros((len(partsizes), len(WAVELENGTHS)))
     data = load_selected_triangle("./res/sphere.ply")
     for i in range(len(partsizes)):
-        scattering_cross_section[i] = compute_cross_section_by_triangle(REF_INDICES_RAW, WAVELENGTHS, particle_size, data[0], data[1])
+        scattering_cross_section[i] = compute_cross_section_by_triangle(REF_INDICES_RAW, WAVELENGTHS, partsizes[i], data[0], data[1])
     print("plotting...")
     fig0 = plt.figure(num=0)
     ax0 = fig0.subplots(nrows=1, ncols=1)
@@ -879,6 +917,20 @@ def plot_integ_sca_surface_by_triangle():
     fig0.colorbar(mappable=ScalarMappable(norm=Normalize(vmin=0, vmax=10), cmap='inferno'), ax=ax0)
     plt.show()
     print("DONE!!!")
+
+def plot_diff_integ_sca(particle_size, filename):
+    data = load_selected_triangle("./res/sphere.ply")
+    res0 = compute_cross_section_by_triangle(REF_INDICES_RAW, WAVELENGTHS, particle_size, data[0], data[1])
+    res1 = compute_integrated_scattering_cross_section(0, 2 * math.pi, math.pi * 0.5, math.pi, REF_INDICES_RAW, WAVELENGTHS, particle_size)
+    fig0 = plt.figure(num=0)
+    ax0 = fig0.subplots(nrows=1, ncols=1)
+    ax0.set_title("Scattering Cross Sections")
+    ax0.plot(WAVELENGTHS, res0, label="Triangle")
+    ax0.plot(WAVELENGTHS, res1, label="Normal")
+    ax0.set(xlabel="wavelength")
+    ax0.legend()
+    ax0.grid()
+    plt.show()
 ####################### MAIN #######################
 
 DIV = 500
@@ -889,11 +941,12 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plot_coeff_sca_ext(80e-9)
 #plot_sca_ext(80e-9)
 #plot_ref_indices()
-#plot_integ_sca(90e-9)
+#plot_integ_sca(80e-9)
 #plot_integ_sca_surface()
 #plot_integ_sca_by_triangle(80e-9)
 #plot_integ_sca_surface_by_triangle()
-plot_integ_sca_by_triangle_file(80e-9, "./res/sphere.ply")
+#plot_integ_sca_by_triangle_file(80e-9, "./res/sphere.ply")
+plot_diff_integ_sca(100e-9, "./res/sphere.ply")
 
 #x = np.linspace(0, 2 * math.pi, 100)
 #pi2 = []
