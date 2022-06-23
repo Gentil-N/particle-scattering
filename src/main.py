@@ -731,7 +731,10 @@ def compute_cross_section_by_triangle(ref_indices_raw, wavelengths, particle_siz
         curr_res = 0
         fn_values = []
         for coord in point_coords:
-            fn_values.append(function_value(an, bn, xin_x, xin_der_x, coord))
+            if coord == (7.7, 7.7):
+                fn_values.append(0)
+            else:
+                fn_values.append(function_value(an, bn, xin_x, xin_der_x, coord))
 
         for i in range(0, int(len(indices)), 3):
             a = point_coords[indices[i]]
@@ -944,9 +947,9 @@ WAVELENGTHS = np.linspace(REF_INDICES_RAW[0][0], REF_INDICES_RAW[-1][0], DIV)
 #plot_integ_sca(80e-9)
 #plot_integ_sca_surface()
 #plot_integ_sca_by_triangle(80e-9)
-#plot_integ_sca_surface_by_triangle()
+plot_integ_sca_surface_by_triangle()
 #plot_integ_sca_by_triangle_file(80e-9, "./res/sphere.ply")
-plot_diff_integ_sca(100e-9, "./res/sphere.ply")
+#plot_diff_integ_sca(60e-9, "./res/sphere.ply")
 
 #x = np.linspace(0, 2 * math.pi, 100)
 #pi2 = []
